@@ -1,0 +1,9 @@
+{
+  "name": "sketch",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/sketch/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project sketch --web",
+  "targets": {}
+}
