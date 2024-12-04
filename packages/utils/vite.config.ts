@@ -8,18 +8,13 @@ import { nxCopyAssetsPlugin } from "@nx/vite/plugins/nx-copy-assets.plugin";
 
 export default defineConfig({
     root: __dirname,
-    cacheDir: "../../node_modules/.vite/packages/ui",
+    cacheDir: "../../node_modules/.vite/packages/utils",
     plugins: [
         react(),
         nxViteTsPaths(),
         nxCopyAssetsPlugin(["*.md"]),
         dts({ entryRoot: "src", tsconfigPath: path.join(__dirname, "tsconfig.lib.json") })
     ],
-    resolve: {
-        alias: {
-            "@": path.resolve(__dirname, "./src")
-        }
-    },
     // Uncomment this if you are using workers.
     // worker: {
     //  plugins: [ nxViteTsPaths() ],
@@ -27,7 +22,7 @@ export default defineConfig({
     // Configuration for building your library.
     // See: https://vitejs.dev/guide/build.html#library-mode
     build: {
-        outDir: "../../dist/packages/ui",
+        outDir: "../../dist/packages/utils",
         emptyOutDir: true,
         reportCompressedSize: true,
         commonjsOptions: {
@@ -36,7 +31,7 @@ export default defineConfig({
         lib: {
             // Could also be a dictionary or array of multiple entry points.
             entry: "src/index.ts",
-            name: "ui",
+            name: "utils",
             fileName: "index",
             // Change this to the formats you want to support.
             // Don't forget to update your package.json as well.
@@ -54,7 +49,7 @@ export default defineConfig({
         include: ["src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
         reporters: ["default"],
         coverage: {
-            reportsDirectory: "../../coverage/packages/ui",
+            reportsDirectory: "../../coverage/packages/utils",
             provider: "v8"
         }
     }

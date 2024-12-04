@@ -1,9 +1,13 @@
-export function Sketch() {
-  return (
-    <div className="text-pink">
-      <h1>Welcome to Sketch!</h1>
-    </div>
-  );
-}
+import { AppSidebar, SidebarProvider, SidebarTrigger } from "@now/ui";
 
-export default Sketch;
+export function Layout({ children }: { children: React.ReactNode }) {
+    return (
+        <SidebarProvider>
+            <AppSidebar />
+            <main>
+                <SidebarTrigger />
+                {children}
+            </main>
+        </SidebarProvider>
+    );
+}

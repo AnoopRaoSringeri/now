@@ -1,9 +1,13 @@
 {
-  "name": "now",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/now/src",
-  "projectType": "application",
-  "tags": [],
-  "// targets": "to see all targets run: nx show project now --web",
-  "targets": {}
+    "name": "now",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "apps/now/src",
+    "projectType": "application",
+    "tags": [],
+    "// targets": "to see all targets run: nx show project now --web",
+    "targets": {
+        "build": {
+            "options": {}
+        }
+    }
 }
