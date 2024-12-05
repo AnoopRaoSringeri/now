@@ -6,3 +6,4 @@ export * from "./components/ui/sidebar";
 export * from "./components/ui/skeleton";
 export * from "./components/ui/tooltip";
 export * from "./components/app-sidebar";
+export * from "./components/ui/breadcrumb";

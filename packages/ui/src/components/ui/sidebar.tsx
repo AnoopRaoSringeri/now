@@ -1,13 +1,16 @@
+"use client";
+
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
 import { PanelLeft } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
+
 import { Button } from "./button";
 import { Input } from "./input";
-import { SheetContent, Sheet } from "./sheet";
-import { Skeleton } from "./skeleton";
 import { Separator } from "./separator";
+import { Sheet, SheetContent } from "./sheet";
+import { Skeleton } from "./skeleton";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
 import { useIsMobile, cn } from "@now/utils";
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state";
@@ -17,7 +20,7 @@ const SIDEBAR_WIDTH_MOBILE = "18rem";
 const SIDEBAR_WIDTH_ICON = "3rem";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 
-type SidebarContext = {
+type SidebarContextType = {
     state: "expanded" | "collapsed";
     open: boolean;
     setOpen: (open: boolean) => void;
@@ -27,7 +30,7 @@ type SidebarContext = {
     toggleSidebar: () => void;
 };
 
-const SidebarContext = React.createContext<SidebarContext | null>(null);
+const SidebarContext = React.createContext<SidebarContextType | null>(null);
 
 function useSidebar() {
     const context = React.useContext(SidebarContext);
@@ -90,7 +93,7 @@ const SidebarProvider = React.forwardRef<
     // This makes it easier to style the sidebar with Tailwind classes.
     const state = open ? "expanded" : "collapsed";
 
-    const contextValue = React.useMemo<SidebarContext>(
+    const contextValue = React.useMemo<SidebarContextType>(
         () => ({
             state,
             open,

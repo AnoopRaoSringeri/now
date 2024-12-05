@@ -1,1 +1,1 @@
-export * from './lib/sketch';
+export * from "./components/sketch";

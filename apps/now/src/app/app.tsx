@@ -6,7 +6,7 @@ export function App() {
     return (
         <HashRouter>
             <Routes>
-                <Route path="/" element={<Layout children={<></>} />} />
+                <Route path="/" element={<Layout />} />
                 <Route path="/commands" element={<NxWelcome title="now" />} />
             </Routes>
         </HashRouter>
