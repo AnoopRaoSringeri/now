@@ -29,7 +29,7 @@ export class VideoToFrames {
                 duration = video.duration;
 
                 let totalFrames: number = amount;
-                if (type ==== VideoToFramesMethod.fps) {
+                if (type === VideoToFramesMethod.fps) {
                     totalFrames = duration * amount;
                 }
                 for (let time = 0; time < duration; time += duration / totalFrames) {

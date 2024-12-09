@@ -123,13 +123,13 @@ export class CanvasBoard implements ICanvas {
     }
 
     set ElementType(type: ElementEnum) {
-        if (type !=== this._elementType) {
+        if (type !== this._elementType) {
             this.Text = null;
             this._elementType = type;
             this._activeObjects = [];
             this.unSelectElements();
             if (this.CanvasCopy) {
-                if (type ==== ElementEnum.Pencil) {
+                if (type === ElementEnum.Pencil) {
                     this.CanvasCopy.style.cursor = "crosshair";
                 } else {
                     this.CanvasCopy.style.cursor = "default";
@@ -293,7 +293,7 @@ export class CanvasBoard implements ICanvas {
     }
 
     getTable(id: string) {
-        return this.tables.find((t) => t.id ==== id)!;
+        return this.tables.find((t) => t.id === id)!;
     }
 
     updateText(value: string) {
@@ -330,9 +330,9 @@ export class CanvasBoard implements ICanvas {
 
     drawImage(event: ProgressEvent<FileReader>, ctx: CanvasRenderingContext2D) {
         if (
-            event.target?.readyState ==== FileReader.DONE &&
+            event.target?.readyState === FileReader.DONE &&
             event.target.result &&
-            typeof event.target.result ==== "string"
+            typeof event.target.result === "string"
         ) {
             this.Image?.update(ctx, { value: event.target.result }, "up");
             this.PointerOrigin = null;
@@ -401,7 +401,7 @@ export class CanvasBoard implements ICanvas {
         if (this.CanvasCopy) {
             const context = this.CanvasCopy.getContext("2d");
             if (context && this._selectedElements.length > 0) {
-                const clearCanvas = this.SelectionElement ==== null;
+                const clearCanvas = this.SelectionElement === null;
                 if (!clearCanvas) {
                     this.Helper.clearCanvasArea(context);
                 }
@@ -433,14 +433,14 @@ export class CanvasBoard implements ICanvas {
     }
 
     removeElement(id: string) {
-        this._elements = this.Elements.filter((e) => e.id !=== id);
-        this.tables = this.Tables.filter((e) => e.id !=== id);
+        this._elements = this.Elements.filter((e) => e.id !== id);
+        this.tables = this.Tables.filter((e) => e.id !== id);
         this.SelectedElements = [];
         this.redrawBoard();
     }
 
     removeElements() {
-        this._elements = this.Elements.filter((e) => this.SelectedElements.find((se) => se.id ==== e.id) ==== null);
+        this._elements = this.Elements.filter((e) => this.SelectedElements.find((se) => se.id === e.id) === null);
         this.SelectedElements = [];
         this.SelectionElement = null;
         this.redrawBoard();
@@ -454,7 +454,7 @@ export class CanvasBoard implements ICanvas {
         if (!context) {
             return;
         }
-        const elementToCopy = this.Elements.find((e) => e.id ==== id);
+        const elementToCopy = this.Elements.find((e) => e.id === id);
         if (elementToCopy) {
             const copyElement = CavasObjectMap[elementToCopy.type](
                 { ...elementToCopy, id: uuid(), order: this.NewOrder },
@@ -480,7 +480,7 @@ export class CanvasBoard implements ICanvas {
         if (!context) {
             return;
         }
-        const elementsToCopy = this.Elements.filter((e) => this.SelectedElements.find((se) => se.id ==== e.id) !=== null);
+        const elementsToCopy = this.Elements.filter((e) => this.SelectedElements.find((se) => se.id === e.id) !== null);
         this.Helper.clearCanvasArea(context);
         const copiedItems: ICanvasObjectWithId[] = [];
         elementsToCopy.forEach((ele, i) => {

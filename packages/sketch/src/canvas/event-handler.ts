@@ -31,25 +31,25 @@ export class EventManager {
             return;
         }
         if (
-            this.Board._selectedElements.length !=== 0 &&
-            (this.Board.HoveredObject ==== null || this.Board.HoveredObject.id !=== this.Board._selectedElements[0].id) &&
-            (this.Board.SelectionElement ==== null || this.Board._currentCanvasAction ==== CanvasActionEnum.Select)
+            this.Board._selectedElements.length !== 0 &&
+            (this.Board.HoveredObject === null || this.Board.HoveredObject.id !== this.Board._selectedElements[0].id) &&
+            (this.Board.SelectionElement === null || this.Board._currentCanvasAction === CanvasActionEnum.Select)
         ) {
             this.Board.unSelectElements();
         }
         const { offsetX, offsetY } = CanvasHelper.getCurrentMousePosition(e, this.Board.Transform);
         this.Board.PointerOrigin = { x: offsetX, y: offsetY };
-        if (this.Board.ElementType ==== ElementEnum.Pan || (e.detail ==== 1 && e.ctrlKey)) {
+        if (this.Board.ElementType === ElementEnum.Pan || (e.detail === 1 && e.ctrlKey)) {
             this.Board._currentCanvasAction = CanvasActionEnum.Pan;
             this.Board.PointerOrigin = { x: e.offsetX, y: e.offsetY };
-        } else if (this.Board.ElementType ==== ElementEnum.Move) {
-            if (e.detail ==== 1) {
+        } else if (this.Board.ElementType === ElementEnum.Move) {
+            if (e.detail === 1) {
                 if (this.Board.HoveredObject) {
-                    this.Board.Elements = this.Board.Elements.filter((e) => e.id !=== this.Board.HoveredObject!.id);
+                    this.Board.Elements = this.Board.Elements.filter((e) => e.id !== this.Board.HoveredObject!.id);
                     this.Board.redrawBoard();
                     this.Board.ActiveObjects = [this.Board.HoveredObject];
                     this.Board.SelectedElements = [this.Board.HoveredObject];
-                    if (this.Board._currentCanvasAction ==== CanvasActionEnum.Resize && this.Board.CursorPosition) {
+                    if (this.Board._currentCanvasAction === CanvasActionEnum.Resize && this.Board.CursorPosition) {
                         this.Board.ActiveObjects.forEach((ao) => {
                             ao.resize(context, { dx: 0, dy: 0 }, this.Board.CursorPosition!, "down");
                         });
@@ -64,7 +64,7 @@ export class EventManager {
                     this.Board.Helper.clearCanvasArea(context);
                     if (this.Board.SelectionElement) {
                         this.Board.TempSelectionArea = this.Board.SelectionElement;
-                        if (this.Board._currentCanvasAction ==== CanvasActionEnum.Resize) {
+                        if (this.Board._currentCanvasAction === CanvasActionEnum.Resize) {
                             this.Board.ActiveObjects = this.Board.SelectedElements;
                             this.Board.SelectedElements = [];
                             this.Board.Elements = this.Board.Elements.filter((e) => !e.IsSelected);
@@ -79,7 +79,7 @@ export class EventManager {
                             this.Board.ActiveObjects.forEach((ele) => {
                                 ele.update(context, { points: [] }, "down", false);
                             });
-                        } else if (this.Board._currentCanvasAction ==== CanvasActionEnum.Move) {
+                        } else if (this.Board._currentCanvasAction === CanvasActionEnum.Move) {
                             this.Board.ActiveObjects = this.Board.SelectedElements;
                             this.Board.SelectedElements = [];
                             this.Board.Elements = this.Board.Elements.filter((e) => !e.IsSelected);
@@ -113,7 +113,7 @@ export class EventManager {
                 }
             }
         } else {
-            if (this.Board.ElementType ==== ElementEnum.Text) {
+            if (this.Board.ElementType === ElementEnum.Text) {
                 if (!this.Board.Text) {
                     this.Board.Text = CavasObjectMap[ElementEnum.Text](
                         {
@@ -128,7 +128,7 @@ export class EventManager {
                     );
                     this.Board.Text?.create(context);
                 }
-            } else if (this.Board.ElementType ==== ElementEnum.Image) {
+            } else if (this.Board.ElementType === ElementEnum.Image) {
                 this.Board.Image = CavasObjectMap[ElementEnum.Image](
                     {
                         x: offsetX,
@@ -172,7 +172,7 @@ export class EventManager {
         const { offsetX, offsetY } = CanvasHelper.getCurrentMousePosition(e, this.Board.Transform);
         if (this.Board.PointerOrigin) {
             const { x, y } = this.Board.PointerOrigin;
-            if (this.Board._currentCanvasAction ==== CanvasActionEnum.Pan) {
+            if (this.Board._currentCanvasAction === CanvasActionEnum.Pan) {
                 const { offsetX, offsetY } = e;
                 const dx = offsetX - x;
                 const dy = offsetY - y;
@@ -180,9 +180,9 @@ export class EventManager {
                 this.Board.Transform = { ...this.Board.Transform, transformX: pe + dx, transformY: pf + dy };
                 this.Board.PointerOrigin = { x: offsetX, y: offsetY };
                 this.Board.redrawBoard();
-            } else if (this.Board.ElementType ==== ElementEnum.Move) {
+            } else if (this.Board.ElementType === ElementEnum.Move) {
                 if (this.Board.TempSelectionArea) {
-                    if (this.Board._currentCanvasAction ==== CanvasActionEnum.Select) {
+                    if (this.Board._currentCanvasAction === CanvasActionEnum.Select) {
                         this.Board.TempSelectionArea.update(
                             context,
                             {
@@ -192,14 +192,14 @@ export class EventManager {
                             },
                             "move"
                         );
-                    } else if (this.Board._currentCanvasAction ==== CanvasActionEnum.Move) {
+                    } else if (this.Board._currentCanvasAction === CanvasActionEnum.Move) {
                         this.Board.Helper.clearCanvasArea(context);
                         this.Board.TempSelectionArea.move(context, { x: offsetX - x, y: offsetY - y }, "move", false);
                         this.Board.ActiveObjects.forEach((ele) => {
                             ele.move(context, { x: offsetX - x, y: offsetY - y }, "move", false);
                         });
                     } else if (
-                        this.Board._currentCanvasAction ==== CanvasActionEnum.Resize &&
+                        this.Board._currentCanvasAction === CanvasActionEnum.Resize &&
                         this.Board.CursorPosition
                     ) {
                         this.Board.Helper.clearCanvasArea(context);
@@ -251,7 +251,7 @@ export class EventManager {
                                     ux = rx + ox;
                                     uy = ry + oy;
                             }
-                            // if (ele.type ==== ElementEnum.Pencil) {
+                            // if (ele.type === ElementEnum.Pencil) {
                             //     ele.resize(context, { dx: ox, dy: oy }, "m", "move", false);
                             // } else {
                             //     ele.update(context, { h: uh, w: uw, x: ux, y: uy, points: [] }, "move", false);
@@ -260,7 +260,7 @@ export class EventManager {
                         });
                     }
                 } else {
-                    if (this.Board._currentCanvasAction ==== CanvasActionEnum.Resize && this.Board.CursorPosition) {
+                    if (this.Board._currentCanvasAction === CanvasActionEnum.Resize && this.Board.CursorPosition) {
                         this.Board.SelectedElements = [];
                         this.Board.ActiveObjects.forEach((ao) => {
                             ao.resize(
@@ -291,7 +291,7 @@ export class EventManager {
                     );
                 });
             }
-        } else if (this.Board.ElementType ==== ElementEnum.Move) {
+        } else if (this.Board.ElementType === ElementEnum.Move) {
             if (this.Board.SelectionElement) {
                 const hovered =
                     this.Board.Helper.isUnderMouse(
@@ -302,14 +302,14 @@ export class EventManager {
                         { x: offsetX, y: offsetY },
                         this.Board.SelectionElement.getValues(),
                         this.Board.SelectionElement.type
-                    ) !=== "m";
+                    ) !== "m";
                 if (hovered) {
                     this.Board.CursorPosition = this.Board.Helper.getCursorPosition(
                         { x: offsetX, y: offsetY },
                         this.Board.SelectionElement.getValues(),
                         this.Board.SelectionElement.type
                     );
-                    if (this.Board.CursorPosition ==== "m") {
+                    if (this.Board.CursorPosition === "m") {
                         this.Board._currentCanvasAction = CanvasActionEnum.Move;
                     } else {
                         this.Board._currentCanvasAction = CanvasActionEnum.Resize;
@@ -333,7 +333,7 @@ export class EventManager {
                         ele.getValues(),
                         ele.type
                     );
-                    if (this.Board.CursorPosition ==== "m") {
+                    if (this.Board.CursorPosition === "m") {
                         this.Board._currentCanvasAction = CanvasActionEnum.Move;
                     } else {
                         this.Board._currentCanvasAction = CanvasActionEnum.Resize;
@@ -368,7 +368,7 @@ export class EventManager {
         const { x, y } = this.Board.PointerOrigin;
         const { offsetX, offsetY } = CanvasHelper.getCurrentMousePosition(e, this.Board.Transform);
         if (this.Board.TempSelectionArea) {
-            if (this.Board._currentCanvasAction ==== CanvasActionEnum.Resize) {
+            if (this.Board._currentCanvasAction === CanvasActionEnum.Resize) {
                 const { x: px = 0, y: py = 0, h: ph = 0, w: pw = 0 } = this.Board.TempSelectionArea.getValues();
                 const {
                     x: rx = 0,
@@ -423,7 +423,7 @@ export class EventManager {
                 context.closePath();
                 this.Board.saveBoard();
                 return;
-            } else if (this.Board._currentCanvasAction ==== CanvasActionEnum.Move) {
+            } else if (this.Board._currentCanvasAction === CanvasActionEnum.Move) {
                 this.Board.TempSelectionArea.move(context, { x: offsetX - x, y: offsetY - y }, "up");
             } else {
                 this.Board.TempSelectionArea.update(
@@ -465,13 +465,13 @@ export class EventManager {
             }
             this.Board.SelectionElement = this.Board.TempSelectionArea;
         }
-        if (this.Board.ActiveObjects.length !=== 0) {
-            if (this.Board.ElementType ==== ElementEnum.Move) {
-                if (this.Board._currentCanvasAction ==== CanvasActionEnum.Resize) {
+        if (this.Board.ActiveObjects.length !== 0) {
+            if (this.Board.ElementType === ElementEnum.Move) {
+                if (this.Board._currentCanvasAction === CanvasActionEnum.Resize) {
                     this.Board.ActiveObjects.forEach((ao) => {
                         ao.resize(context, { dx: offsetX - x, dy: offsetY - y }, this.Board.CursorPosition!, "up");
                     });
-                } else if (this.Board._currentCanvasAction ==== CanvasActionEnum.Select) {
+                } else if (this.Board._currentCanvasAction === CanvasActionEnum.Select) {
                     this.Board.ActiveObjects.forEach((ao) => {
                         ao.select(ao.getValues());
                         ao.set("ShowSelection", true);
@@ -482,12 +482,12 @@ export class EventManager {
                     });
                 }
                 this.Board.Tables.forEach((t) => {
-                    const table = this.Board.ActiveObjects.find((e) => e.id ==== t.id);
+                    const table = this.Board.ActiveObjects.find((e) => e.id === t.id);
                     if (table) {
                         t.update(context, table.getValues(), "up", false);
                     }
                 });
-                this.Board.ActiveObjects = this.Board.ActiveObjects.filter((e) => e.type !=== ElementEnum.Table);
+                this.Board.ActiveObjects = this.Board.ActiveObjects.filter((e) => e.type !== ElementEnum.Table);
                 this.Board.SelectedElements = this.Board.ActiveObjects;
             } else {
                 this.Board.ActiveObjects.forEach((ao) => {
@@ -501,10 +501,10 @@ export class EventManager {
                         "up"
                     );
                 });
-                if (this.Board.ElementType ==== ElementEnum.Table) {
+                if (this.Board.ElementType === ElementEnum.Table) {
                     this.Board.Tables = [
                         ...this.Board.Tables,
-                        ...this.Board.ActiveObjects.filter((e) => e.type ==== ElementEnum.Table)
+                        ...this.Board.ActiveObjects.filter((e) => e.type === ElementEnum.Table)
                     ];
                     this.Board.ActiveObjects = [];
                 }
@@ -568,17 +568,17 @@ export class EventManager {
             return;
         }
         if (
-            this.Board.SelectedElements.length !=== 0 &&
-            this.Board.HoveredObject?.id !=== this.Board.SelectedElements[0]?.id
+            this.Board.SelectedElements.length !== 0 &&
+            this.Board.HoveredObject?.id !== this.Board.SelectedElements[0]?.id
         ) {
             this.Board.unSelectElements();
         }
         const { clientX: offsetX, clientY: offsetY } = e.touches[0];
         this.Board.PointerOrigin = { x: offsetX, y: offsetY };
-        if (this.Board.ElementType ==== ElementEnum.Move) {
+        if (this.Board.ElementType === ElementEnum.Move) {
             const ele = this.Board.Helper.hoveredElement({ x: offsetX, y: offsetY }, this.Board.Elements);
             if (ele) {
-                this.Board.Elements = this.Board.Elements.filter((e) => e.id !=== ele.id);
+                this.Board.Elements = this.Board.Elements.filter((e) => e.id !== ele.id);
                 this.Board.redrawBoard();
                 this.Board.HoveredObject = ele;
                 this.Board.ActiveObjects = [ele];
@@ -587,7 +587,7 @@ export class EventManager {
             }
             const table = this.Board.Helper.hoveredElement({ x: offsetX, y: offsetY }, this.Board.Tables);
             if (table) {
-                this.Board.Elements = this.Board.Elements.filter((e) => e.id !=== table.id);
+                this.Board.Elements = this.Board.Elements.filter((e) => e.id !== table.id);
                 this.Board.redrawBoard();
                 this.Board.HoveredObject = table;
                 this.Board.ActiveObjects = [table];
@@ -622,9 +622,9 @@ export class EventManager {
             return;
         }
         const { clientX: offsetX, clientY: offsetY } = e.touches[0];
-        if (this.Board.ActiveObjects.length !=== 0 && this.Board.PointerOrigin) {
+        if (this.Board.ActiveObjects.length !== 0 && this.Board.PointerOrigin) {
             const { x, y } = this.Board.PointerOrigin;
-            if (this.Board.ElementType ==== ElementEnum.Move) {
+            if (this.Board.ElementType === ElementEnum.Move) {
                 this.Board.ActiveObjects[0].move(context, { x: offsetX - x, y: offsetY - y }, "move");
             } else {
                 this.Board.ActiveObjects[0].update(
@@ -648,11 +648,11 @@ export class EventManager {
         if (!context) {
             return;
         }
-        if (this.Board.ActiveObjects.length !=== 0) {
+        if (this.Board.ActiveObjects.length !== 0) {
             const { clientX: offsetX, clientY: offsetY } = e.changedTouches[0];
-            if (this.Board.ActiveObjects.length !=== 0 && this.Board.PointerOrigin) {
+            if (this.Board.ActiveObjects.length !== 0 && this.Board.PointerOrigin) {
                 const { x, y } = this.Board.PointerOrigin;
-                if (this.Board.ElementType ==== ElementEnum.Move) {
+                if (this.Board.ElementType === ElementEnum.Move) {
                     this.Board.ActiveObjects[0].move(context, { x: offsetX - x, y: offsetY - y }, "up");
                 } else {
                     this.Board.ActiveObjects[0].update(context, { w: offsetX - x, h: offsetY - y }, "up");

@@ -125,7 +125,7 @@ export class Circle implements ICanvasObjectWithId {
         ctx.fill();
         ctx.closePath();
         ctx.restore();
-        if (action ==== "up") {
+        if (action === "up") {
             this.h = h;
             this.w = w;
             this.x = x;
@@ -165,7 +165,7 @@ export class Circle implements ICanvasObjectWithId {
         ctx.stroke();
         ctx.fill();
         this.select({ x: offsetX, y: offsetY });
-        if (action ==== "up") {
+        if (action === "up") {
             ctx.closePath();
             ctx.restore();
             this.x = offsetX;
@@ -296,7 +296,7 @@ export class Circle implements ICanvasObjectWithId {
         ctx.restore();
 
         this.select({ h, w, x, y });
-        if (action ==== "up") {
+        if (action === "up") {
             this.h = h;
             this.w = w;
             this.x = x;

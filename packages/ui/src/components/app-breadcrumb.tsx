@@ -23,7 +23,7 @@ export function AppBreadcrumb({ items }: { items: BreadcrumbItemType[] }) {
             <Breadcrumb>
                 <BreadcrumbList>
                     {items.map((i, ix) => (
-                        <BreadcrumbItemContainer key={ix} {...i} hideSeparator={ix ==== items.length - 1} />
+                        <BreadcrumbItemContainer key={ix} {...i} hideSeparator={ix === items.length - 1} />
                     ))}
                 </BreadcrumbList>
             </Breadcrumb>
