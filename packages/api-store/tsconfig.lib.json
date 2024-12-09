@@ -26,6 +26,5 @@
         "src/**/*.test.jsx",
         "src/**/*.spec.jsx"
     ],
-    "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx", "src/hooks/use-toast.ts"],
-    "composite": true
+    "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"]
 }

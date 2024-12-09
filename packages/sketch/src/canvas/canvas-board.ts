@@ -26,7 +26,6 @@ import {
     MIN_INTERVAL
 } from "../helpers/canvas-helpers";
 
-let CanvasWorker: Worker | null = null;
 export class CanvasBoard implements ICanvas {
     private _lastTimestamp = 0;
     private _clicked = false;
@@ -351,8 +350,6 @@ export class CanvasBoard implements ICanvas {
     }
 
     loadBoard(metadata: CanvasMetadata, { height, readonly, width, draw }: Partial<AdditionalCanvasOptions>) {
-        CanvasWorker = CanvasHelper.GetCanvasWorker();
-
         this.ReadOnly = readonly ?? false;
         this.Height = height ?? metadata.size.height;
         this.Width = width ?? metadata.size.width;
@@ -372,7 +369,6 @@ export class CanvasBoard implements ICanvas {
     }
 
     createBoard({ height = window.innerHeight, width = window.innerWidth }: Partial<AdditionalCanvasOptions>) {
-        CanvasWorker = CanvasHelper.GetCanvasWorker();
         this.Height = height;
         this.Width = width;
     }
@@ -599,9 +595,6 @@ export class CanvasBoard implements ICanvas {
     redrawBoard() {
         const fId = window.requestAnimationFrame((timestamp) => {
             if (timestamp - this._lastTimestamp >= MIN_INTERVAL) {
-                if (!CanvasWorker) {
-                    return;
-                }
                 if (this.CanvasCopy) {
                     const contextCopy = this.CanvasCopy.getContext("2d");
                     if (contextCopy) {
@@ -629,24 +622,6 @@ export class CanvasBoard implements ICanvas {
                     });
                     context.restore();
                 }
-                CanvasWorker.onmessage = function (e) {
-                    console.log(e.data);
-                };
-
-                // this.RunInWorker({
-                //     type: "redraw",
-                //     data: {
-                //         metadata: this.toJSON()
-                //     }
-                // });
-                // CanvasWorker.onmessage = (e) => {
-                //     const btm = e.data;
-                //     const ctx = this.Canvas.getContext("bitmaprenderer");
-                //     if (ctx) {
-                //         ctx.transferFromImageBitmap(btm);
-                //     }
-                //     console.log(ctx);
-                // };
                 this._lastTimestamp = timestamp;
             }
         });

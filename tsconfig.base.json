@@ -15,6 +15,8 @@
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
         "paths": {
+            "@now/api-store": ["packages/api-store/src/index.ts"],
+            "@now/auth": ["packages/auth/src/index.ts"],
             "@now/sketch": ["packages/sketch/src/index.ts"],
             "@now/styles/*": ["packages/ui/src/styles/*"],
             "@now/ui": ["packages/ui/src/index.ts"],

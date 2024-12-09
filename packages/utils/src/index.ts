@@ -4,3 +4,8 @@ export * from "./hooks/use-theme";
 //
 export * from "./types/sketch-now/canvas";
 export * from "./types/sketch-now/custom-canvas";
+//
+export * from "./types/auth/auth";
+export * from "./hooks/use-auth";
+//
+export * from "./hooks/store-provider";
