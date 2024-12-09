@@ -18,7 +18,8 @@
             "@now/sketch": ["packages/sketch/src/index.ts"],
             "@now/styles/*": ["packages/ui/src/styles/*"],
             "@now/ui": ["packages/ui/src/index.ts"],
-            "@now/utils": ["packages/utils/src/index.ts"]
+            "@now/utils": ["packages/utils/src/index.ts"],
+            "@now/visualize": ["packages/visualize/src/index.ts"]
         }
     },
     "exclude": ["node_modules", "tmp"]

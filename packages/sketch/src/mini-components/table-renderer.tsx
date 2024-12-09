@@ -1,17 +1,7 @@
-import {
-    AppLoader,
-    Button,
-    Icon,
-    ScrollArea,
-    ScrollBar,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow
-} from "@now/ui";
+import { AppLoader, Button, Icon } from "@now/ui";
 import { ICanvasTransform } from "@now/utils";
+import { CutomTable } from "@now/visualize";
+
 import { observer } from "mobx-react";
 import { useEffect, useState } from "react";
 import { CanvasBoard } from "../canvas/canvas-board";
@@ -82,35 +72,7 @@ export const TableRenderer = observer(function TableRenderer({
             </div>
             <AppLoader />
             {data.length > 0 ? (
-                <ScrollArea
-                    className="size-full border border-gray-50/10"
-                    style={{
-                        zIndex: isLocked ? 0 : 50,
-                        zoom: transform.scaleX
-                    }}
-                >
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                {headers.map((h) => (
-                                    <TableHead key={h}>{h}</TableHead>
-                                ))}
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody className="size-full overflow-auto">
-                            {data.slice(1).map((row, i) => (
-                                <TableRow key={i}>
-                                    {row.map((k, i) => (
-                                        <TableCell key={k + i} className="text-nowrap">
-                                            {row[i]}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                    <ScrollBar orientation="horizontal" />
-                </ScrollArea>
+                <CutomTable headers={headers} data={data} />
             ) : loading ? null : (
                 <>
                     <label htmlFor={id} className="absolute z-50 flex items-center justify-center opacity-30">

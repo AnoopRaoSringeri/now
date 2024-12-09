@@ -61,7 +61,7 @@ export const DEFAULT_TRANSFORM: ICanvasTransform = {
     transformY: 0
 };
 
-let CanvasWorker: Worker | null = null;
+const CanvasWorker: Worker | null = null;
 export class CanvasHelper {
     Board: ICanvas;
     constructor(board: ICanvas) {
@@ -399,10 +399,10 @@ export class CanvasHelper {
 
     static GetCanvasWorker() {
         if (!CanvasWorker) {
-            CanvasWorker = new Worker(new URL("../workers/canvas-worker", import.meta.url), {
-                type: "module",
-                name: "canvas-worker"
-            });
+            // CanvasWorker = new Worker(new URL("../workers/canvas-worker", import.meta.url), {
+            //     type: "module",
+            //     name: "canvas-worker"
+            // });
         }
         return CanvasWorker;
     }

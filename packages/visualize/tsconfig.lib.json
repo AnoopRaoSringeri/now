@@ -31,7 +31,7 @@
         "src/**/*.jsx",
         "src/**/*.ts",
         "src/**/*.tsx",
-        "src/mini-components/tables-renderer.tsx"
-    ],
-    "composite": true
+        "../sketch/src/mini-components/tables-renderer.tsx",
+        "../sketch/src/mini-components/table-renderer.tsx"
+    ]
 }
