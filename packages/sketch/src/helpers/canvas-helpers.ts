@@ -180,7 +180,7 @@ export class CanvasHelper {
                     x <= px + hOffSet + wFactor &&
                     py - (hOffSet + wFactor) <= y &&
                     y <= py + hOffSet + wFactor
-            ) !== null ||
+            ) != null ||
             // (x === ucx && y === ucy) ||
             (x === lpx + wFactor && y === lpy + wFactor)
             // Math.sqrt(Math.pow(cx - x, 2) + Math.pow(cy - y, 2))

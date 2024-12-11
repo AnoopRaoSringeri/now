@@ -32,8 +32,8 @@ export class EventManager {
         }
         if (
             this.Board._selectedElements.length !== 0 &&
-            (this.Board.HoveredObject === null || this.Board.HoveredObject.id !== this.Board._selectedElements[0].id) &&
-            (this.Board.SelectionElement === null || this.Board._currentCanvasAction === CanvasActionEnum.Select)
+            (this.Board.HoveredObject == null || this.Board.HoveredObject.id !== this.Board._selectedElements[0].id) &&
+            (this.Board.SelectionElement == null || this.Board._currentCanvasAction === CanvasActionEnum.Select)
         ) {
             this.Board.unSelectElements();
         }

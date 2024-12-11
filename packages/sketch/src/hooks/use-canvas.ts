@@ -87,6 +87,7 @@ export function useCanvas(canvasId: string) {
 
     function onResize() {
         canvasBoard?.resizeBoard();
+        console.log("re");
     }
 
     function onMouseDown(e: MouseEvent) {
@@ -126,5 +127,5 @@ export function useCanvas(canvasId: string) {
     function onWheelAction(e: WheelEvent) {
         canvasBoard?.onWheelAction(e);
     }
-    return { canvasBoard, removeCanvasCache };
+    return { canvasBoard, removeCanvasCache, onResize };
 }

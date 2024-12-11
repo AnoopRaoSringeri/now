@@ -93,7 +93,7 @@ export class CanvasImage implements ICanvasObjectWithId {
             return;
         }
         this.Board.Helper.applyStyles(ctx, this.style);
-        if (this.image.src === "" || this.image.src === null) {
+        if (this.image.src === "" || this.image.src == null) {
             this.image.src = this.value;
             this.image.onload = () => {
                 ctx.drawImage(this.image, this.x, this.y);

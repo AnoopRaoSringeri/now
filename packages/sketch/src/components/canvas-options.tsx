@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import ElementSelector from "./element-selector";
 import { Button, Input } from "@now/ui";
-import { House, Save } from "lucide-react";
+import { Expand, House, Save } from "lucide-react";
 import { useCanvas } from "../hooks/use-canvas";
 import { StyleEditorWrapper } from "../mini-components/canvas-style-editor";
 import { ZoomController } from "../mini-components/zoom-controller";
 
-const CanvasOptions = observer(function CanvasOptions({ name }: { name: string }) {
+const CanvasOptions = observer(function CanvasOptions({ name, onExpand }: { name: string; onExpand?: () => unknown }) {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [sketchName, setSketchName] = useState(name);
@@ -49,9 +49,12 @@ const CanvasOptions = observer(function CanvasOptions({ name }: { name: string }
                         </Button>
                     </div>
                 </div>
-                <div className="absolute left-5 top-5 z-[100]">
+                <div className="absolute left-5 top-5 z-[100] gap-1 flex ">
                     <Button size="sm" onClick={goToHome}>
                         <House size="20px" />
+                    </Button>
+                    <Button size="sm" onClick={onExpand}>
+                        <Expand size="20px" />
                     </Button>
                 </div>
                 <StyleEditorWrapper />

@@ -18,5 +18,8 @@ export * from "./components/ui/table";
 export * from "./components/ui/toast";
 export * from "./components/ui/toaster";
 export * from "./components/ui/sonner";
+export * from "./components/ui/card";
+export * from "./components/ui/form";
+export * from "./components/ui/image";
 
 export * from "./hooks/use-toast";

@@ -11,14 +11,14 @@ export const TextEditorWrapper = observer(function TextEditorWrapper() {
 
     useEffect(() => {
         inputRef.current?.focus();
-    }, [canvasBoard.Text !== null]);
+    }, [canvasBoard.Text != null]);
 
     useEffect(() => {
         inputRef.current?.addEventListener("input", autoResize, false);
         return () => {
             inputRef.current?.removeEventListener("input", autoResize, false);
         };
-    }, [canvasBoard.Text !== null]);
+    }, [canvasBoard.Text != null]);
 
     function onBlur(value: string) {
         canvasBoard.updateText(value);
@@ -34,7 +34,7 @@ export const TextEditorWrapper = observer(function TextEditorWrapper() {
         inputRef.current.style.width = inputRef.current.scrollWidth + "px";
     }
 
-    if (canvasBoard.Text === null) {
+    if (canvasBoard.Text == null) {
         return null;
     }
 

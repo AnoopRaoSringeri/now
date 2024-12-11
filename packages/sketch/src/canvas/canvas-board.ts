@@ -397,7 +397,7 @@ export class CanvasBoard implements ICanvas {
         if (this.CanvasCopy) {
             const context = this.CanvasCopy.getContext("2d");
             if (context && this._selectedElements.length > 0) {
-                const clearCanvas = this.SelectionElement === null;
+                const clearCanvas = this.SelectionElement == null;
                 if (!clearCanvas) {
                     this.Helper.clearCanvasArea(context);
                 }
@@ -436,7 +436,7 @@ export class CanvasBoard implements ICanvas {
     }
 
     removeElements() {
-        this._elements = this.Elements.filter((e) => this.SelectedElements.find((se) => se.id === e.id) === null);
+        this._elements = this.Elements.filter((e) => this.SelectedElements.find((se) => se.id === e.id) == null);
         this.SelectedElements = [];
         this.SelectionElement = null;
         this.redrawBoard();
@@ -476,7 +476,7 @@ export class CanvasBoard implements ICanvas {
         if (!context) {
             return;
         }
-        const elementsToCopy = this.Elements.filter((e) => this.SelectedElements.find((se) => se.id === e.id) !== null);
+        const elementsToCopy = this.Elements.filter((e) => this.SelectedElements.find((se) => se.id === e.id) != null);
         this.Helper.clearCanvasArea(context);
         const copiedItems: ICanvasObjectWithId[] = [];
         elementsToCopy.forEach((ele, i) => {

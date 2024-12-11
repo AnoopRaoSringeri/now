@@ -1,5 +1,5 @@
 import { AppBody } from "@now/ui";
-import { CanvasBoard } from "./canvas-board";
+import { SketchList } from "./sketch-view";
 
 export function SketchNow() {
     return (
@@ -11,7 +11,7 @@ export function SketchNow() {
                 }
             ]}
         >
-            <CanvasBoard />
+            <SketchList />
         </AppBody>
     );
 }

@@ -11,7 +11,7 @@ export function useAuth() {
     const isAuthenticated = localStorage.getItem("IsAuthenticated");
 
     const refreshToken = async () => {
-        if (isAuthenticated == "true") {
+        if (isAuthenticated === "true") {
             const res = await authStore.IsValidSession();
             if (!res) {
                 endSession();
@@ -45,7 +45,7 @@ export function useAuth() {
             toast.success("Logged in successfully");
             localStorage.setItem("IsAuthenticated", "true");
             authStore.IsSessionValid = true;
-            navigate("/sketches");
+            navigate("/sketch-now/sketches");
         } else {
             toast.error("User login failed");
         }
@@ -75,5 +75,5 @@ export function useAuth() {
         setLoading(false);
     };
 
-    return { register, logOut, logIn, loading, refreshToken, forgotPassword };
+    return { register, logOut, logIn, loading, refreshToken, forgotPassword, isAuthenticated };
 }
