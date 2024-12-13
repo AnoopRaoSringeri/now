@@ -58,7 +58,12 @@ const LeftOptionLists: Option[] = [
     {
         icon: "Table",
         value: ElementEnum.Table,
-        description: "Click and drag to draw a file inpup, upload file to add a table"
+        description: "Click and drag to draw a file input, upload file to add a table"
+    },
+    {
+        icon: "Sparkles",
+        value: ElementEnum.AiPrompt,
+        description: "Click and drag to draw a textarea, type your prompt"
     }
 ];
 

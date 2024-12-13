@@ -60,6 +60,10 @@ export class CanvasBoard implements ICanvas {
 
     tables: ICanvasObjectWithId[] = [];
 
+    aiPanels: ICanvasObjectWithId[] = [];
+
+    charts: ICanvasObjectWithId[] = [];
+
     constructor() {
         this.EventManager = new EventManager(this);
         this._canvas = createRef();
@@ -88,7 +92,9 @@ export class CanvasBoard implements ICanvas {
             image: observable,
             Image: computed,
             tables: observable,
-            Tables: computed
+            Tables: computed,
+            aiPanels: observable,
+            AiPanels: computed
         });
     }
 
@@ -291,8 +297,24 @@ export class CanvasBoard implements ICanvas {
         return this.tables.map((t) => t.id);
     }
 
+    get AiPanels() {
+        return this.aiPanels;
+    }
+
+    set AiPanels(aiPanels: ICanvasObjectWithId[]) {
+        this.aiPanels = aiPanels;
+    }
+
+    get AiPanelIds() {
+        return this.aiPanels.map((a) => a.id);
+    }
+
     getTable(id: string) {
         return this.tables.find((t) => t.id === id)!;
+    }
+
+    getAiPanel(id: string) {
+        return this.aiPanels.find((t) => t.id === id)!;
     }
 
     updateText(value: string) {
@@ -363,6 +385,10 @@ export class CanvasBoard implements ICanvas {
             return CavasObjectMap[ele.type](ele, this);
         });
         this.Tables = tables;
+        const aiPanles = (metadata.aiPanels ?? []).map((ele) => {
+            return CavasObjectMap[ele.type](ele, this);
+        });
+        this.AiPanels = aiPanles;
         if (draw) {
             this.redrawBoard();
         }
@@ -431,6 +457,7 @@ export class CanvasBoard implements ICanvas {
     removeElement(id: string) {
         this._elements = this.Elements.filter((e) => e.id !== id);
         this.tables = this.Tables.filter((e) => e.id !== id);
+        this.aiPanels = this.AiPanels.filter((e) => e.id !== id);
         this.SelectedElements = [];
         this.redrawBoard();
     }
@@ -646,7 +673,8 @@ export class CanvasBoard implements ICanvas {
             elements: [...this.Elements.map((ele) => ele.getValues())],
             size: { height: this.Height, width: this.Width },
             transform: this.Transform,
-            tables: [...this.Tables.map((ele) => ele.getValues())]
+            tables: [...this.Tables.map((ele) => ele.getValues())],
+            aiPanels: [...this.AiPanels.map((ele) => ele.getValues())]
         };
     }
 

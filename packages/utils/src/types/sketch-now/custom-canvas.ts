@@ -123,6 +123,7 @@ export enum ElementEnum {
     Text = "text",
     Image = "image",
     Table = "table",
+    AiPrompt = "aiPrompt",
     Move = "move",
     Pan = "pan"
 }

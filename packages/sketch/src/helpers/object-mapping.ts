@@ -8,6 +8,7 @@ import { Rectangle } from "../canvas/canvas-objects/rectangle";
 import { Square } from "../canvas/canvas-objects/square";
 import { Table } from "../canvas/canvas-objects/table";
 import { Text } from "../canvas/canvas-objects/text";
+import { AiPrompt } from "../canvas/canvas-objects/ai-prompt";
 
 export const CavasObjectMap: {
     [key in ElementEnum]: (initValues: PartialCanvasObject, parent: CanvasBoard) => ICanvasObjectWithId;
@@ -25,5 +26,6 @@ export const CavasObjectMap: {
     },
     [ElementEnum.Pan]: function (): ICanvasObjectWithId {
         throw new Error("Function not implemented.");
-    }
+    },
+    [ElementEnum.AiPrompt]: (initValues, parent) => new AiPrompt(initValues, parent)
 };

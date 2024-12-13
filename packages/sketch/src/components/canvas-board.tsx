@@ -11,6 +11,7 @@ import { AppLoader } from "@now/ui";
 import { useQuery } from "@tanstack/react-query";
 import { useStore } from "@now/utils";
 import { useFullscreen, useResizeObserver } from "@mantine/hooks";
+import { AiPromptsRenderer } from "../mini-components/ai-prompts-renderer";
 
 export const CanvasBoard = observer(function CanvasBoard() {
     const { toggle, ref } = useFullscreen();
@@ -58,6 +59,7 @@ export const CanvasBoard = observer(function CanvasBoard() {
             <TextEditorWrapper />
             <ImageInput />
             <TablesRenderer />
+            <AiPromptsRenderer />
             <canvas id="canvas-board" className="absolute z-10 overscroll-none" ref={canvasBoard.CanvasRef}></canvas>
             <canvas
                 id="canvas-board-copy"

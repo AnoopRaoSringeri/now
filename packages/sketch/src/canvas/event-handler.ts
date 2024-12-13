@@ -325,7 +325,8 @@ export class EventManager {
             } else {
                 const ele = this.Board.Helper.hoveredElement({ x: offsetX, y: offsetY }, [
                     ...this.Board.Elements,
-                    ...this.Board.Tables
+                    ...this.Board.Tables,
+                    ...this.Board.AiPanels
                 ]);
                 if (ele) {
                     this.Board.CursorPosition = this.Board.Helper.getCursorPosition(
@@ -487,7 +488,15 @@ export class EventManager {
                         t.update(context, table.getValues(), "up", false);
                     }
                 });
-                this.Board.ActiveObjects = this.Board.ActiveObjects.filter((e) => e.type !== ElementEnum.Table);
+                this.Board.AiPanels.forEach((t) => {
+                    const table = this.Board.ActiveObjects.find((e) => e.id === t.id);
+                    if (table) {
+                        t.update(context, table.getValues(), "up", false);
+                    }
+                });
+                this.Board.ActiveObjects = this.Board.ActiveObjects.filter(
+                    (e) => e.type !== ElementEnum.Table && e.type !== ElementEnum.AiPrompt
+                );
                 this.Board.SelectedElements = this.Board.ActiveObjects;
             } else {
                 this.Board.ActiveObjects.forEach((ao) => {
@@ -505,6 +514,12 @@ export class EventManager {
                     this.Board.Tables = [
                         ...this.Board.Tables,
                         ...this.Board.ActiveObjects.filter((e) => e.type === ElementEnum.Table)
+                    ];
+                    this.Board.ActiveObjects = [];
+                } else if (this.Board.ElementType === ElementEnum.AiPrompt) {
+                    this.Board.AiPanels = [
+                        ...this.Board.AiPanels,
+                        ...this.Board.ActiveObjects.filter((e) => e.type === ElementEnum.AiPrompt)
                     ];
                     this.Board.ActiveObjects = [];
                 }

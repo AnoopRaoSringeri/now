@@ -1,11 +1,12 @@
 import { createContext, ReactNode, useContext } from "react";
 import SketchStore from "../api-store/sketch-now-store";
 import AuthStore from "../api-store/auth-store";
+import UploadStore from "../api-store/upload-store";
 
 const store = {
     authStore: new AuthStore(),
-    sketchStore: new SketchStore()
-    // uploadStore: new UploadStore()
+    sketchStore: new SketchStore(),
+    uploadStore: new UploadStore()
 };
 
 const StoreContex = createContext(store);

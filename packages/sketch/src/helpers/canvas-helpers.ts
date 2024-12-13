@@ -95,6 +95,7 @@ export class CanvasHelper {
             case ElementEnum.Rectangle:
             case ElementEnum.Image:
             case ElementEnum.Table:
+            case ElementEnum.AiPrompt:
                 return x >= ucx - hOffSet && x <= ucx + hOffSet && y >= ucy - hOffSet && y <= ucy + hOffSet
                     ? "tl"
                     : x >= ucx - hOffSet && x <= ucx + hOffSet && y >= uh - hOffSet && y <= uh + hOffSet
@@ -198,6 +199,7 @@ export class CanvasHelper {
             case ElementEnum.Square:
             case ElementEnum.Image:
             case ElementEnum.Table:
+            case ElementEnum.AiPrompt:
                 break;
             case ElementEnum.Pencil: {
                 let lx = Number.POSITIVE_INFINITY;
@@ -270,6 +272,7 @@ export class CanvasHelper {
                 case ElementEnum.Rectangle:
                 case ElementEnum.Image:
                 case ElementEnum.Table:
+                case ElementEnum.AiPrompt:
                     x = Math.min(x, ex);
                     y = Math.min(y, ey);
                     h = Math.max(h, eh + ey);

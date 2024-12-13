@@ -1,5 +1,5 @@
 import { AppLoader, Button, Icon } from "@now/ui";
-import { ICanvasTransform } from "@now/utils";
+import { ICanvasTransform, useStore } from "@now/utils";
 import { CutomTable } from "@now/visualize";
 
 import { observer } from "mobx-react";
@@ -21,7 +21,7 @@ export const TableRenderer = observer(function TableRenderer({
     const { x = 0, y = 0, h = 0, w = 0 } = table.getValues();
     const [loading, setLoading] = useState<boolean>(false);
     const [data, setData] = useState<string[][]>([]);
-    // const { uploadStore } = useStore();
+    const { uploadStore } = useStore();
     const { ax, ay } = CanvasHelper.getAbsolutePosition({ x, y }, transform);
 
     useEffect(() => {
@@ -30,8 +30,8 @@ export const TableRenderer = observer(function TableRenderer({
 
     const loadData = async () => {
         setLoading(true);
-        // const res = await uploadStore.GetData(id);
-        // setData(res.data);
+        const res = await uploadStore.GetData(id);
+        setData(res.data);
         setLoading(false);
     };
 
@@ -49,8 +49,8 @@ export const TableRenderer = observer(function TableRenderer({
 
     const upload = async (file: File, id: string) => {
         setLoading(true);
-        // const res = await uploadStore.UploadFile(file, id);
-        // setData(res.data);
+        const res = await uploadStore.UploadFile(file, id);
+        setData(res.data);
         setLoading(false);
     };
 
