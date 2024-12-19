@@ -87,7 +87,6 @@ export function useCanvas(canvasId: string) {
 
     function onResize() {
         canvasBoard?.resizeBoard();
-        console.log("re");
     }
 
     function onMouseDown(e: MouseEvent) {

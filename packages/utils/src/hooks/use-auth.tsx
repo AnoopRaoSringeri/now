@@ -45,7 +45,7 @@ export function useAuth() {
             toast.success("Logged in successfully");
             localStorage.setItem("IsAuthenticated", "true");
             authStore.IsSessionValid = true;
-            navigate("/sketch-now/sketches");
+            navigate("/sketch-now");
         } else {
             toast.error("User login failed");
         }

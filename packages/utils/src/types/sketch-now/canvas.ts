@@ -44,8 +44,7 @@ export type SavedCanvas = {
 
 export interface CanvasMetadata {
     elements: CanvasObject[];
-    tables: CanvasObject[];
-    aiPanels: CanvasObject[];
+    customElements: CanvasObject[];
     size: Size;
     transform: ICanvasTransform;
 }

@@ -325,8 +325,7 @@ export class EventManager {
             } else {
                 const ele = this.Board.Helper.hoveredElement({ x: offsetX, y: offsetY }, [
                     ...this.Board.Elements,
-                    ...this.Board.Tables,
-                    ...this.Board.AiPanels
+                    ...this.Board.CustomElements
                 ]);
                 if (ele) {
                     this.Board.CursorPosition = this.Board.Helper.getCursorPosition(
@@ -482,20 +481,14 @@ export class EventManager {
                         ao.move(context, { x: offsetX - x, y: offsetY - y }, "up");
                     });
                 }
-                this.Board.Tables.forEach((t) => {
-                    const table = this.Board.ActiveObjects.find((e) => e.id === t.id);
-                    if (table) {
-                        t.update(context, table.getValues(), "up", false);
-                    }
-                });
-                this.Board.AiPanels.forEach((t) => {
-                    const table = this.Board.ActiveObjects.find((e) => e.id === t.id);
-                    if (table) {
-                        t.update(context, table.getValues(), "up", false);
+                this.Board.CustomElements.forEach((t) => {
+                    const element = this.Board.ActiveObjects.find((e) => e.id === t.id);
+                    if (element) {
+                        t.update(context, element.getValues(), "up", false);
                     }
                 });
                 this.Board.ActiveObjects = this.Board.ActiveObjects.filter(
-                    (e) => e.type !== ElementEnum.Table && e.type !== ElementEnum.AiPrompt
+                    (e) => e.type !== ElementEnum.Chart && e.type !== ElementEnum.AiPrompt
                 );
                 this.Board.SelectedElements = this.Board.ActiveObjects;
             } else {
@@ -510,16 +503,10 @@ export class EventManager {
                         "up"
                     );
                 });
-                if (this.Board.ElementType === ElementEnum.Table) {
-                    this.Board.Tables = [
-                        ...this.Board.Tables,
-                        ...this.Board.ActiveObjects.filter((e) => e.type === ElementEnum.Table)
-                    ];
-                    this.Board.ActiveObjects = [];
-                } else if (this.Board.ElementType === ElementEnum.AiPrompt) {
-                    this.Board.AiPanels = [
-                        ...this.Board.AiPanels,
-                        ...this.Board.ActiveObjects.filter((e) => e.type === ElementEnum.AiPrompt)
+                if (this.Board.ElementType === ElementEnum.Chart || this.Board.ElementType === ElementEnum.AiPrompt) {
+                    this.Board.CustomElements = [
+                        ...this.Board.CustomElements,
+                        ...this.Board.ActiveObjects.filter((e) => e.type === this.Board.ElementType)
                     ];
                     this.Board.ActiveObjects = [];
                 }
@@ -600,13 +587,13 @@ export class EventManager {
                 this.Board.SelectedElements = [ele];
                 this.Board.ActiveObjects[0].move(context, { x: 0, y: 0 }, "down");
             }
-            const table = this.Board.Helper.hoveredElement({ x: offsetX, y: offsetY }, this.Board.Tables);
-            if (table) {
-                this.Board.Elements = this.Board.Elements.filter((e) => e.id !== table.id);
+            const element = this.Board.Helper.hoveredElement({ x: offsetX, y: offsetY }, this.Board.CustomElements);
+            if (element) {
+                this.Board.Elements = this.Board.Elements.filter((e) => e.id !== element.id);
                 this.Board.redrawBoard();
-                this.Board.HoveredObject = table;
-                this.Board.ActiveObjects = [table];
-                this.Board.SelectedElements = [table];
+                this.Board.HoveredObject = element;
+                this.Board.ActiveObjects = [element];
+                this.Board.SelectedElements = [element];
                 this.Board.ActiveObjects[0].move(context, { x: 0, y: 0 }, "down");
             }
         } else {

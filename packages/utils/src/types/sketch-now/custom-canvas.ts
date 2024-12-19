@@ -49,7 +49,6 @@ export type MouseAction = "down" | "move" | "up";
 
 export interface ICanvasObjectMethods {
     draw: (ctx: CanvasRenderingContext2D) => unknown;
-    drawTable?: () => ReactNode;
     create: (ctx: CanvasRenderingContext2D) => unknown;
     update: (
         ctx: CanvasRenderingContext2D,
@@ -64,8 +63,6 @@ export interface ICanvasObjectMethods {
         clearCanvas?: boolean
     ) => unknown;
     move: (ctx: CanvasRenderingContext2D, position: Position, action: MouseAction, clearCanvas?: boolean) => unknown;
-    toSVG: (options: Size) => string;
-    getValues: () => CanvasObject;
     select: (cords: Partial<IObjectValue>) => unknown;
     unSelect: () => unknown;
     resize: (
@@ -76,7 +73,9 @@ export interface ICanvasObjectMethods {
         clearCanvas?: boolean
     ) => Position & { h: number; w: number };
     getPosition: () => Position & AbsPosition;
+    getValues: () => CanvasObject;
     set: <T extends keyof ObjectOptions>(key: T, value: ObjectOptions[T]) => unknown;
+    toSVG: (options: Size) => string;
 }
 export interface ObjectOptions {
     IsSelected: boolean;
@@ -122,7 +121,7 @@ export enum ElementEnum {
     Pencil = "pencil",
     Text = "text",
     Image = "image",
-    Table = "table",
+    Chart = "chart",
     AiPrompt = "aiPrompt",
     Move = "move",
     Pan = "pan"

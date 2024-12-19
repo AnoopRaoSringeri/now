@@ -11,6 +11,7 @@ import { AppLoader } from "@now/ui";
 import { useQuery } from "@tanstack/react-query";
 import { useStore } from "@now/utils";
 import { useFullscreen, useResizeObserver } from "@mantine/hooks";
+import { CustomComponentsRenderer } from "./elements-renderer";
 import { AiPromptsRenderer } from "../mini-components/ai-prompts-renderer";
 
 export const CanvasBoard = observer(function CanvasBoard() {
@@ -24,7 +25,7 @@ export const CanvasBoard = observer(function CanvasBoard() {
 
     const { data, isLoading: sketchLoading } = useQuery({
         queryFn: async () => {
-            if (id) {
+            if (id && id != "new") {
                 return await sketchStore.GetSketchById(id);
             } else {
                 return null;
@@ -60,6 +61,7 @@ export const CanvasBoard = observer(function CanvasBoard() {
             <ImageInput />
             <TablesRenderer />
             <AiPromptsRenderer />
+            {/* <CustomComponentsRenderer /> */}
             <canvas id="canvas-board" className="absolute z-10 overscroll-none" ref={canvasBoard.CanvasRef}></canvas>
             <canvas
                 id="canvas-board-copy"

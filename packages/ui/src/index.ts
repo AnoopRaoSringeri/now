@@ -21,5 +21,7 @@ export * from "./components/ui/sonner";
 export * from "./components/ui/card";
 export * from "./components/ui/form";
 export * from "./components/ui/image";
+export * from "./components/ui/popover";
+export * from "./components/ui/chart";
 
 export * from "./hooks/use-toast";

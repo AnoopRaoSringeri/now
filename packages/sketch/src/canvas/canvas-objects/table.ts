@@ -17,9 +17,9 @@ import {
 } from "@now/utils";
 import { DefaultStyle, CanvasHelper } from "../../helpers/canvas-helpers";
 
-export class Table implements ICanvasObjectWithId {
+export class Chart implements ICanvasObjectWithId {
     readonly Board: CanvasBoard;
-    type: ElementEnum = ElementEnum.Table;
+    type: ElementEnum = ElementEnum.Chart;
     id = uuid();
     style = DefaultStyle;
     order = 0;
@@ -96,21 +96,6 @@ export class Table implements ICanvasObjectWithId {
         ctx.strokeRect(this.x, this.y, this.w, this.h);
         ctx.fillRect(this.x, this.y, this.w, this.h);
     }
-
-    // drawTable() {
-    //     return render({
-    //         id: this.id,
-    //         position: {
-    //             x: this.x,
-    //             y: this.y
-    //         },
-    //         size: {
-    //             height: this.h,
-    //             width: this.w
-    //         },
-    //         transform: this.Board.Transform
-    //     });
-    // }
 
     create(ctx: CanvasRenderingContext2D) {
         this.draw(ctx);

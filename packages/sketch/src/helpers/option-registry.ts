@@ -69,6 +69,6 @@ export const OptionRegistry: OptionRegistryType = {
     [ElementEnum.Move]: [],
     [ElementEnum.Pan]: [],
     [ElementEnum.Image]: [],
-    [ElementEnum.Table]: [],
+    [ElementEnum.Chart]: [],
     [ElementEnum.AiPrompt]: []
 };

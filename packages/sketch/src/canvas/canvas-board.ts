@@ -58,9 +58,7 @@ export class CanvasBoard implements ICanvas {
 
     image: ICanvasObjectWithId | null = null;
 
-    tables: ICanvasObjectWithId[] = [];
-
-    aiPanels: ICanvasObjectWithId[] = [];
+    customElements: ICanvasObjectWithId[] = [];
 
     charts: ICanvasObjectWithId[] = [];
 
@@ -91,10 +89,8 @@ export class CanvasBoard implements ICanvas {
             Text: computed,
             image: observable,
             Image: computed,
-            tables: observable,
-            Tables: computed,
-            aiPanels: observable,
-            AiPanels: computed
+            customElements: observable,
+            CustomElements: computed
         });
     }
 
@@ -285,36 +281,29 @@ export class CanvasBoard implements ICanvas {
         this.image = value;
     }
 
-    get Tables() {
-        return this.tables;
+    get CustomElements() {
+        return this.customElements;
     }
 
-    set Tables(tables: ICanvasObjectWithId[]) {
-        this.tables = tables;
+    set CustomElements(components: ICanvasObjectWithId[]) {
+        this.customElements = components;
     }
 
-    get TableIds() {
-        return this.tables.map((t) => t.id);
+    get CustomComponentIds() {
+        return this.customElements.map((a) => a.id);
     }
 
-    get AiPanels() {
-        return this.aiPanels;
+    getCustomComponentIds(type: ElementEnum) {
+        return this.customElements.reduce((p, c) => {
+            if (c.type === type) {
+                p.push(c.id);
+            }
+            return p;
+        }, [] as string[]);
     }
 
-    set AiPanels(aiPanels: ICanvasObjectWithId[]) {
-        this.aiPanels = aiPanels;
-    }
-
-    get AiPanelIds() {
-        return this.aiPanels.map((a) => a.id);
-    }
-
-    getTable(id: string) {
-        return this.tables.find((t) => t.id === id)!;
-    }
-
-    getAiPanel(id: string) {
-        return this.aiPanels.find((t) => t.id === id)!;
+    getComponent(id: string) {
+        return this.customElements.find((t) => t.id === id)!;
     }
 
     updateText(value: string) {
@@ -381,14 +370,9 @@ export class CanvasBoard implements ICanvas {
             return CavasObjectMap[ele.type](ele, this);
         });
         this._elements = objArray;
-        const tables = (metadata.tables ?? []).map((ele) => {
+        this.CustomElements = (metadata.customElements ?? []).map((ele) => {
             return CavasObjectMap[ele.type](ele, this);
         });
-        this.Tables = tables;
-        const aiPanles = (metadata.aiPanels ?? []).map((ele) => {
-            return CavasObjectMap[ele.type](ele, this);
-        });
-        this.AiPanels = aiPanles;
         if (draw) {
             this.redrawBoard();
         }
@@ -456,8 +440,7 @@ export class CanvasBoard implements ICanvas {
 
     removeElement(id: string) {
         this._elements = this.Elements.filter((e) => e.id !== id);
-        this.tables = this.Tables.filter((e) => e.id !== id);
-        this.aiPanels = this.AiPanels.filter((e) => e.id !== id);
+        this.customElements = this.CustomElements.filter((e) => e.id !== id);
         this.SelectedElements = [];
         this.redrawBoard();
     }
@@ -673,8 +656,7 @@ export class CanvasBoard implements ICanvas {
             elements: [...this.Elements.map((ele) => ele.getValues())],
             size: { height: this.Height, width: this.Width },
             transform: this.Transform,
-            tables: [...this.Tables.map((ele) => ele.getValues())],
-            aiPanels: [...this.AiPanels.map((ele) => ele.getValues())]
+            customElements: [...this.CustomElements.map((ele) => ele.getValues())]
         };
     }
 

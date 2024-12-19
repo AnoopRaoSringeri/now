@@ -1,4 +1,4 @@
-import { Button, LucideIcons, Icon, Label } from "@now/ui";
+import { Button, LucideIcons, Icon, Label, PopoverTrigger, Popover, PopoverContent, PopoverArrow } from "@now/ui";
 import { ElementEnum } from "@now/utils";
 import { observer } from "mobx-react";
 import { useParams } from "react-router";
@@ -57,7 +57,7 @@ const LeftOptionLists: Option[] = [
     },
     {
         icon: "Table",
-        value: ElementEnum.Table,
+        value: ElementEnum.Chart,
         description: "Click and drag to draw a file input, upload file to add a table"
     },
     {
@@ -66,6 +66,8 @@ const LeftOptionLists: Option[] = [
         description: "Click and drag to draw a textarea, type your prompt"
     }
 ];
+
+const VISIBLE_ELEMENTS = 8;
 
 const ElementSelector = observer(function ElementSelector({ onChange }: { onChange: (value: ElementEnum) => unknown }) {
     const { id } = useParams<{ id: string }>();
@@ -90,7 +92,7 @@ const ElementSelector = observer(function ElementSelector({ onChange }: { onChan
                     )}
                 </Button>
                 <Icon name="Minus" className="rotate-90" size="30px" />
-                {LeftOptionLists.map((o) => (
+                {LeftOptionLists.slice(0, VISIBLE_ELEMENTS).map((o) => (
                     <Button
                         size="sm"
                         variant={canvasBoard.ElementType === o.value ? "default" : "secondary"}
@@ -102,6 +104,34 @@ const ElementSelector = observer(function ElementSelector({ onChange }: { onChan
                         <Icon name={o.icon} size="20px" />
                     </Button>
                 ))}
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button size="sm" variant="secondary">
+                            <Icon name="Ellipsis" size="20px" />
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                        onInteractOutside={(e) => e.preventDefault()}
+                        onPointerDownOutside={(e) => e.preventDefault()}
+                        align="end"
+                        alignOffset={0}
+                        className=" flex flex-row items-center gap-1 w-min"
+                    >
+                        {LeftOptionLists.slice(VISIBLE_ELEMENTS).map((o) => (
+                            <Button
+                                size="sm"
+                                variant={canvasBoard.ElementType === o.value ? "default" : "secondary"}
+                                key={o.value}
+                                onClick={() => {
+                                    onChange(o.value);
+                                }}
+                            >
+                                <Icon name={o.icon} size="20px" />
+                            </Button>
+                        ))}
+                        <PopoverArrow />
+                    </PopoverContent>
+                </Popover>
             </div>
             {selectedOption ? <Label className="text-xs ">{selectedOption.description}</Label> : null}
         </div>

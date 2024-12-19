@@ -6,7 +6,7 @@ import { Line } from "../canvas/canvas-objects/line";
 import { Pencil } from "../canvas/canvas-objects/pencil";
 import { Rectangle } from "../canvas/canvas-objects/rectangle";
 import { Square } from "../canvas/canvas-objects/square";
-import { Table } from "../canvas/canvas-objects/table";
+import { Chart } from "../canvas/canvas-objects/table";
 import { Text } from "../canvas/canvas-objects/text";
 import { AiPrompt } from "../canvas/canvas-objects/ai-prompt";
 
@@ -20,7 +20,7 @@ export const CavasObjectMap: {
     [ElementEnum.Pencil]: (initValues, parent) => new Pencil(initValues, parent),
     [ElementEnum.Text]: (initValues, parent) => new Text(initValues, parent),
     [ElementEnum.Image]: (initValues, parent) => new CanvasImage(initValues, parent),
-    [ElementEnum.Table]: (initValues, parent) => new Table(initValues, parent),
+    [ElementEnum.Chart]: (initValues, parent) => new Chart(initValues, parent),
     [ElementEnum.Move]: function (): ICanvasObjectWithId {
         throw new Error("Function not implemented.");
     },

@@ -7,12 +7,16 @@ import { Expand, House, Save } from "lucide-react";
 import { useCanvas } from "../hooks/use-canvas";
 import { StyleEditorWrapper } from "../mini-components/canvas-style-editor";
 import { ZoomController } from "../mini-components/zoom-controller";
+import { useStore } from "@now/utils";
+import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
 
 const CanvasOptions = observer(function CanvasOptions({ name, onExpand }: { name: string; onExpand?: () => unknown }) {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [sketchName, setSketchName] = useState(name);
     const { canvasBoard } = useCanvas(id ?? "new");
+    const { sketchStore } = useStore();
 
     useEffect(() => {
         setSketchName(name);
@@ -20,10 +24,28 @@ const CanvasOptions = observer(function CanvasOptions({ name, onExpand }: { name
 
     const saveBoard = async () => {
         console.log(canvasBoard.Canvas.toDataURL());
+        if (id && id != "new") {
+            await sketchStore.UpdateSketch(id, canvasBoard.toJSON(), sketchName, canvasBoard.Canvas.toDataURL());
+            toast.success("Sketch saved successfully");
+        } else {
+            const response = await sketchStore.SaveSketch(
+                canvasBoard.toJSON(),
+                sketchName,
+                canvasBoard.Canvas.toDataURL()
+            );
+            if (response) {
+                toast.success("Sketch updated successfully");
+                navigate(`/sketch/${response._id}`);
+            }
+        }
     };
 
+    const { mutate, isPending } = useMutation({
+        mutationFn: () => saveBoard()
+    });
+
     const goToHome = () => {
-        navigate("/sketches");
+        navigate("/sketch-now");
     };
 
     return (
@@ -44,7 +66,7 @@ const CanvasOptions = observer(function CanvasOptions({ name, onExpand }: { name
                                 setSketchName(e.target.value);
                             }}
                         />
-                        <Button size="sm" onClick={() => saveBoard()}>
+                        <Button size="sm" onClick={() => mutate()} loading={isPending}>
                             <Save />
                         </Button>
                     </div>

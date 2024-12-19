@@ -30,7 +30,9 @@ module.exports = [
         // Override or add rules here
         rules: {
             "@typescript-eslint/adjacent-overload-signatures": 0,
-            "@typescript-eslint/no-non-null-assertion": 0
+            "@typescript-eslint/no-non-null-assertion": 0,
+            eqeqeq: 0,
+            "react-hooks/exhaustive-deps": 0
         }
     }
 ];

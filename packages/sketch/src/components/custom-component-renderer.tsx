@@ -1,28 +1,47 @@
 import { AppLoader, Button, Icon } from "@now/ui";
-import { ChartData, ICanvasTransform, useStore } from "@now/utils";
-import { BarChart, CutomTable, PieChart } from "@now/visualize";
+import { ElementEnum, ICanvasObjectWithId, ICanvasTransform, useStore } from "@now/utils";
+import { BarChart } from "@now/visualize";
 
 import { observer } from "mobx-react";
 import { useEffect, useState } from "react";
 import { CanvasBoard } from "../canvas/canvas-board";
 import { CanvasHelper } from "../helpers/canvas-helpers";
 
-export const TableRenderer = observer(function TableRenderer({
-    transform,
+export type RendererType = React.ComponentType<{
+    id: string;
+    board: CanvasBoard;
+}>;
+
+export const CustomComponentRendererWrapper = observer(function CustomComponentRendererWrapper({
     id,
     board
 }: {
-    transform: ICanvasTransform;
     id: string;
     board: CanvasBoard;
 }) {
+    const component = board.getComponent(id);
+    switch (component.type) {
+        case ElementEnum.AiPrompt:
+            return <></>;
+        case ElementEnum.Chart:
+            return <CustomComponentRenderer board={board} component={component} />;
+    }
+});
+export const CustomComponentRenderer = observer(function CustomComponentRenderer({
+    component,
+    board
+}: {
+    component: ICanvasObjectWithId;
+    board: CanvasBoard;
+}) {
+    const { x = 0, y = 0, h = 0, w = 0 } = component.getValues();
     const [isLocked, setIsLocked] = useState(true);
-    const table = board.getComponent(id);
-    const { x = 0, y = 0, h = 0, w = 0 } = table.getValues();
     const [loading, setLoading] = useState<boolean>(false);
-    const [data, setData] = useState<ChartData | null>(null);
+    const [data, setData] = useState<string[][]>([]);
     const { uploadStore } = useStore();
+    const transform = board.Transform;
     const { ax, ay } = CanvasHelper.getAbsolutePosition({ x, y }, transform);
+    const id = component.id;
 
     useEffect(() => {
         loadData();
@@ -31,32 +50,31 @@ export const TableRenderer = observer(function TableRenderer({
     const loadData = async () => {
         setLoading(true);
         const res = await uploadStore.GetData(id);
-        setData(res);
+        setData(res.data);
         setLoading(false);
     };
 
     const style: React.CSSProperties = {
         top: ay,
         left: ax,
-        // height: h,
-        // width: w,
         height: h * transform.scaleX,
         width: w * transform.scaleX,
         position: "absolute",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: 10
-        // transform: `scale(${transform.scaleX})`,
-        // zoom: transform.scaleX
+        padding: 10,
+        zoom: transform.scaleX
     };
 
     const upload = async (file: File, id: string) => {
         setLoading(true);
         const res = await uploadStore.UploadFile(file, id);
-        setData(res);
+        setData(res.data);
         setLoading(false);
     };
+
+    const headers: string[] = data.length > 0 ? data[0] : [];
 
     function removeElement() {
         board.removeElement(id);
@@ -73,17 +91,16 @@ export const TableRenderer = observer(function TableRenderer({
                 </Button>
             </div>
             <AppLoader />
-            {data ? (
+            {data.length > 0 ? (
                 <>
                     {/* <CutomTable
-                        headers={data.columns}
-                        data={data.data}
+                        headers={headers}
+                        data={data}
                         style={{
                             zoom: transform.scaleX
                         }}
                     /> */}
-                    {/* <BarChart chartData={data} /> */}
-                    <PieChart />
+                    <BarChart />
                 </>
             ) : loading ? null : (
                 <>
