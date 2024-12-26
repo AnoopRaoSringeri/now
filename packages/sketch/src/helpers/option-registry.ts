@@ -7,7 +7,8 @@ export enum OptionTypeEnum {
     Range = "Range",
     Color = "Color",
     Number = "Number",
-    Font = "Font"
+    Font = "Font",
+    Select = "Select"
 }
 
 export type RegistryOption = {

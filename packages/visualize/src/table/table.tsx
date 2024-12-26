@@ -1,8 +1,8 @@
 import { ScrollArea, ScrollBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@now/ui";
 import { ChartRowData } from "@now/utils";
-import { CSSProperties } from "react";
+import React, { CSSProperties, useMemo } from "react";
 
-export function CutomTable({
+export const CutomTable = React.memo(function CutomTable({
     headers,
     data,
     style
@@ -11,6 +11,18 @@ export function CutomTable({
     data: ChartRowData[];
     style?: CSSProperties;
 }) {
+    const rows = useMemo(() => {
+        return data.slice(1).map((row, i) => (
+            <TableRow key={i}>
+                {headers.map((k, i) => (
+                    <TableCell key={k + i} className="text-nowrap">
+                        {row[k]}
+                    </TableCell>
+                ))}
+            </TableRow>
+        ));
+    }, [data, headers]);
+
     return (
         <ScrollArea className="size-full border border-gray-50/10" style={style}>
             <Table>
@@ -21,19 +33,9 @@ export function CutomTable({
                         ))}
                     </TableRow>
                 </TableHeader>
-                <TableBody className="size-full overflow-auto">
-                    {data.slice(1).map((row, i) => (
-                        <TableRow key={i}>
-                            {headers.map((k, i) => (
-                                <TableCell key={k + i} className="text-nowrap">
-                                    {row[k]}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    ))}
-                </TableBody>
+                <TableBody className="size-full overflow-auto">{rows}</TableBody>
             </Table>
             <ScrollBar orientation="horizontal" />
         </ScrollArea>
     );
-}
+});

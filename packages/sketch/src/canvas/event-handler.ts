@@ -487,9 +487,9 @@ export class EventManager {
                         t.update(context, element.getValues(), "up", false);
                     }
                 });
-                this.Board.ActiveObjects = this.Board.ActiveObjects.filter(
-                    (e) => e.type !== ElementEnum.Chart && e.type !== ElementEnum.AiPrompt
-                );
+                // this.Board.ActiveObjects = this.Board.ActiveObjects.filter(
+                //     (e) => e.type !== ElementEnum.Chart && e.type !== ElementEnum.AiPrompt
+                // );
                 this.Board.SelectedElements = this.Board.ActiveObjects;
             } else {
                 this.Board.ActiveObjects.forEach((ao) => {

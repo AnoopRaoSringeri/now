@@ -72,18 +72,18 @@ export const TableRenderer = observer(function TableRenderer({
                     <Icon name="Trash2" />
                 </Button>
             </div>
-            <AppLoader />
-            {data ? (
+            <AppLoader loading={loading} />
+            {data && data.columns.length > 0 ? (
                 <>
-                    {/* <CutomTable
+                    <CutomTable
                         headers={data.columns}
                         data={data.data}
                         style={{
                             zoom: transform.scaleX
                         }}
-                    /> */}
+                    />
                     {/* <BarChart chartData={data} /> */}
-                    <PieChart />
+                    {/* <PieChart /> */}
                 </>
             ) : loading ? null : (
                 <>

@@ -12,7 +12,7 @@ import { ChartData } from "@now/utils";
 import React from "react";
 import { Bar, BarChart as BarChartComponent, CartesianGrid, XAxis } from "recharts";
 
-export const BarChart = React.memo(function BarChart({ chartData }: { chartData: ChartData }) {
+export const BarChartNow = React.memo(function BarChartNow({ chartData }: { chartData: ChartData }) {
     const chartConfig = {
         [chartData.columns[1]]: {
             label: chartData.columns[1],

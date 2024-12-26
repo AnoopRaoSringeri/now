@@ -31,7 +31,8 @@ export const CanvasBoard = observer(function CanvasBoard() {
                 return null;
             }
         },
-        queryKey: ["Sketch", id]
+        queryKey: ["Sketch", id],
+        refetchOnMount: false
     });
 
     useEffect(() => {
@@ -59,9 +60,9 @@ export const CanvasBoard = observer(function CanvasBoard() {
             <CanvasOptions name={sketchName} onExpand={toggle} />
             <TextEditorWrapper />
             <ImageInput />
-            <TablesRenderer />
-            <AiPromptsRenderer />
-            {/* <CustomComponentsRenderer /> */}
+            {/* <TablesRenderer />
+            <AiPromptsRenderer /> */}
+            <CustomComponentsRenderer />
             <canvas id="canvas-board" className="absolute z-10 overscroll-none" ref={canvasBoard.CanvasRef}></canvas>
             <canvas
                 id="canvas-board-copy"

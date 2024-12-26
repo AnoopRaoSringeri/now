@@ -6,7 +6,7 @@ import { Line } from "../canvas/canvas-objects/line";
 import { Pencil } from "../canvas/canvas-objects/pencil";
 import { Rectangle } from "../canvas/canvas-objects/rectangle";
 import { Square } from "../canvas/canvas-objects/square";
-import { Chart } from "../canvas/canvas-objects/table";
+import { Chart } from "../canvas/canvas-objects/chart";
 import { Text } from "../canvas/canvas-objects/text";
 import { AiPrompt } from "../canvas/canvas-objects/ai-prompt";
 

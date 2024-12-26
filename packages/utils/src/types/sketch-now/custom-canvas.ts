@@ -1,49 +1,6 @@
-import { ReactNode } from "react";
-
 import { AbsPosition, Delta, Position, Size } from "./canvas";
-
-export interface IObjectValue {
-    x: number;
-    y: number;
-    h: number;
-    w: number;
-    sa: number;
-    ea: number;
-    ro: number;
-    points: [number, number][];
-    value: string;
-    style: IObjectStyle;
-}
-
-export interface IObjectStyle {
-    strokeStyle: string;
-    fillColor: string;
-    strokeWidth: number;
-    opacity: number;
-    font: Font | null;
-}
-
-export interface Font {
-    color: string;
-    style: string;
-    varient: string;
-    weight: number | string;
-    size: number | string;
-    family:
-        | string
-        | "caption"
-        | "icon"
-        | "menu"
-        | "message-box"
-        | "small-caption"
-        | "status-bar"
-        | "initial"
-        | "inherit";
-}
-
-export interface IObjectValueWithId extends Partial<IObjectValue> {
-    id: string;
-}
+import { IObjectStyle } from "./object-styles";
+import { CanvasObject, ICanvasObject, IObjectValue, ObjectOptions } from "./canvas-object";
 
 export type MouseAction = "down" | "move" | "up";
 
@@ -77,24 +34,6 @@ export interface ICanvasObjectMethods {
     set: <T extends keyof ObjectOptions>(key: T, value: ObjectOptions[T]) => unknown;
     toSVG: (options: Size) => string;
 }
-export interface ObjectOptions {
-    IsSelected: boolean;
-    IsDragging: boolean;
-    ShowSelection: boolean;
-}
-export interface ICanvasObject extends Partial<IObjectValue>, ICanvasObjectMethods, ObjectOptions {
-    type: ElementEnum;
-    order: number;
-    readonly Board: ICanvas;
-}
-
-export interface ICanvasObjectWithId extends ICanvasObject {
-    id: string;
-}
-
-export type PartialCanvasObject = Partial<ICanvasObject> & { id: string };
-
-export type CanvasObject = PartialCanvasObject & { type: ElementEnum };
 
 export interface ICanvas {
     Transform: ICanvasTransform;
@@ -111,28 +50,6 @@ export interface ICanvasTransform {
     scaleY: number;
     transformX: number;
     transformY: number;
-}
-
-export enum ElementEnum {
-    Line = "line",
-    Square = "square",
-    Rectangle = "rectangle",
-    Circle = "circle",
-    Pencil = "pencil",
-    Text = "text",
-    Image = "image",
-    Chart = "chart",
-    AiPrompt = "aiPrompt",
-    Move = "move",
-    Pan = "pan"
-}
-
-export enum CanvasActionEnum {
-    Pan = "pan",
-    Zoom = "zoom",
-    Select = "select",
-    Resize = "resize",
-    Move = "move"
 }
 
 export type CursorPosition = "m" | "tl" | "tr" | "br" | "bl" | "l" | "r" | "t" | "b";

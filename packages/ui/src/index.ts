@@ -23,5 +23,6 @@ export * from "./components/ui/form";
 export * from "./components/ui/image";
 export * from "./components/ui/popover";
 export * from "./components/ui/chart";
+export * from "./components/ui/select";
 
 export * from "./hooks/use-toast";

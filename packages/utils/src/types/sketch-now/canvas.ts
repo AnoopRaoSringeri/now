@@ -1,4 +1,5 @@
-import { CanvasObject, ICanvasTransform } from "./custom-canvas";
+import { CanvasObject } from "./canvas-object";
+import { ICanvasTransform } from "./custom-canvas";
 
 export interface Position {
     x: number;

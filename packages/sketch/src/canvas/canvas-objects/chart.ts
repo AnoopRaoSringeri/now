@@ -10,12 +10,14 @@ import {
     MouseAction,
     IObjectStyle,
     Position,
-    ICanvasObject,
     Delta,
     CursorPosition,
-    Size
+    Size,
+    ObjectOptions,
+    Chart as ChartClassType
 } from "@now/utils";
 import { DefaultStyle, CanvasHelper } from "../../helpers/canvas-helpers";
+import { ChartFactory } from "@now/visualize";
 
 export class Chart implements ICanvasObjectWithId {
     readonly Board: CanvasBoard;
@@ -23,12 +25,14 @@ export class Chart implements ICanvasObjectWithId {
     id = uuid();
     style = DefaultStyle;
     order = 0;
+    chart: ChartClassType = ChartFactory.createChart("Table", []);
     constructor(v: PartialCanvasObject, parent: CanvasBoard) {
         this.x = v.x ?? 0;
         this.y = v.y ?? 0;
         this.h = v.h ?? 0;
         this.w = v.w ?? 0;
         this.value = v.value ?? "";
+        this.chart = v.chart ?? ChartFactory.createChart("Table", []);
         this.id = v.id;
         this.Board = parent;
         this.order = v.order ?? 0;
@@ -70,19 +74,14 @@ export class Chart implements ICanvasObjectWithId {
     set ShowSelection(value: boolean) {
         this._showSelection = value;
     }
-    select({ x = this.x, y = this.y }: Partial<IObjectValue>) {
+
+    select({ x = this.x, y = this.y, h = this.h, w = this.w }: Partial<IObjectValue>) {
         this._isSelected = true;
         if (this.Board.CanvasCopy && this._showSelection) {
-            const copyCtx = this.Board.CanvasCopy.getContext("2d");
-            if (copyCtx) {
-                const metrics = copyCtx.measureText(this.value);
-                CanvasHelper.applySelection(copyCtx, {
-                    height: metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent,
-                    width: metrics.width,
-                    x,
-                    y
-                });
-            }
+            // const copyCtx = this.Board.CanvasCopy.getContext("2d");
+            // if (copyCtx) {
+            //     CanvasHelper.applySelection(copyCtx, { height: h, width: w, x, y });
+            // }
         }
     }
 
@@ -93,8 +92,8 @@ export class Chart implements ICanvasObjectWithId {
 
     draw(ctx: CanvasRenderingContext2D) {
         this.Board.Helper.applyStyles(ctx, this.style);
-        ctx.strokeRect(this.x, this.y, this.w, this.h);
-        ctx.fillRect(this.x, this.y, this.w, this.h);
+        // ctx.strokeRect(this.x, this.y, this.w, this.h);
+        // ctx.fillRect(this.x, this.y, this.w, this.h);
     }
 
     create(ctx: CanvasRenderingContext2D) {
@@ -119,9 +118,9 @@ export class Chart implements ICanvasObjectWithId {
             x = x + w;
             w = Math.abs(w);
         }
-        ctx.strokeRect(x, y, w, h);
-        ctx.fillRect(x, y, w, h);
-        ctx.restore();
+        // ctx.strokeRect(x, y, w, h);
+        // ctx.fillRect(x, y, w, h);
+        // ctx.restore();
         if (action === "up") {
             this.h = h;
             this.w = w;
@@ -177,13 +176,15 @@ export class Chart implements ICanvasObjectWithId {
             w: this.w,
             h: this.h,
             style: this.style,
-            order: this.order
+            order: this.order,
+            chart: this.chart
         };
     }
 
-    set<T extends keyof ICanvasObject>(key: T, value: ICanvasObject[T]) {
-        console.log(key, value);
+    set<T extends keyof ObjectOptions>(key: T, value: ObjectOptions[T]) {
+        this[key] = value;
     }
+
     resize(ctx: CanvasRenderingContext2D, delta: Delta, cPos: CursorPosition, action: MouseAction, clearCanvas = true) {
         const { dx, dy } = delta;
         this.Board.Helper.applyStyles(ctx, this.style);

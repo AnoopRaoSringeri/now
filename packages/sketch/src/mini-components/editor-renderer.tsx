@@ -1,9 +1,21 @@
-import { Button, Icon, Label, Separator, Slider } from "@now/ui";
-import { IObjectStyle, Font } from "@now/utils";
+import {
+    Button,
+    Icon,
+    Label,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+    Separator,
+    Slider
+} from "@now/ui";
+import { IObjectStyle, Font, ChartEnum } from "@now/utils";
 import { observer } from "mobx-react";
-import TwitterPicker, { TwitterPickerStylesProps } from "react-color/lib/components/twitter/Twitter";
 import { DefaultFont } from "../helpers/canvas-helpers";
 import { RegistryOption, OptionTypeEnum } from "../helpers/option-registry";
+import { TwitterPicker } from "react-color";
+import { TwitterPickerStylesProps } from "react-color/lib/components/twitter/Twitter";
 
 const SWATCHES = [
     "#FF6900",
@@ -104,6 +116,18 @@ export const Renderer = observer(function Renderer({
                     <Separator className="bg-white" />
                     <FontEditor font={(value ?? DefaultFont) as Font} onChange={(f) => onChange("font", f)} />
                 </div>
+            );
+        case OptionTypeEnum.Select:
+            return (
+                <Select>
+                    <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Select..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value={ChartEnum.BarChart}>Bar</SelectItem>
+                        <SelectItem value={ChartEnum.Table}>Table</SelectItem>
+                    </SelectContent>
+                </Select>
             );
     }
 });

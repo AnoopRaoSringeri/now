@@ -50,7 +50,7 @@ const chartConfig = {
     }
 } satisfies ChartConfig;
 
-export function PieChart() {
+export const PieChartNow = React.memo(function PieChartNow() {
     const totalVisitors = React.useMemo(() => {
         return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
     }, []);
@@ -107,4 +107,4 @@ export function PieChart() {
             </CardFooter>
         </Card>
     );
-}
+});

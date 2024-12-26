@@ -1,18 +1,17 @@
-import * as React from "react";
-
 import { cn } from "@now/utils";
+import * as React from "react";
 
 const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
     ({ className, ...props }, ref) => (
-        <div className="relative w-full overflow-auto">
-            <table ref={ref} className={cn("w-full caption-bottom text-sm", className)} {...props} />
-        </div>
+        <table ref={ref} className={cn("w-full caption-bottom text-sm", className)} {...props} />
     )
 );
 Table.displayName = "Table";
 
 const TableHeader = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
-    ({ className, ...props }, ref) => <thead ref={ref} className={cn("[&_tr]:border-b", className)} {...props} />
+    ({ className, ...props }, ref) => (
+        <thead ref={ref} className={cn("sticky top-0 bg-muted  [&_tr]:border-b", className)} {...props} />
+    )
 );
 TableHeader.displayName = "TableHeader";
 
@@ -50,7 +49,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, React.ThHTMLAttributes<
         <th
             ref={ref}
             className={cn(
-                "h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
+                "h-12 px-4 text-left align-middle text-base font-semibold text-muted-foreground [&:has([role=checkbox])]:pr-0",
                 className
             )}
             {...props}
@@ -73,4 +72,4 @@ const TableCaption = React.forwardRef<HTMLTableCaptionElement, React.HTMLAttribu
 );
 TableCaption.displayName = "TableCaption";
 
-export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };
+export { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow };
