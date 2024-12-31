@@ -24,5 +24,10 @@ export * from "./components/ui/image";
 export * from "./components/ui/popover";
 export * from "./components/ui/chart";
 export * from "./components/ui/select";
+export * from "./components/ui/command";
+export * from "./components/ui/dialog";
+export * from "./components/ui/badge";
+
+export * from "./components/multi-select";
 
 export * from "./hooks/use-toast";

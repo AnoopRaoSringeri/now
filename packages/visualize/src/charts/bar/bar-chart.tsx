@@ -9,30 +9,46 @@ import {
     ChartTooltipContent
 } from "@now/ui";
 import { ChartData } from "@now/utils";
-import React from "react";
+import { observer } from "mobx-react";
+import React, { useMemo } from "react";
 import { Bar, BarChart as BarChartComponent, CartesianGrid, XAxis } from "recharts";
+import { BarChartConfig } from "./class";
 
-export const BarChartNow = React.memo(function BarChartNow({ chartData }: { chartData: ChartData }) {
-    const chartConfig = {
-        [chartData.columns[1]]: {
-            label: chartData.columns[1],
+export const BarChartNow = observer(function BarChartNow({
+    chartData,
+    chartConfig: config
+}: {
+    chartData: ChartData;
+    chartConfig: BarChartConfig;
+}) {
+    const memoizedData = chartData.data;
+
+    const xAxis = config.xAxis.getValue();
+
+    if (xAxis == null || config.yAxis.getValue().length === 0) {
+        return null;
+    }
+
+    const usedColumn = [xAxis, ...config.yAxis.getValue()];
+
+    const chartConfig: ChartConfig = {};
+    usedColumn.forEach((column) => {
+        chartConfig[column.name] = {
+            label: column.name,
             color: "#2563eb"
-        },
-        [chartData.columns[8]]: {
-            label: chartData.columns[8],
-            color: "#60a5fa"
-        }
-    } satisfies ChartConfig;
+        };
+    });
+
     return (
         <ChartContainer config={chartConfig} className="size-full">
-            <BarChartComponent accessibilityLayer data={chartData.data}>
+            <BarChartComponent accessibilityLayer data={memoizedData}>
                 <CartesianGrid vertical={false} />
-                <XAxis dataKey={chartData.columns[7]} tickLine={false} tickMargin={10} axisLine={false} />
+                <XAxis dataKey={xAxis.name} tickLine={false} tickMargin={10} axisLine={false} />
                 <ChartTooltip content={<ChartTooltipContent />} />
                 <ChartLegend content={<ChartLegendContent />} />
-                <Bar dataKey={chartData.columns[1]} fill={`var(--color-${chartData.columns[1]})`} radius={4} />
-                <Bar dataKey={chartData.columns[8]} fill={`var(--color-${chartData.columns[8]})`} radius={4} />
-                <Bar dataKey={chartData.columns[2]} fill={`var(--color-${chartData.columns[8]})`} radius={4} />
+                {config.yAxis.getValue().map((v) => (
+                    <Bar key={v.name} dataKey={v.name} fill={`var(--color-${v.name})`} radius={4} />
+                ))}
             </BarChartComponent>
         </ChartContainer>
     );

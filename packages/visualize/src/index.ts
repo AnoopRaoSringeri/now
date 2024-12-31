@@ -13,3 +13,6 @@ export * from "./charts/line/line-chart";
 export * from "./charts/line/class";
 
 export * from "./chart-factory";
+
+export * from "./components/options-renderer";
+export * from "./components/chart-select-editor";

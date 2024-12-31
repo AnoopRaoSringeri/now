@@ -11,6 +11,8 @@ export function AppContainer() {
     useEffect(() => {
         if (isAuthenticated === "true") {
             refreshToken();
+        } else {
+            navigate("/auth");
         }
     }, [isAuthenticated]);
 

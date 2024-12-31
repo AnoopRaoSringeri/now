@@ -45,7 +45,6 @@ export type SavedCanvas = {
 
 export interface CanvasMetadata {
     elements: CanvasObject[];
-    customElements: CanvasObject[];
     size: Size;
     transform: ICanvasTransform;
 }

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 import { ImageInput } from "../mini-components/image-input";
-import { TablesRenderer } from "../mini-components/tables-renderer";
 import { TextEditorWrapper } from "../mini-components/text-editor";
 import CanvasOptions from "./canvas-options";
 import { useCanvas } from "../hooks/use-canvas";
@@ -11,8 +10,7 @@ import { AppLoader } from "@now/ui";
 import { useQuery } from "@tanstack/react-query";
 import { useStore } from "@now/utils";
 import { useFullscreen, useResizeObserver } from "@mantine/hooks";
-import { CustomComponentsRenderer } from "./elements-renderer";
-import { AiPromptsRenderer } from "../mini-components/ai-prompts-renderer";
+import { CustomComponentsRenderer } from "../renderers/custom-component-renderer";
 
 export const CanvasBoard = observer(function CanvasBoard() {
     const { toggle, ref } = useFullscreen();
@@ -25,14 +23,17 @@ export const CanvasBoard = observer(function CanvasBoard() {
 
     const { data, isLoading: sketchLoading } = useQuery({
         queryFn: async () => {
-            if (id && id != "new") {
+            if (id && id !== "new") {
                 return await sketchStore.GetSketchById(id);
             } else {
                 return null;
             }
         },
         queryKey: ["Sketch", id],
-        refetchOnMount: false
+        refetchOnMount: false,
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
+        retry: false
     });
 
     useEffect(() => {
@@ -51,7 +52,7 @@ export const CanvasBoard = observer(function CanvasBoard() {
         } else {
             canvasBoard.createBoard({});
         }
-    }, [canvas, data]);
+    }, [canvas, canvasBoard, data, id]);
 
     return (
         <div ref={ref} className="size-full">
@@ -60,8 +61,6 @@ export const CanvasBoard = observer(function CanvasBoard() {
             <CanvasOptions name={sketchName} onExpand={toggle} />
             <TextEditorWrapper />
             <ImageInput />
-            {/* <TablesRenderer />
-            <AiPromptsRenderer /> */}
             <CustomComponentsRenderer />
             <canvas id="canvas-board" className="absolute z-10 overscroll-none" ref={canvasBoard.CanvasRef}></canvas>
             <canvas

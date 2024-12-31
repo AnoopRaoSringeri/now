@@ -25,14 +25,14 @@ export class Chart implements ICanvasObjectWithId {
     id = uuid();
     style = DefaultStyle;
     order = 0;
-    chart: ChartClassType = ChartFactory.createChart("Table", []);
+    chart: ChartClassType = ChartFactory.createChart("Bar", []);
     constructor(v: PartialCanvasObject, parent: CanvasBoard) {
         this.x = v.x ?? 0;
         this.y = v.y ?? 0;
         this.h = v.h ?? 0;
         this.w = v.w ?? 0;
         this.value = v.value ?? "";
-        this.chart = v.chart ?? ChartFactory.createChart("Table", []);
+        this.chart = v.chart ? ChartFactory.restoreChart(v.chart) : ChartFactory.createChart("Bar", []);
         this.id = v.id;
         this.Board = parent;
         this.order = v.order ?? 0;
@@ -78,10 +78,10 @@ export class Chart implements ICanvasObjectWithId {
     select({ x = this.x, y = this.y, h = this.h, w = this.w }: Partial<IObjectValue>) {
         this._isSelected = true;
         if (this.Board.CanvasCopy && this._showSelection) {
-            // const copyCtx = this.Board.CanvasCopy.getContext("2d");
-            // if (copyCtx) {
-            //     CanvasHelper.applySelection(copyCtx, { height: h, width: w, x, y });
-            // }
+            const copyCtx = this.Board.CanvasCopy.getContext("2d");
+            if (copyCtx) {
+                CanvasHelper.applySelection(copyCtx, { height: h, width: w, x, y });
+            }
         }
     }
 
@@ -92,8 +92,10 @@ export class Chart implements ICanvasObjectWithId {
 
     draw(ctx: CanvasRenderingContext2D) {
         this.Board.Helper.applyStyles(ctx, this.style);
-        // ctx.strokeRect(this.x, this.y, this.w, this.h);
-        // ctx.fillRect(this.x, this.y, this.w, this.h);
+        if (this.IsSelected) {
+            this.select({ x: this.x, y: this.y });
+        }
+        ctx.restore();
     }
 
     create(ctx: CanvasRenderingContext2D) {
@@ -118,9 +120,9 @@ export class Chart implements ICanvasObjectWithId {
             x = x + w;
             w = Math.abs(w);
         }
-        // ctx.strokeRect(x, y, w, h);
-        // ctx.fillRect(x, y, w, h);
-        // ctx.restore();
+        ctx.strokeRect(x, y, w, h);
+        ctx.fillRect(x, y, w, h);
+        ctx.restore();
         if (action === "up") {
             this.h = h;
             this.w = w;

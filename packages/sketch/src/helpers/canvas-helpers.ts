@@ -398,4 +398,8 @@ export class CanvasHelper {
     static GetDefaultTransForm() {
         return { ...DEFAULT_TRANSFORM };
     }
+
+    static isCustomElement(ele: ICanvasObjectWithId) {
+        return ele.type === ElementEnum.AiPrompt || ele.type === ElementEnum.Chart;
+    }
 }

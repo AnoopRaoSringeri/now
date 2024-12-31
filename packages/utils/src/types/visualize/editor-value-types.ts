@@ -1,3 +1,4 @@
+import { action, computed, makeObservable, observable, runInAction, toJS } from "mobx";
 import { ColumnConfig, EditorType } from "./types";
 import {
     ValueType,
@@ -8,9 +9,56 @@ import {
 } from "./value-types";
 
 export class EditorValue {
-    constructor(public editorType: EditorType, public options: ValueType["v"], public value: ValueType) {}
+    constructor(public editorType: EditorType, public options: ValueType["v"], public value: ValueType) {
+        makeObservable(this, {
+            value: observable,
+            onChange: action,
+            setOptions: action,
+            Value: computed
+        });
+    }
+    get Value(): ValueType {
+        return toJS(this.value);
+    }
+    getValue(): ValueType["v"] {
+        return toJS(this.value["v"]);
+    }
     onChange(value: ValueType) {
-        this.value = value;
+        runInAction(() => {
+            this.value = value;
+        });
+    }
+    setOptions(options: ValueType["v"]) {
+        this.options = options;
+    }
+}
+
+export class EditorValueExtended<T extends ValueType> {
+    constructor(public editorType: EditorType, public options: ValueType["v"], public value: T) {
+        makeObservable(
+            this,
+            {
+                value: observable,
+                onChange: action,
+                setOptions: action,
+                Value: computed
+            },
+            { deep: true }
+        );
+    }
+    get Value(): T {
+        return toJS(this.value);
+    }
+    getValue(): T["v"] {
+        return toJS(this.value["v"]);
+    }
+    onChange(value: T) {
+        runInAction(() => {
+            this.value = value;
+        });
+    }
+    setOptions(options: T["v"]) {
+        this.options = options;
     }
 }
 
@@ -33,20 +81,36 @@ export class SelectType extends EditorValue {
 }
 
 export class ColumnSelectType extends EditorValue {
+    valueType: SingleColumnSelectValue;
     constructor(public options: ColumnConfig[], value: SingleColumnSelectValue) {
         super("ColumnSelect", options, value);
+        this.valueType = value;
     }
     onChange(value: SingleColumnSelectValue) {
         this.value = value;
     }
+    get Value(): SingleColumnSelectValue {
+        return toJS(this.valueType);
+    }
+    getValue(): SingleColumnSelectValue["v"] {
+        return toJS(this.valueType["v"]);
+    }
 }
 
 export class MultiColumnSelectType extends EditorValue {
+    valueType: MultiColumnSelectValue;
     constructor(public options: ColumnConfig[], value: MultiColumnSelectValue) {
         super("MultiColumnSelect", options, value);
+        this.valueType = value;
     }
     onChange(value: MultiColumnSelectValue) {
         this.value = value;
+    }
+    get Value(): MultiColumnSelectValue {
+        return toJS(this.valueType);
+    }
+    getValue(): MultiColumnSelectValue["v"] {
+        return toJS(this.valueType["v"]);
     }
 }
 

@@ -1,7 +1,7 @@
 import { Chart } from "../visualize/chart";
 import { ChartType } from "../visualize/types";
 import { ICanvas, ICanvasObjectMethods } from "./custom-canvas";
-import { ChartEnum, ElementEnum } from "./enums";
+import { ElementEnum } from "./enums";
 import { IObjectStyle } from "./object-styles";
 
 export interface IObjectValue {

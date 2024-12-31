@@ -1,4 +1,4 @@
-import { action, computed, makeObservable, observable, toJS } from "mobx";
+import { action, computed, makeObservable, observable, runInAction, toJS } from "mobx";
 import { createRef } from "react";
 import { v4 as uuid } from "uuid";
 
@@ -31,13 +31,15 @@ export class CanvasBoard implements ICanvas {
     private _clicked = false;
     private _canvas: React.RefObject<HTMLCanvasElement>;
     private _canvasCopy: React.RefObject<HTMLCanvasElement>;
-    private _elements: ICanvasObjectWithId[] = [];
+    _elements: ICanvasObjectWithId[] = [];
     private _pointerOrigin: Position | null = null;
     private _readOnly = false;
     private _cursorPosition: CursorPosition | null = null;
 
-    private _activeObjects: ICanvasObjectWithId[] = [];
+    protected _activeObjects: ICanvasObjectWithId[] = [];
     private _hoveredObject: ICanvasObjectWithId | null = null;
+
+    private EventManager: EventManager;
 
     _elementType: ElementEnum = ElementEnum.Move;
     _isElementSelectorLocked = true;
@@ -47,7 +49,6 @@ export class CanvasBoard implements ICanvas {
     _selectedElements: ICanvasObjectWithId[] = [];
     _canvasTransform: ICanvasTransform = CanvasHelper.GetDefaultTransForm();
 
-    private EventManager: EventManager;
     TempSelectionArea: ICanvasObjectWithId | null = null;
     _selectionArea: ICanvasObjectWithId | null = null;
     _applySelectionStyle = true;
@@ -57,10 +58,6 @@ export class CanvasBoard implements ICanvas {
     text: ICanvasObjectWithId | null = null;
 
     image: ICanvasObjectWithId | null = null;
-
-    customElements: ICanvasObjectWithId[] = [];
-
-    charts: ICanvasObjectWithId[] = [];
 
     constructor() {
         this.EventManager = new EventManager(this);
@@ -84,13 +81,14 @@ export class CanvasBoard implements ICanvas {
             _selectionArea: observable,
             SelectionElement: computed,
             NewOrder: computed,
+            _elements: observable,
             Elements: computed,
             text: observable,
             Text: computed,
             image: observable,
             Image: computed,
-            customElements: observable,
-            CustomElements: computed
+            CustomComponentIds: computed,
+            getComponent: action
         });
     }
 
@@ -105,9 +103,6 @@ export class CanvasBoard implements ICanvas {
         if (this.ReadOnly) {
             return null;
         }
-        // if (!this._canvasCopy.current) {
-        //     throw new Error("canvas copy is not initialized");
-        // }
         return this._canvasCopy.current!;
     }
 
@@ -214,11 +209,11 @@ export class CanvasBoard implements ICanvas {
     }
 
     get Elements() {
-        return this._elements.sort((a, b) => a.order - b.order);
+        return this._elements;
     }
 
     set Elements(objects: ICanvasObjectWithId[]) {
-        this._elements = objects;
+        this._elements = toJS(objects).sort((a, b) => a.order - b.order);
     }
 
     get HoveredObject() {
@@ -281,44 +276,29 @@ export class CanvasBoard implements ICanvas {
         this.image = value;
     }
 
-    get CustomElements() {
-        return this.customElements;
-    }
-
-    set CustomElements(components: ICanvasObjectWithId[]) {
-        this.customElements = components;
-    }
-
     get CustomComponentIds() {
-        return this.customElements.map((a) => a.id);
-    }
-
-    getCustomComponentIds(type: ElementEnum) {
-        return this.customElements.reduce((p, c) => {
-            if (c.type === type) {
-                p.push(c.id);
-            }
-            return p;
-        }, [] as string[]);
+        return this.Elements.filter(CanvasHelper.isCustomElement).map((a) => a.id);
     }
 
     getComponent(id: string) {
-        return this.customElements.find((t) => t.id === id)!;
+        return this.Elements.find((t) => t.id === id)!;
     }
 
     updateText(value: string) {
-        if (!this.CanvasCopy || !this.Text) {
-            return;
-        }
-        const context = this.CanvasCopy.getContext("2d");
-        if (!context) {
-            return;
-        }
-        this.Text.update(context, { value: value }, "down");
-        this.PointerOrigin = null;
-        this._elements.push(this.Text);
-        this.Text = null;
-        this.redrawBoard();
+        runInAction(() => {
+            if (!this.CanvasCopy || !this.Text) {
+                return;
+            }
+            const context = this.CanvasCopy.getContext("2d");
+            if (!context) {
+                return;
+            }
+            this.Text.update(context, { value: value }, "down");
+            this.PointerOrigin = null;
+            this.Elements.push(this.Text);
+            this.Text = null;
+            this.redrawBoard();
+        });
     }
 
     uploadImage(e: React.ChangeEvent<HTMLInputElement>) {
@@ -339,17 +319,19 @@ export class CanvasBoard implements ICanvas {
     }
 
     drawImage(event: ProgressEvent<FileReader>, ctx: CanvasRenderingContext2D) {
-        if (
-            event.target?.readyState === FileReader.DONE &&
-            event.target.result &&
-            typeof event.target.result === "string"
-        ) {
-            this.Image?.update(ctx, { value: event.target.result }, "up");
-            this.PointerOrigin = null;
-            this._elements.push(this.Image!);
-            this.Image = null;
-            this.redrawBoard();
-        }
+        runInAction(() => {
+            if (
+                event.target?.readyState === FileReader.DONE &&
+                event.target.result &&
+                typeof event.target.result === "string"
+            ) {
+                this.Image?.update(ctx, { value: event.target.result }, "up");
+                this.PointerOrigin = null;
+                this.Elements.push(this.Image!);
+                this.Image = null;
+                this.redrawBoard();
+            }
+        });
     }
 
     init({ width, height }: Size) {
@@ -369,10 +351,7 @@ export class CanvasBoard implements ICanvas {
         const objArray = metadata.elements.map((ele) => {
             return CavasObjectMap[ele.type](ele, this);
         });
-        this._elements = objArray;
-        this.CustomElements = (metadata.customElements ?? []).map((ele) => {
-            return CavasObjectMap[ele.type](ele, this);
-        });
+        this.Elements = objArray;
         if (draw) {
             this.redrawBoard();
         }
@@ -439,40 +418,41 @@ export class CanvasBoard implements ICanvas {
     }
 
     removeElement(id: string) {
-        this._elements = this.Elements.filter((e) => e.id !== id);
-        this.customElements = this.CustomElements.filter((e) => e.id !== id);
+        this.Elements = this.Elements.filter((e) => e.id !== id);
         this.SelectedElements = [];
         this.redrawBoard();
     }
 
     removeElements() {
-        this._elements = this.Elements.filter((e) => this.SelectedElements.find((se) => se.id === e.id) == null);
+        this.Elements = this.Elements.filter((e) => this.SelectedElements.find((se) => se.id === e.id) == null);
         this.SelectedElements = [];
         this.SelectionElement = null;
         this.redrawBoard();
     }
 
     copyElement(id: string) {
-        if (!this.CanvasCopy) {
-            return;
-        }
-        const context = this.CanvasCopy.getContext("2d");
-        if (!context) {
-            return;
-        }
-        const elementToCopy = this.Elements.find((e) => e.id === id);
-        if (elementToCopy) {
-            const copyElement = CavasObjectMap[elementToCopy.type](
-                { ...elementToCopy, id: uuid(), order: this.NewOrder },
-                this
-            );
-            copyElement.move(context, { x: 0, y: 0 }, "down");
-            copyElement.move(context, { x: 40, y: 40 }, "up");
-            context.closePath();
-            this._elements.push(copyElement);
-            this.SelectedElements = [copyElement];
-            this.saveBoard();
-        }
+        runInAction(() => {
+            if (!this.CanvasCopy) {
+                return;
+            }
+            const context = this.CanvasCopy.getContext("2d");
+            if (!context) {
+                return;
+            }
+            const elementToCopy = this.Elements.find((e) => e.id === id);
+            if (elementToCopy) {
+                const copyElement = CavasObjectMap[elementToCopy.type](
+                    { ...elementToCopy, id: uuid(), order: this.NewOrder },
+                    this
+                );
+                copyElement.move(context, { x: 0, y: 0 }, "down");
+                copyElement.move(context, { x: 40, y: 40 }, "up");
+                context.closePath();
+                this.Elements.push(copyElement);
+                this.SelectedElements = [copyElement];
+                this.saveBoard();
+            }
+        });
     }
 
     copyElements() {
@@ -585,21 +565,27 @@ export class CanvasBoard implements ICanvas {
     }
 
     saveBoard() {
-        if (this._activeObjects.length > 0) {
-            if (this.SelectionElement) {
-                this._elements.push(...this._activeObjects);
-                this.SelectedElements = this._activeObjects;
-            } else {
-                this._elements.push(...this._activeObjects);
+        runInAction(() => {
+            if (this._activeObjects.length > 0) {
+                if (this.SelectionElement) {
+                    this.Elements.push(...this._activeObjects.filter((o) => !CanvasHelper.isCustomElement(o)));
+                    this.SelectedElements = this._activeObjects;
+                } else {
+                    this.Elements.push(
+                        ...this._activeObjects.filter(
+                            (o) => !CanvasHelper.isCustomElement(o) || this.Elements.find((e) => e.id === o.id) == null
+                        )
+                    );
+                }
             }
-        }
-        this._pointerOrigin = null;
-        this._activeObjects = [];
-        // this._hoveredObject = null;
-        if (!this._isElementSelectorLocked) {
-            this.ElementType = ElementEnum.Move;
-        }
-        this.redrawBoard();
+            this._pointerOrigin = null;
+            this._activeObjects = [];
+            // this._hoveredObject = null;
+            if (!this._isElementSelectorLocked) {
+                this.ElementType = ElementEnum.Move;
+            }
+            this.redrawBoard();
+        });
     }
 
     redrawBoard() {
@@ -655,8 +641,7 @@ export class CanvasBoard implements ICanvas {
         return {
             elements: [...this.Elements.map((ele) => ele.getValues())],
             size: { height: this.Height, width: this.Width },
-            transform: this.Transform,
-            customElements: [...this.CustomElements.map((ele) => ele.getValues())]
+            transform: this.Transform
         };
     }
 

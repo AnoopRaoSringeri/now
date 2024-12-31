@@ -2,7 +2,7 @@ import { ColumnConfig } from "./types";
 
 export type SingleSelectValue = { t: "s"; v: string };
 
-export type MultiSelectValue = { t: "sa"; v: string[] };
+export type MultiSelectValue = { t: "ms"; v: string[] };
 
 export type SingleColumnSelectValue = { t: "scs"; v: ColumnConfig | null };
 

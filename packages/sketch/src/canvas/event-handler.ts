@@ -45,7 +45,9 @@ export class EventManager {
         } else if (this.Board.ElementType === ElementEnum.Move) {
             if (e.detail === 1) {
                 if (this.Board.HoveredObject) {
-                    this.Board.Elements = this.Board.Elements.filter((e) => e.id !== this.Board.HoveredObject!.id);
+                    this.Board.Elements = this.Board.Elements.filter(
+                        (e) => CanvasHelper.isCustomElement(e) || e.id !== this.Board.HoveredObject!.id
+                    );
                     this.Board.redrawBoard();
                     this.Board.ActiveObjects = [this.Board.HoveredObject];
                     this.Board.SelectedElements = [this.Board.HoveredObject];
@@ -67,7 +69,9 @@ export class EventManager {
                         if (this.Board._currentCanvasAction === CanvasActionEnum.Resize) {
                             this.Board.ActiveObjects = this.Board.SelectedElements;
                             this.Board.SelectedElements = [];
-                            this.Board.Elements = this.Board.Elements.filter((e) => !e.IsSelected);
+                            this.Board.Elements = this.Board.Elements.filter(
+                                (e) => CanvasHelper.isCustomElement(e) || !e.IsSelected
+                            );
                             this.Board.redrawBoard();
                             this.Board.TempSelectionArea.resize(
                                 context,
@@ -82,7 +86,9 @@ export class EventManager {
                         } else if (this.Board._currentCanvasAction === CanvasActionEnum.Move) {
                             this.Board.ActiveObjects = this.Board.SelectedElements;
                             this.Board.SelectedElements = [];
-                            this.Board.Elements = this.Board.Elements.filter((e) => !e.IsSelected);
+                            this.Board.Elements = this.Board.Elements.filter(
+                                (e) => CanvasHelper.isCustomElement(e) || !e.IsSelected
+                            );
                             this.Board.redrawBoard();
                             this.Board.TempSelectionArea.move(context, { x: 0, y: 0 }, "down", false);
                             this.Board.ActiveObjects.forEach((ele) => {
@@ -323,10 +329,7 @@ export class EventManager {
                     this.Board.TempSelectionArea = null;
                 }
             } else {
-                const ele = this.Board.Helper.hoveredElement({ x: offsetX, y: offsetY }, [
-                    ...this.Board.Elements,
-                    ...this.Board.CustomElements
-                ]);
+                const ele = this.Board.Helper.hoveredElement({ x: offsetX, y: offsetY }, this.Board.Elements);
                 if (ele) {
                     this.Board.CursorPosition = this.Board.Helper.getCursorPosition(
                         { x: offsetX, y: offsetY },
@@ -481,12 +484,6 @@ export class EventManager {
                         ao.move(context, { x: offsetX - x, y: offsetY - y }, "up");
                     });
                 }
-                this.Board.CustomElements.forEach((t) => {
-                    const element = this.Board.ActiveObjects.find((e) => e.id === t.id);
-                    if (element) {
-                        t.update(context, element.getValues(), "up", false);
-                    }
-                });
                 // this.Board.ActiveObjects = this.Board.ActiveObjects.filter(
                 //     (e) => e.type !== ElementEnum.Chart && e.type !== ElementEnum.AiPrompt
                 // );
@@ -503,13 +500,6 @@ export class EventManager {
                         "up"
                     );
                 });
-                if (this.Board.ElementType === ElementEnum.Chart || this.Board.ElementType === ElementEnum.AiPrompt) {
-                    this.Board.CustomElements = [
-                        ...this.Board.CustomElements,
-                        ...this.Board.ActiveObjects.filter((e) => e.type === this.Board.ElementType)
-                    ];
-                    this.Board.ActiveObjects = [];
-                }
             }
             context.closePath();
             this.Board.saveBoard();
@@ -585,15 +575,6 @@ export class EventManager {
                 this.Board.HoveredObject = ele;
                 this.Board.ActiveObjects = [ele];
                 this.Board.SelectedElements = [ele];
-                this.Board.ActiveObjects[0].move(context, { x: 0, y: 0 }, "down");
-            }
-            const element = this.Board.Helper.hoveredElement({ x: offsetX, y: offsetY }, this.Board.CustomElements);
-            if (element) {
-                this.Board.Elements = this.Board.Elements.filter((e) => e.id !== element.id);
-                this.Board.redrawBoard();
-                this.Board.HoveredObject = element;
-                this.Board.ActiveObjects = [element];
-                this.Board.SelectedElements = [element];
                 this.Board.ActiveObjects[0].move(context, { x: 0, y: 0 }, "down");
             }
         } else {

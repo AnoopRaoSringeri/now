@@ -15,45 +15,48 @@ import {
     ChartTooltipContent,
     CardFooter
 } from "@now/ui";
+import { PieChartConfig } from "./class";
+import { ChartData } from "@now/utils";
 
-const chartData = [
-    { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-    { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-    { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-    { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-    { browser: "other", visitors: 190, fill: "var(--color-other)" }
-];
+export const PieChartNow = React.memo(function PieChartNow({
+    chartConfig: config,
+    chartData
+}: {
+    chartData: ChartData;
+    chartConfig: PieChartConfig;
+}) {
+    const xAxis = config.measure.getValue();
 
-const chartConfig = {
-    visitors: {
-        label: "Visitors"
-    },
-    chrome: {
-        label: "Chrome",
-        color: "hsl(var(--chart-1))"
-    },
-    safari: {
-        label: "Safari",
-        color: "hsl(var(--chart-2))"
-    },
-    firefox: {
-        label: "Firefox",
-        color: "hsl(var(--chart-3))"
-    },
-    edge: {
-        label: "Edge",
-        color: "hsl(var(--chart-4))"
-    },
-    other: {
-        label: "Other",
-        color: "hsl(var(--chart-5))"
-    }
-} satisfies ChartConfig;
+    const yAxis = config.dimension.getValue();
 
-export const PieChartNow = React.memo(function PieChartNow() {
-    const totalVisitors = React.useMemo(() => {
-        return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
-    }, []);
+    const total = React.useMemo(() => {
+        if (yAxis == null) {
+            return 0;
+        }
+
+        return chartData.data.reduce((acc, curr) => acc + Number(curr[yAxis.name]), 0);
+    }, [chartData.data, yAxis]);
+
+    const items = React.useMemo(() => {
+        if (xAxis == null) {
+            return [];
+        }
+
+        return chartData.data.reduce((r, curr) => {
+            if (!r.includes(curr[xAxis.name])) {
+                r.push(curr[xAxis.name]);
+            }
+            return r;
+        }, [] as string[]);
+    }, [chartData.data, xAxis]);
+
+    const chartConfig: ChartConfig = {};
+    items.forEach((item) => {
+        chartConfig[item] = {
+            label: item,
+            color: "#2563eb"
+        };
+    });
 
     return (
         <Card className="flex flex-col size-full ">
@@ -65,7 +68,13 @@ export const PieChartNow = React.memo(function PieChartNow() {
                 <ChartContainer config={chartConfig} className="mx-auto size-full">
                     <PieChartComponent>
                         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                        <Pie data={chartData} dataKey="visitors" nameKey="browser" innerRadius={60} strokeWidth={5}>
+                        <Pie
+                            data={chartData.data}
+                            dataKey="visitors"
+                            nameKey="browser"
+                            innerRadius={60}
+                            strokeWidth={5}
+                        >
                             <Label
                                 content={({ viewBox }) => {
                                     if (viewBox && "cx" in viewBox && "cy" in viewBox) {
@@ -81,7 +90,7 @@ export const PieChartNow = React.memo(function PieChartNow() {
                                                     y={viewBox.cy}
                                                     className="fill-foreground text-3xl font-bold"
                                                 >
-                                                    {totalVisitors.toLocaleString()}
+                                                    {total.toLocaleString()}
                                                 </tspan>
                                                 <tspan
                                                     x={viewBox.cx}

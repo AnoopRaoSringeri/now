@@ -62,7 +62,11 @@ const Sketch = function Sketch({
         queryFn: async () => {
             return await sketchStore.GetImageData(canvasId);
         },
-        queryKey: ["SketchImageData", canvasId]
+        queryKey: ["SketchImageData", canvasId],
+        refetchOnMount: false,
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
+        retry: false
     });
 
     const onClick = () => {

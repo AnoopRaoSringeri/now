@@ -24,7 +24,7 @@ const CanvasOptions = observer(function CanvasOptions({ name, onExpand }: { name
 
     const saveBoard = async () => {
         console.log(canvasBoard.Canvas.toDataURL());
-        if (id && id != "new") {
+        if (id && id !== "new") {
             await sketchStore.UpdateSketch(id, canvasBoard.toJSON(), sketchName, canvasBoard.Canvas.toDataURL());
             toast.success("Sketch saved successfully");
         } else {
@@ -35,7 +35,7 @@ const CanvasOptions = observer(function CanvasOptions({ name, onExpand }: { name
             );
             if (response) {
                 toast.success("Sketch updated successfully");
-                navigate(`/sketch/${response._id}`);
+                navigate(`/sketch-now/sketch/${response._id}`);
             }
         }
     };

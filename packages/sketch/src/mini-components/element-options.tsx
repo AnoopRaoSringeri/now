@@ -1,19 +1,26 @@
-import { Button, Icon } from "@now/ui";
+import { Button, Icon, Label } from "@now/ui";
 import { observer } from "mobx-react";
 import { useParams } from "react-router";
 import { useCanvas } from "../hooks/use-canvas";
+import { ChartFactory, ChartOptionsRendererWrapper, ChartSelect } from "@now/visualize";
+import { runInAction } from "mobx";
 
 export const ElementOptions = observer(function ElementOptions() {
     const { id } = useParams<{ id: string }>();
     const { canvasBoard } = useCanvas(id ?? "new");
     const selectedElements = canvasBoard.SelectedElements;
-    const element = selectedElements[0];
-    if (!element) {
-        return <></>;
+    const copyEle = selectedElements[0];
+    if (!copyEle) {
+        return null;
     }
-    // const { ax, ay } = element.getPosition();
-    // const { w = 0 } = element.getValues();
-
+    const element = canvasBoard.getComponent(copyEle.id);
+    if (!element) {
+        return null;
+    }
+    const { chart } = element;
+    if (!chart) {
+        return null;
+    }
     function removeElement() {
         canvasBoard.removeElement(element.id);
     }
@@ -23,13 +30,27 @@ export const ElementOptions = observer(function ElementOptions() {
     }
 
     return (
-        <div className="flex gap-4 ">
-            <Button size="xs" variant="ghost" onClick={copyElement}>
-                <Icon name="Copy" size={20} />
-            </Button>
-            <Button size="xs" variant="destructive" onClick={removeElement}>
-                <Icon name="Trash2" size={20} />
-            </Button>
+        <div className="flex flex-col gap-4 " id={`element-options-${element.id}`}>
+            <div>
+                <Label>{"Chart Type"}</Label>
+                <ChartSelect
+                    value={chart.type}
+                    onChange={(c) => {
+                        runInAction(() => {
+                            element.chart = ChartFactory.createChart(c, chart.columnConfig);
+                        });
+                    }}
+                />
+            </div>
+            {element.chart ? <ChartOptionsRendererWrapper chart={chart} /> : null}
+            <div className="flex gap-2">
+                <Button size="xs" variant="ghost" onClick={copyElement}>
+                    <Icon name="Copy" size={20} />
+                </Button>
+                <Button size="xs" variant="destructive" onClick={removeElement}>
+                    <Icon name="Trash2" size={20} />
+                </Button>
+            </div>
         </div>
     );
 });

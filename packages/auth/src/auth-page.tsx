@@ -11,8 +11,10 @@ export const Auth = observer(function Auth() {
     useEffect(() => {
         if (isAuthenticated === "true") {
             refreshToken();
+        } else {
+            navigate("/auth");
         }
-    }, []);
+    }, [isAuthenticated]);
 
     const refreshToken = async () => {
         const res = await authStore.IsValidSession();

@@ -18,23 +18,6 @@ class UploadStore {
         }
     }
 
-    async UploadVideo(file: File): Promise<boolean> {
-        try {
-            const buf = await file.arrayBuffer();
-            const items = file.name.split(".");
-            const ext = items[items.length - 1];
-            const { data }: AxiosResponse<boolean> = await axios.post(`${BaseUrl}upload/video?extension=${ext}`, buf, {
-                withCredentials: true,
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            });
-            return data;
-        } catch (e) {
-            return false;
-        }
-    }
-
     async GetData(request: ChartDataRequest): Promise<ChartData> {
         try {
             const { data }: AxiosResponse<ChartData> = await axios.post(
