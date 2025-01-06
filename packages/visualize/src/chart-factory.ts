@@ -1,4 +1,4 @@
-import { ChartType, ColumnConfig, MultiColumnSelectType, ColumnSelectType, Chart } from "@now/utils";
+import { ChartType, ColumnConfig, Chart, ChartMetadata } from "@now/utils";
 import { BarChart, BarChartConfig } from "./charts/bar/class";
 import { LineChart, LineChartConfig } from "./charts/line/class";
 import { PieChart, PieChartConfig } from "./charts/pie/class";
@@ -10,65 +10,93 @@ export class ChartFactory {
         switch (type) {
             case "Bar":
                 return new BarChart({
-                    xAxis: new ColumnSelectType(columnConfig, {
-                        t: "scs",
-                        v: null
-                    }),
-                    yAxis: new MultiColumnSelectType(columnConfig, {
-                        t: "mcs",
-                        v: []
-                    })
+                    dimensions: {
+                        t: "s",
+                        v: {
+                            t: "scs",
+                            v: null
+                        }
+                    },
+                    measures: {
+                        t: "m",
+                        v: {
+                            t: "mcs",
+                            v: []
+                        }
+                    }
                 });
             case "Line":
                 return new LineChart({
-                    xAxis: new ColumnSelectType(columnConfig, {
-                        t: "scs",
-                        v: null
-                    }),
-                    yAxis: new MultiColumnSelectType(columnConfig, {
-                        t: "mcs",
-                        v: []
-                    })
+                    dimensions: {
+                        t: "s",
+                        v: {
+                            t: "scs",
+                            v: null
+                        }
+                    },
+                    measures: {
+                        t: "m",
+                        v: {
+                            t: "mcs",
+                            v: []
+                        }
+                    }
                 });
             case "Pie":
                 return new PieChart({
-                    measure: new ColumnSelectType(columnConfig, {
-                        t: "scs",
-                        v: null
-                    }),
-                    dimension: new ColumnSelectType(columnConfig, {
-                        t: "scs",
-                        v: null
-                    })
+                    dimensions: {
+                        t: "s",
+                        v: {
+                            t: "scs",
+                            v: null
+                        }
+                    },
+                    measures: {
+                        t: "s",
+                        v: {
+                            t: "scs",
+                            v: null
+                        }
+                    }
                 });
             default:
                 return new TableChart({
-                    columns: new MultiColumnSelectType(columnConfig, {
-                        t: "mcs",
-                        v: columnConfig
-                    })
+                    dimensions: {
+                        t: "m",
+                        v: {
+                            t: "mcs",
+                            v: []
+                        }
+                    },
+                    measures: {
+                        t: "m",
+                        v: {
+                            t: "mcs",
+                            v: []
+                        }
+                    }
                 });
         }
     }
 
-    static restoreChart(chart: Chart) {
+    static restoreChart(chart: ChartMetadata) {
         const chartObj = new Chart(chart.config, chart.type);
-        chartObj.columnConfig = chart.columnConfig;
+        // chartObj.columnConfig = chart.columnConfig;
         return chartObj;
     }
 
     static getChartConfig(chart: Chart): ChartTypes {
         switch (chart.type) {
             case "Bar":
-                return { type: "Bar", config: chart.config as BarChartConfig };
+                return { type: "Bar", config: chart.Config as BarChartConfig };
             case "Line":
-                return { type: "Line", config: chart.config as LineChartConfig };
+                return { type: "Line", config: chart.Config as LineChartConfig };
             case "Pie":
-                return { type: "Pie", config: chart.config as PieChartConfig };
+                return { type: "Pie", config: chart.Config as PieChartConfig };
             // case "Area":
             //     return chart.config as LineChartConfig;
             default:
-                return { type: "Table", config: chart.config as TableChartConfig };
+                return { type: "Table", config: chart.Config as TableChartConfig };
         }
     }
 }

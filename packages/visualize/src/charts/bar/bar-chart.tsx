@@ -10,7 +10,7 @@ import {
 } from "@now/ui";
 import { ChartData } from "@now/utils";
 import { observer } from "mobx-react";
-import React, { useMemo } from "react";
+import React from "react";
 import { Bar, BarChart as BarChartComponent, CartesianGrid, XAxis } from "recharts";
 import { BarChartConfig } from "./class";
 
@@ -23,13 +23,13 @@ export const BarChartNow = observer(function BarChartNow({
 }) {
     const memoizedData = chartData.data;
 
-    const xAxis = config.xAxis.getValue();
+    const xAxis = config.dimensions.v.v;
 
-    if (xAxis == null || config.yAxis.getValue().length === 0) {
+    if (xAxis == null || config.measures.v.v.length === 0) {
         return null;
     }
 
-    const usedColumn = [xAxis, ...config.yAxis.getValue()];
+    const usedColumn = [xAxis, ...config.measures.v.v];
 
     const chartConfig: ChartConfig = {};
     usedColumn.forEach((column) => {
@@ -46,7 +46,7 @@ export const BarChartNow = observer(function BarChartNow({
                 <XAxis dataKey={xAxis.name} tickLine={false} tickMargin={10} axisLine={false} />
                 <ChartTooltip content={<ChartTooltipContent />} />
                 <ChartLegend content={<ChartLegendContent />} />
-                {config.yAxis.getValue().map((v) => (
+                {config.measures.v.v.map((v) => (
                     <Bar key={v.name} dataKey={v.name} fill={`var(--color-${v.name})`} radius={4} />
                 ))}
             </BarChartComponent>

@@ -13,55 +13,62 @@ import {
 import { TrendingUp } from "lucide-react";
 import React from "react";
 import { CartesianGrid, Line, LineChart as LineChartComponent, XAxis } from "recharts";
-const chartData = [
-    { month: "January", desktop: 186 },
-    { month: "February", desktop: 305 },
-    { month: "March", desktop: 237 },
-    { month: "April", desktop: 73 },
-    { month: "May", desktop: 209 },
-    { month: "June", desktop: 214 }
-];
+import { BarChartConfig } from "../bar/class";
+import { ChartData } from "@now/utils";
 
-const chartConfig = {
-    desktop: {
-        label: "Desktop",
-        color: "hsl(var(--chart-1))"
+export const LineChartNow = React.memo(function LineChartNow({
+    chartData,
+    chartConfig: config
+}: {
+    chartData: ChartData;
+    chartConfig: BarChartConfig;
+}) {
+    const xAxis = config.dimensions.v.v;
+
+    const yAxis = config.measures.v.v;
+
+    if (xAxis == null || yAxis.length === 0) {
+        return null;
     }
-} satisfies ChartConfig;
 
-export const LineChartNow = React.memo(function LineChartNow() {
+    const usedColumn = [xAxis, ...yAxis];
+
+    const chartConfig: ChartConfig = {};
+    usedColumn.forEach((column) => {
+        chartConfig[column.name] = {
+            label: column.name,
+            color: "#2563eb"
+        };
+    });
+
     return (
-        <Card>
+        <Card className="flex flex-col size-full bg-transparent">
             <CardHeader>
                 <CardTitle>Line Chart - Linear</CardTitle>
                 <CardDescription>January - June 2024</CardDescription>
             </CardHeader>
-            <CardContent>
-                <ChartContainer config={chartConfig}>
-                    <LineChartComponent
-                        accessibilityLayer
-                        data={chartData}
-                        margin={{
-                            left: 12,
-                            right: 12
-                        }}
-                    >
+            <CardContent className="flex-1 pb-0 overflow-hidden">
+                <ChartContainer config={chartConfig} className="size-full">
+                    <LineChartComponent accessibilityLayer data={chartData.data}>
                         <CartesianGrid vertical={false} />
                         <XAxis
-                            dataKey="month"
+                            dataKey={xAxis.name}
                             tickLine={false}
                             axisLine={false}
                             tickMargin={8}
                             tickFormatter={(value) => value.slice(0, 3)}
                         />
                         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                        <Line
-                            dataKey="desktop"
-                            type="linear"
-                            stroke="var(--color-desktop)"
-                            strokeWidth={2}
-                            dot={false}
-                        />
+                        {yAxis.map((v) => (
+                            <Line
+                                key={v.name}
+                                dataKey={v.name}
+                                type="linear"
+                                stroke={`var(--color-${v.name})`}
+                                strokeWidth={2}
+                                dot={false}
+                            />
+                        ))}
                     </LineChartComponent>
                 </ChartContainer>
             </CardContent>

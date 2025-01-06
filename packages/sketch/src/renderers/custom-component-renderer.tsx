@@ -1,7 +1,7 @@
 import { Button, Icon } from "@now/ui";
 
 import { observer } from "mobx-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CanvasBoard } from "../canvas/canvas-board";
 import { CanvasHelper } from "../helpers/canvas-helpers";
 import { useCanvas } from "../hooks/use-canvas";
@@ -37,18 +37,21 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
     const { ax, ay } = CanvasHelper.getAbsolutePosition({ x, y }, transform);
     const [isLocked, setIsLocked] = useState(true);
 
-    const style: React.CSSProperties = {
-        top: ay,
-        left: ax,
-        height: h * transform.scaleX,
-        width: w * transform.scaleX,
-        position: "absolute",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-        padding: 10
-    };
+    const style: React.CSSProperties = useMemo(
+        () => ({
+            top: ay,
+            left: ax,
+            height: h * transform.scaleX,
+            width: w * transform.scaleX,
+            position: "absolute",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+            padding: 10
+        }),
+        [ax, ay, h, transform.scaleX, w]
+    );
 
     const removeElement = () => {
         board.removeElement(id);
@@ -56,7 +59,7 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
 
     return (
         <div style={style}>
-            <div className="absolute top-[-40px] right-0 z-[60] flex">
+            <div style={{ zoom: transform.scaleX }} className="absolute top-[-40px] right-0 z-[60] flex">
                 <Button onClick={() => setIsLocked((pre) => !pre)} size="icon" variant="ghost">
                     {isLocked ? <Icon name="LockOpen" /> : <Icon name="Lock" />}
                 </Button>
@@ -65,7 +68,9 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
                     <Icon name="Trash2" />
                 </Button>
             </div>
-            <Renderer component={component} />
+            <div style={{ zoom: transform.scaleX }} className="size-full">
+                <Renderer component={component} />
+            </div>
         </div>
     );
 });

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { useParams } from "react-router";
 
-import { Renderer } from "./editor-renderer";
+import { Renderer } from "../renderers/editor-renderer";
 import { OptionsWrapper } from "./options-wrapper";
 import { useCanvas } from "../hooks/use-canvas";
 import { ScrollArea } from "@now/ui";
@@ -56,7 +56,7 @@ const ElementStyleEditor = observer(function ElemntStyleEditor() {
     const elementStyle = element?.style;
 
     if (!elementStyle) {
-        return <></>;
+        return null;
     }
 
     const options = OptionRegistry[element.type];

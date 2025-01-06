@@ -1,3 +1,4 @@
+import { ChartMetadata } from "./../visualize/chart";
 import { Chart } from "../visualize/chart";
 import { ChartType } from "../visualize/types";
 import { ICanvas, ICanvasObjectMethods } from "./custom-canvas";
@@ -16,6 +17,7 @@ export interface IObjectValue {
     value: string;
     style: IObjectStyle;
     chartType: ChartType;
+    chartMetadata: ChartMetadata;
     chart: Chart;
 }
 

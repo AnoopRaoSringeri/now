@@ -16,7 +16,7 @@ import {
     CardFooter
 } from "@now/ui";
 import { PieChartConfig } from "./class";
-import { ChartData } from "@now/utils";
+import { ChartData, formatText } from "@now/utils";
 
 export const PieChartNow = React.memo(function PieChartNow({
     chartConfig: config,
@@ -25,30 +25,30 @@ export const PieChartNow = React.memo(function PieChartNow({
     chartData: ChartData;
     chartConfig: PieChartConfig;
 }) {
-    const xAxis = config.measure.getValue();
+    const measure = config.measures.v.v;
 
-    const yAxis = config.dimension.getValue();
+    const dimension = config.dimensions.v.v;
 
     const total = React.useMemo(() => {
-        if (yAxis == null) {
+        if (measure == null) {
             return 0;
         }
 
-        return chartData.data.reduce((acc, curr) => acc + Number(curr[yAxis.name]), 0);
-    }, [chartData.data, yAxis]);
+        return chartData.data.reduce((acc, curr) => acc + Number(curr[measure.name]), 0);
+    }, [chartData.data, measure]);
 
     const items = React.useMemo(() => {
-        if (xAxis == null) {
+        if (dimension == null) {
             return [];
         }
 
         return chartData.data.reduce((r, curr) => {
-            if (!r.includes(curr[xAxis.name])) {
-                r.push(curr[xAxis.name]);
+            if (!r.includes(curr[dimension.name])) {
+                r.push(curr[dimension.name]);
             }
             return r;
         }, [] as string[]);
-    }, [chartData.data, xAxis]);
+    }, [chartData.data, dimension]);
 
     const chartConfig: ChartConfig = {};
     items.forEach((item) => {
@@ -58,8 +58,12 @@ export const PieChartNow = React.memo(function PieChartNow({
         };
     });
 
+    if (measure == null || dimension == null) {
+        return null;
+    }
+
     return (
-        <Card className="flex flex-col size-full ">
+        <Card className="flex flex-col size-full bg-transparent">
             <CardHeader className="items-center pb-0">
                 <CardTitle>Pie Chart - Donut with Text</CardTitle>
                 <CardDescription>January - June 2024</CardDescription>
@@ -70,8 +74,8 @@ export const PieChartNow = React.memo(function PieChartNow({
                         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
                         <Pie
                             data={chartData.data}
-                            dataKey="visitors"
-                            nameKey="browser"
+                            dataKey={measure.name}
+                            nameKey={dimension.name}
                             innerRadius={60}
                             strokeWidth={5}
                         >
@@ -97,7 +101,7 @@ export const PieChartNow = React.memo(function PieChartNow({
                                                     y={(viewBox.cy || 0) + 24}
                                                     className="fill-muted-foreground"
                                                 >
-                                                    Visitors
+                                                    {formatText(measure.name)}
                                                 </tspan>
                                             </text>
                                         );

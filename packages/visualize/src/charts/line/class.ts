@@ -1,9 +1,13 @@
-import { Chart, ChartType, MultiColumnSelectType, OptionType } from "@now/utils";
+import { Chart, ChartType, SingleColumnSelectValue, MultiColumnSelectValue } from "@now/utils";
 
-export type LineChartConfig = { xAxis: MultiColumnSelectType; yAxis: MultiColumnSelectType };
+export type LineChartConfig = {
+    measures: { t: "m"; v: MultiColumnSelectValue };
+    dimensions: { t: "s"; v: SingleColumnSelectValue };
+};
+
 export class LineChart extends Chart {
     type: ChartType = "Line";
-    constructor(public config: OptionType) {
+    constructor(config: LineChartConfig) {
         super(config, "Line");
     }
 }

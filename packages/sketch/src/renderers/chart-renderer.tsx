@@ -26,9 +26,9 @@ const ChartRenderer = observer(function ChartRenderer({ chart, chartData }: { ch
         case "Bar":
             return <BarChartNow chartConfig={typedChart.config} chartData={chart.ChartData} />;
         case "Line":
-            return <LineChartNow chartConfig={typedChart.config} chartData={chartData} />;
+            return <LineChartNow chartConfig={typedChart.config} chartData={chart.ChartData} />;
         case "Pie":
-            return <PieChartNow chartConfig={typedChart.config} chartData={chartData} />;
+            return <PieChartNow chartConfig={typedChart.config} chartData={chart.ChartData} />;
         default:
             return <CutomTable data={chartData.data} headers={chartData.columns} />;
     }

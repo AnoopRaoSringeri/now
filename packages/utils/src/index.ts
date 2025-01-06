@@ -14,6 +14,7 @@ export * from "./types/visualize/chart";
 export * from "./types/visualize/editor-value-types";
 export * from "./types/visualize/value-types";
 export * from "./types/visualize/types";
+export * from "./types/visualize/source";
 //
 export * from "./types/auth/auth";
 export * from "./hooks/use-auth";

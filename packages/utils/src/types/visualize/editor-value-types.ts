@@ -1,5 +1,4 @@
 import { action, computed, makeObservable, observable, runInAction, toJS } from "mobx";
-import { ColumnConfig, EditorType } from "./types";
 import {
     ValueType,
     MultiSelectValue,
@@ -9,7 +8,8 @@ import {
 } from "./value-types";
 
 export class EditorValue {
-    constructor(public editorType: EditorType, public options: ValueType["v"], public value: ValueType) {
+    options: ValueType["v"] | null = null;
+    constructor(public value: ValueType) {
         makeObservable(this, {
             value: observable,
             onChange: action,
@@ -34,17 +34,14 @@ export class EditorValue {
 }
 
 export class EditorValueExtended<T extends ValueType> {
-    constructor(public editorType: EditorType, public options: ValueType["v"], public value: T) {
-        makeObservable(
-            this,
-            {
-                value: observable,
-                onChange: action,
-                setOptions: action,
-                Value: computed
-            },
-            { deep: true }
-        );
+    options: T["v"] = null;
+    constructor(public value: T) {
+        makeObservable(this, {
+            value: observable,
+            onChange: action,
+            setOptions: action,
+            Value: computed
+        });
     }
     get Value(): T {
         return toJS(this.value);
@@ -62,56 +59,77 @@ export class EditorValueExtended<T extends ValueType> {
     }
 }
 
-export class MultiSelectType extends EditorValue {
+export class MultiSelectEditorValue extends EditorValue {
     constructor(public options: string[], value: MultiSelectValue) {
-        super("MultiSelect", options, value);
+        super(value);
     }
     onChange(value: MultiSelectValue) {
         this.value = value;
     }
 }
 
-export class SelectType extends EditorValue {
+export class SelectEditorValue extends EditorValue {
     constructor(public options: string[], value: SingleSelectValue) {
-        super("Select", options, value);
+        super(value);
     }
     onChange(value: SingleSelectValue) {
         this.value = value;
     }
 }
 
-export class ColumnSelectType extends EditorValue {
-    valueType: SingleColumnSelectValue;
-    constructor(public options: ColumnConfig[], value: SingleColumnSelectValue) {
-        super("ColumnSelect", options, value);
-        this.valueType = value;
+export class ColumnSelectEditorValue extends EditorValue {
+    value: SingleColumnSelectValue;
+    constructor(value: SingleColumnSelectValue) {
+        super(value);
+        this.value = value;
     }
     onChange(value: SingleColumnSelectValue) {
         this.value = value;
     }
     get Value(): SingleColumnSelectValue {
-        return toJS(this.valueType);
+        return toJS(this.value);
     }
     getValue(): SingleColumnSelectValue["v"] {
-        return toJS(this.valueType["v"]);
+        return toJS(this.value["v"]);
     }
 }
 
-export class MultiColumnSelectType extends EditorValue {
-    valueType: MultiColumnSelectValue;
-    constructor(public options: ColumnConfig[], value: MultiColumnSelectValue) {
-        super("MultiColumnSelect", options, value);
-        this.valueType = value;
+export class MultiColumnSelectEditorValue extends EditorValue {
+    value: MultiColumnSelectValue;
+    constructor(value: MultiColumnSelectValue) {
+        super(value);
+        this.value = value;
     }
     onChange(value: MultiColumnSelectValue) {
         this.value = value;
     }
     get Value(): MultiColumnSelectValue {
-        return toJS(this.valueType);
+        return toJS(this.value);
     }
     getValue(): MultiColumnSelectValue["v"] {
-        return toJS(this.valueType["v"]);
+        return toJS(this.value["v"]);
     }
 }
 
-export type OptionType = Record<string, EditorValue>;
+export type ChartNowConfig = Record<string, EditorValueExtended<ValueType>>;
+
+export type ConfigType = {
+    measures:
+        | {
+              t: "s";
+              v: ColumnSelectEditorValue;
+          }
+        | {
+              t: "m";
+              v: MultiColumnSelectEditorValue;
+          };
+    dimensions:
+        | {
+              t: "s";
+              v: ColumnSelectEditorValue;
+          }
+        | {
+              t: "m";
+              v: MultiColumnSelectEditorValue;
+          };
+};

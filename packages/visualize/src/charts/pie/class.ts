@@ -1,10 +1,13 @@
-import { Chart, ChartType, ColumnSelectType } from "@now/utils";
+import { Chart, ChartType, SingleColumnSelectValue } from "@now/utils";
 
-export type PieChartConfig = { measure: ColumnSelectType; dimension: ColumnSelectType };
+export type PieChartConfig = {
+    measures: { t: "s"; v: SingleColumnSelectValue };
+    dimensions: { t: "s"; v: SingleColumnSelectValue };
+};
 
 export class PieChart extends Chart {
     type: ChartType = "Pie";
-    constructor(public config: PieChartConfig) {
+    constructor(config: PieChartConfig) {
         super(config, "Pie");
     }
 }

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { CheckIcon, XCircle, ChevronDown, XIcon, WandSparkles } from "lucide-react";
+import { CheckIcon, ChevronDown, XIcon, WandSparkles } from "lucide-react";
 import { cn } from "@now/utils";
 import { Button } from "./ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
@@ -197,7 +197,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
                                             >
                                                 {IconComponent && <IconComponent className="h-4 w-4 mr-2" />}
                                                 {option?.label}
-                                                <XCircle
+                                                <XIcon
                                                     className="ml-2 h-4 w-4 cursor-pointer"
                                                     onClick={(event) => {
                                                         event.stopPropagation();
@@ -217,7 +217,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
                                             style={{ animationDuration: `${animation}s` }}
                                         >
                                             {`+ ${selectedValues.length - maxCount} more`}
-                                            <XCircle
+                                            <XIcon
                                                 className="ml-2 h-4 w-4 cursor-pointer"
                                                 onClick={(event) => {
                                                     event.stopPropagation();

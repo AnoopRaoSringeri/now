@@ -14,7 +14,8 @@ import {
     CursorPosition,
     Size,
     ObjectOptions,
-    Chart as ChartClassType
+    Chart as ChartClassType,
+    ChartMetadata
 } from "@now/utils";
 import { DefaultStyle, CanvasHelper } from "../../helpers/canvas-helpers";
 import { ChartFactory } from "@now/visualize";
@@ -26,13 +27,15 @@ export class Chart implements ICanvasObjectWithId {
     style = DefaultStyle;
     order = 0;
     chart: ChartClassType = ChartFactory.createChart("Bar", []);
+    chartMetadata: ChartMetadata | undefined;
     constructor(v: PartialCanvasObject, parent: CanvasBoard) {
         this.x = v.x ?? 0;
         this.y = v.y ?? 0;
         this.h = v.h ?? 0;
         this.w = v.w ?? 0;
         this.value = v.value ?? "";
-        this.chart = v.chart ? ChartFactory.restoreChart(v.chart) : ChartFactory.createChart("Bar", []);
+        this.chartMetadata = v.chartMetadata;
+        this.chart = v.chartMetadata ? ChartFactory.restoreChart(v.chartMetadata) : ChartFactory.createChart("Bar", []);
         this.id = v.id;
         this.Board = parent;
         this.order = v.order ?? 0;
@@ -179,7 +182,8 @@ export class Chart implements ICanvasObjectWithId {
             h: this.h,
             style: this.style,
             order: this.order,
-            chart: this.chart
+            chart: this.chart,
+            chartMetadata: this.chart.toJSON()
         };
     }
 

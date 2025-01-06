@@ -13,7 +13,12 @@ export function useDataLoader(chart: Chart, id: string) {
         queryFn: async () => {
             return await uploadStore.GetData({
                 id,
-                columns: chart.UsedColumns
+                measures: chart.MeasureColumns,
+                dimensions: chart.DimensionColumns,
+                columns:
+                    chart.MeasureColumns.length > 0 && chart.DimensionColumns.length > 0
+                        ? [chart.DimensionColumns[0], chart.MeasureColumns[0]]
+                        : []
             });
         },
         queryKey: ["ChartData", id],
@@ -32,7 +37,7 @@ export function useDataLoader(chart: Chart, id: string) {
 
     useEffect(() => {
         refetch();
-    }, [chart.DataVersion, refetch, chart.UsedColumns]);
+    }, [chart.DataVersion, refetch, chart.MeasureColumns, chart.DimensionColumns]);
 
     return { chartData: chart.chartData, loading: dataLoading };
 }
