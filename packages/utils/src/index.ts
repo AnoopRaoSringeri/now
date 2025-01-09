@@ -1,4 +1,9 @@
 export * from "./lib/utils";
+export * from "./lib/canvas-board";
+export * from "./lib/canvas-helpers";
+export * from "./lib/canvas-object-factory";
+export * from "./lib/event-handler";
+
 export * from "./hooks/use-mobile";
 export * from "./hooks/use-theme";
 export * from "./hooks/use-data-loader";
@@ -15,6 +20,13 @@ export * from "./types/visualize/editor-value-types";
 export * from "./types/visualize/value-types";
 export * from "./types/visualize/types";
 export * from "./types/visualize/source";
+
+export * from "./types/canvas/base-object";
+export * from "./types/canvas/types";
+export * from "./types/canvas/objects/image";
+export * from "./types/canvas/objects/rectangle";
+export * from "./types/canvas/objects/text";
+export * from "./types/canvas/objects/chart";
 //
 export * from "./types/auth/auth";
 export * from "./hooks/use-auth";

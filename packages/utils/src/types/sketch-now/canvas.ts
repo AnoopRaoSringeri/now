@@ -1,4 +1,4 @@
-import { CanvasObject } from "./canvas-object";
+import { CanvasObject } from "../canvas/types";
 import { ICanvasTransform } from "./custom-canvas";
 
 export interface Position {

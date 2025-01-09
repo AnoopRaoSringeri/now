@@ -59,7 +59,7 @@ const ElementStyleEditor = observer(function ElemntStyleEditor() {
         return null;
     }
 
-    const options = OptionRegistry[element.type];
+    const options = OptionRegistry[element.Type];
 
     return options.length > 0 ? (
         <>

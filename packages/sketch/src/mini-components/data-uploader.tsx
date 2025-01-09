@@ -10,17 +10,11 @@ import {
     DialogFooter,
     Button
 } from "@now/ui";
-import { ICanvasObjectWithId, useStore } from "@now/utils";
+import { ChartNow, ICanvasObjectWithId, useStore } from "@now/utils";
 import { observer } from "mobx-react";
 import { useState } from "react";
 
-export const DataUploader = observer(function DataUploader({
-    id,
-    component
-}: {
-    id: string;
-    component: ICanvasObjectWithId;
-}) {
+export const DataUploader = observer(function DataUploader({ id, component }: { id: string; component: ChartNow }) {
     const { uploadStore } = useStore();
     const [file, setFile] = useState<File | null>(null);
     const [opened, { close, open, toggle }] = useDisclosure(false);
