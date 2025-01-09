@@ -1,4 +1,6 @@
-import { Chart, ChartType, SingleColumnSelectValue, MultiColumnSelectValue } from "@now/utils";
+import { Chart } from "../chart";
+import { ChartType } from "../types";
+import { MultiColumnSelectValue, SingleColumnSelectValue } from "../value-types";
 
 export type LineChartConfig = {
     measures: { t: "m"; v: MultiColumnSelectValue };

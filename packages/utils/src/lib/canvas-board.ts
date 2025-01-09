@@ -16,7 +16,7 @@ import { EventManager } from "./event-handler";
 import { BaseObject } from "../types/canvas/base-object";
 import { Rectangle } from "../types/canvas/objects/rectangle";
 import { Text } from "../types/canvas/objects/text";
-import { Image } from "../types/canvas/objects/image";
+import { CanvasImage } from "../types/canvas/objects/image";
 import { CanvasObjectFactory } from "./canvas-object-factory";
 
 export class CanvasBoard implements ICanvas {
@@ -50,7 +50,7 @@ export class CanvasBoard implements ICanvas {
 
     text: Text | null = null;
 
-    image: Image | null = null;
+    image: CanvasImage | null = null;
 
     constructor() {
         this.EventManager = new EventManager(this);
@@ -265,7 +265,7 @@ export class CanvasBoard implements ICanvas {
         return this.image;
     }
 
-    set Image(value: Image | null) {
+    set Image(value: CanvasImage | null) {
         this.image = value;
     }
 

@@ -4,7 +4,7 @@ import { CanvasBoard } from "./canvas-board";
 import { CanvasActionEnum, ElementEnum } from "../types/sketch-now/enums";
 import { CanvasHelper, CANVAS_SCALING_FACTOR, CANVAS_SCALING_LIMIT, CANVAS_SCALING_MULTIPLIER } from "./canvas-helpers";
 import { CanvasObjectFactory } from "./canvas-object-factory";
-import { Image } from "../types/canvas/objects/image";
+import { CanvasImage } from "../types/canvas/objects/image";
 import { Text } from "../types/canvas/objects/text";
 
 export class EventManager {
@@ -76,7 +76,7 @@ export class EventManager {
                                 false
                             );
                             this.Board.ActiveObjects.forEach((ele) => {
-                                ele.update(context, ele.getValues(), "down", false);
+                                ele.updateValue(context, ele.Value, "down", false);
                             });
                         } else if (this.Board._currentCanvasAction === CanvasActionEnum.Move) {
                             this.Board.ActiveObjects = this.Board.SelectedElements;
@@ -90,9 +90,9 @@ export class EventManager {
                                 ele.move(context, { x: 0, y: 0 }, "down", false);
                             });
                         } else {
-                            this.Board.TempSelectionArea.update(
+                            this.Board.TempSelectionArea.updateValue(
                                 context,
-                                { type: ElementEnum.Rectangle, value: { x: offsetX, y: offsetY, h: 0, w: 0 } },
+                                { x: offsetX, y: offsetY, h: 0, w: 0 },
                                 "down"
                             );
                         }
@@ -143,7 +143,7 @@ export class EventManager {
                     this.Board.Text?.create(context);
                 }
             } else if (this.Board.ElementType === ElementEnum.Image) {
-                this.Board.Image = new Image(
+                this.Board.Image = new CanvasImage(
                     uuid(),
                     {
                         type: ElementEnum.Image,
@@ -297,7 +297,9 @@ export class EventManager {
                         {
                             ...ao.Value,
                             w: offsetX - x,
-                            h: offsetY - y
+                            h: offsetY - y,
+                            ex: offsetX,
+                            ey: offsetY
                         },
                         "move"
                     );
@@ -455,13 +457,13 @@ export class EventManager {
                 this.Board._applySelectionStyle = false;
                 // Uncomment if individual selection is required
                 this.Board.SelectedElements.forEach((ele) => {
-                    ele.select(ele.getValues());
+                    ele.select({});
                     ele.ShowSelection = false;
                 });
                 const selectedAreaBoundary = CanvasHelper.getSelectedAreaBoundary(this.Board.SelectedElements);
                 this.Board.TempSelectionArea.updateValue(context, selectedAreaBoundary, "up");
                 this.Board.TempSelectionArea.draw(context);
-                this.Board.TempSelectionArea.select(this.Board.TempSelectionArea.getValues());
+                this.Board.TempSelectionArea.select({});
                 this.Board.TempSelectionArea.ShowSelection = true;
             }
             this.Board.SelectionElement = this.Board.TempSelectionArea;
@@ -474,7 +476,7 @@ export class EventManager {
                     });
                 } else if (this.Board._currentCanvasAction === CanvasActionEnum.Select) {
                     this.Board.ActiveObjects.forEach((ao) => {
-                        ao.select(ao.getValues());
+                        ao.select({});
                         ao.ShowSelection = true;
                     });
                 } else {

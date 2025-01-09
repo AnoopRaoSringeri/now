@@ -14,6 +14,13 @@ export type XYH = {
     h: number;
 };
 
+export type LinePoints = {
+    sx: number;
+    sy: number;
+    ex: number;
+    ey: number;
+};
+
 export type XY = {
     x: number;
     y: number;
@@ -42,7 +49,7 @@ export type CircleObject = {
 
 export type LineObject = {
     type: ElementEnum.Line;
-    value: XY;
+    value: LinePoints;
 };
 
 export type TextObject = {
@@ -67,7 +74,7 @@ export type ChartObject = {
 
 export type AiPromptObject = {
     type: ElementEnum.AiPrompt;
-    value: XYHW;
+    value: XYHW & { prompt: string };
 };
 
 export type CanvasObject =

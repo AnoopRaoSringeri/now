@@ -15,8 +15,7 @@ import {
     ChartTooltipContent,
     CardFooter
 } from "@now/ui";
-import { PieChartConfig } from "./class";
-import { ChartData, formatText } from "@now/utils";
+import { ChartData, formatText, PieChartConfig } from "@now/utils";
 
 export const PieChartNow = React.memo(function PieChartNow({
     chartConfig: config,

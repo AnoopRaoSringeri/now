@@ -2,11 +2,10 @@ import { Button, Icon } from "@now/ui";
 
 import { observer } from "mobx-react";
 import { useMemo, useState } from "react";
-// import { CanvasBoard } from "../canvas/canvas-board";
 import { CanvasHelper } from "../helpers/canvas-helpers";
 import { useCanvas } from "../hooks/use-canvas";
 import { useParams } from "react-router";
-import { BaseObject, CanvasBoard, ChartNow, ElementEnum, ICanvasObjectWithId } from "@now/utils";
+import { AiPrompt, BaseObject, CanvasBoard, ChartNow, ElementEnum } from "@now/utils";
 import { ChartsRenderer } from "./chart-renderer";
 import { AiPromptRenderer } from "./ai-prompt-renderer";
 import { DataUploader } from "../mini-components/data-uploader";
@@ -32,7 +31,6 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
     board: CanvasBoard;
 }) {
     const component = board.getComponent(id);
-    const { type } = component.getValues();
     const { x = 0, y = 0, h = 0, w = 0 } = component.Cords;
     const transform = board.Transform;
     const { ax, ay } = CanvasHelper.getAbsolutePosition({ x, y }, transform);
@@ -64,12 +62,14 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
                 <Button onClick={() => setIsLocked((pre) => !pre)} size="icon" variant="ghost">
                     {isLocked ? <Icon name="LockOpen" /> : <Icon name="Lock" />}
                 </Button>
-                {type === ElementEnum.Chart ? <DataUploader id={id} component={component as ChartNow} /> : null}
+                {component.Type === ElementEnum.Chart ? (
+                    <DataUploader id={id} component={component as ChartNow} />
+                ) : null}
                 <Button onClick={removeElement} size="icon" variant="destructive">
                     <Icon name="Trash2" />
                 </Button>
             </div>
-            <div style={{ zoom: transform.scaleX }} className="size-full">
+            <div style={{ zoom: transform.scaleX }} className="size-full flex flex-col">
                 <Renderer component={component} />
             </div>
         </div>
@@ -77,10 +77,9 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
 });
 
 const Renderer = observer(function Renderer({ component }: { component: BaseObject }) {
-    const { type, value } = component.getValues();
-    switch (type) {
+    switch (component.Type) {
         case ElementEnum.AiPrompt:
-            return <AiPromptRenderer component={component} />;
+            return <AiPromptRenderer component={component as AiPrompt} />;
         case ElementEnum.Chart:
             return <ChartsRenderer component={component as ChartNow} />;
     }

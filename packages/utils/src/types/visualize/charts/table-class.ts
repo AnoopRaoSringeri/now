@@ -1,5 +1,6 @@
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { Chart, ChartType, MultiColumnSelectValue } from "@now/utils";
+import { Chart } from "../chart";
+import { ChartType } from "../types";
+import { MultiColumnSelectValue } from "../value-types";
 
 export type TableChartConfig = {
     measures: { t: "m"; v: MultiColumnSelectValue };

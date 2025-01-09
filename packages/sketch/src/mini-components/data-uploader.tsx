@@ -10,7 +10,7 @@ import {
     DialogFooter,
     Button
 } from "@now/ui";
-import { ChartNow, ICanvasObjectWithId, useStore } from "@now/utils";
+import { ChartNow, useStore } from "@now/utils";
 import { observer } from "mobx-react";
 import { useState } from "react";
 

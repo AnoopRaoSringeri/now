@@ -1,9 +1,10 @@
-import { ChartType, ColumnConfig, Chart, ChartMetadata } from "@now/utils";
-import { BarChart, BarChartConfig } from "./charts/bar/class";
-import { LineChart, LineChartConfig } from "./charts/line/class";
-import { PieChart, PieChartConfig } from "./charts/pie/class";
-import { TableChart, TableChartConfig } from "./table/class";
-import { ChartTypes } from "./charts/chart-types";
+import { ChartMetadata, Chart } from "./chart";
+import { BarChart, BarChartConfig } from "./charts/bar-class";
+import { ChartTypes } from "./chart-types";
+import { LineChart, LineChartConfig } from "./charts/line-class";
+import { PieChart, PieChartConfig } from "./charts/pie-class";
+import { TableChart, TableChartConfig } from "./charts/table-class";
+import { ChartType, ColumnConfig } from "./types";
 
 export class ChartFactory {
     static createChart(type: ChartType, columnConfig: ColumnConfig[]) {

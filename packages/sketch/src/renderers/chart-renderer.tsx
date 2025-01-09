@@ -1,6 +1,6 @@
 import { AppLoader } from "@now/ui";
-import { ChartData, Chart, useDataLoader, ChartNow } from "@now/utils";
-import { ChartFactory, BarChartNow, PieChartNow, CutomTable, LineChartNow } from "@now/visualize";
+import { ChartData, Chart, useDataLoader, ChartNow, ChartFactory } from "@now/utils";
+import { BarChartNow, PieChartNow, CutomTable, LineChartNow } from "@now/visualize";
 import { observer } from "mobx-react";
 
 export const ChartsRenderer = observer(function ChartsRenderer({ component }: { component: ChartNow }) {

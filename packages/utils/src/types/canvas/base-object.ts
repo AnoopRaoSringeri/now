@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { makeObservable } from "mobx";
+import { makeObservable, observable } from "mobx";
 import { CanvasBoard } from "../../lib/canvas-board";
 import { CanvasHelper, DefaultStyle } from "../../lib/canvas-helpers";
 import { Position, Delta, AbsPosition, Size } from "../sketch-now/canvas";
@@ -15,13 +15,15 @@ export class BaseObject {
     private _isSelected = false;
     private _showSelection = false;
     private _isDragging = false;
-    protected object: CanvasObject;
+    object: CanvasObject;
     readonly Board: CanvasBoard;
     constructor(id: string, objectValue: CanvasObject, board: CanvasBoard) {
         this.object = objectValue;
         this.Board = board;
         this.id = id;
-        makeObservable(this);
+        makeObservable(this, {
+            object: observable
+        });
     }
 
     id = uuid();
@@ -64,6 +66,10 @@ export class BaseObject {
         return this.object.value;
     }
 
+    set Value(value: CanvasObject["value"]) {
+        this.object.value = value;
+    }
+
     updateValue(
         ctx: CanvasRenderingContext2D,
         objectValue: CanvasObject["value"],
@@ -100,7 +106,6 @@ export class BaseObject {
         switch (this.object.type) {
             case ElementEnum.AiPrompt:
             case ElementEnum.Chart:
-            case ElementEnum.Image:
             case ElementEnum.Rectangle: {
                 const { x, y } = position;
                 this.Board.Helper.applyStyles(ctx, this.style);
@@ -122,6 +127,7 @@ export class BaseObject {
             }
         }
     }
+
     resize(ctx: CanvasRenderingContext2D, delta: Delta, cPos: CursorPosition, action: MouseAction, clearCanvas = true) {
         const { dx, dy } = delta;
         this.Board.Helper.applyStyles(ctx, this.style);
@@ -228,17 +234,22 @@ export class BaseObject {
                 }
                 return { x, y, h, w };
             }
+            default:
+                return { x: 0, y: 0, h, w };
         }
     }
+
     draw(ctx: CanvasRenderingContext2D) {
         //
     }
+
     create(ctx: CanvasRenderingContext2D) {
         const { x, y, h, w } = this.Cords;
         this.Board.Helper.applyStyles(ctx, this.style);
         ctx.strokeRect(x, y, w, h);
         ctx.fillRect(x, y, w, h);
     }
+
     updateStyle<T extends keyof IObjectStyle>(
         ctx: CanvasRenderingContext2D,
         key: T,
@@ -260,7 +271,20 @@ export class BaseObject {
         if (this.Board.CanvasCopy && this._showSelection) {
             const copyCtx = this.Board.CanvasCopy.getContext("2d");
             if (copyCtx) {
-                CanvasHelper.applySelection(copyCtx, { height: h, width: w, x, y });
+                switch (this.object.type) {
+                    case ElementEnum.Image: {
+                        const metrics = copyCtx.measureText(this.object.value.value);
+                        CanvasHelper.applySelection(copyCtx, {
+                            height: metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent,
+                            width: metrics.width,
+                            x,
+                            y
+                        });
+                        break;
+                    }
+                    default:
+                        CanvasHelper.applySelection(copyCtx, { height: h, width: w, x, y });
+                }
             }
         }
     }
@@ -283,8 +307,8 @@ export class BaseObject {
         switch (type) {
             case ElementEnum.AiPrompt:
             case ElementEnum.Chart:
-            case ElementEnum.Image:
             case ElementEnum.Circle:
+            case ElementEnum.Image:
             case ElementEnum.Rectangle: {
                 ({ x, y, h, w } = value);
                 return { x, y, h, w };

@@ -1,6 +1,8 @@
+import { AiPrompt } from "../types/canvas/objects/ai-prompt";
 import { ChartNow } from "../types/canvas/objects/chart";
 import { Circle } from "../types/canvas/objects/circle";
-import { Image } from "../types/canvas/objects/image";
+import { CanvasImage } from "../types/canvas/objects/image";
+import { Line } from "../types/canvas/objects/line";
 import { Rectangle } from "../types/canvas/objects/rectangle";
 import { Square } from "../types/canvas/objects/square";
 import { Text } from "../types/canvas/objects/text";
@@ -27,46 +29,54 @@ export class CanvasObjectFactory {
             case ElementEnum.Rectangle:
                 return new Rectangle(uuid(), { type: type, value: { ...position, h: 0, w: 0 } }, board);
             case ElementEnum.Image:
-                return new Image(uuid(), { type: type, value: { ...position, h: 0, w: 0, value: "" } }, board);
+                return new CanvasImage(uuid(), { type: type, value: { ...position, h: 0, w: 0, value: "" } }, board);
             case ElementEnum.Text:
                 return new Text(uuid(), { type: type, value: { ...position, value: "" } }, board);
             case ElementEnum.Circle:
                 return new Circle(uuid(), { type: type, value: { ...position, h: 0, w: 0 } }, board);
-            // case ElementEnum.Chart:
-            //     return new ChartNow(
-            //         uuid(),
-            //         {
-            //             type: type,
-            //             value: {
-            //                 ...position,
-            //                 h: 0,
-            //                 w: 0,
-            //                 metadata: {
-            //                     columnConfig: [],
-            //                     config: {
-            //                         dimensions: {
-            //                             t: "m",
-            //                             v: {
-            //                                 t: "mcs",
-            //                                 v: []
-            //                             }
-            //                         },
-            //                         measures: {
-            //                             t: "m",
-            //                             v: {
-            //                                 t: "mcs",
-            //                                 v: []
-            //                             }
-            //                         }
-            //                     },
-            //                     type: "Table",
-            //                     source: null,
-            //                     options: {}
-            //                 }
-            //             }
-            //         },
-            //         board
-            //     );
+            case ElementEnum.Line:
+                return new Line(
+                    uuid(),
+                    { type: type, value: { sx: position.x, sy: position.y, ex: position.x, ey: position.y } },
+                    board
+                );
+            case ElementEnum.AiPrompt:
+                return new AiPrompt(uuid(), { type: type, value: { ...position, h: 0, w: 0 } }, board);
+            case ElementEnum.Chart:
+                return new ChartNow(
+                    uuid(),
+                    {
+                        type: type,
+                        value: {
+                            ...position,
+                            h: 0,
+                            w: 0,
+                            metadata: {
+                                columnConfig: [],
+                                config: {
+                                    dimensions: {
+                                        t: "m",
+                                        v: {
+                                            t: "mcs",
+                                            v: []
+                                        }
+                                    },
+                                    measures: {
+                                        t: "m",
+                                        v: {
+                                            t: "mcs",
+                                            v: []
+                                        }
+                                    }
+                                },
+                                type: "Table",
+                                source: null,
+                                options: {}
+                            }
+                        }
+                    },
+                    board
+                );
             default:
                 throw Error();
         }

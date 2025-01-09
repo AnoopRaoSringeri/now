@@ -2,8 +2,9 @@ import { Button, Icon, Label } from "@now/ui";
 import { observer } from "mobx-react";
 import { useParams } from "react-router";
 import { useCanvas } from "../hooks/use-canvas";
-import { ChartFactory, ChartOptionsRendererWrapper, ChartSelect } from "@now/visualize";
+import { ChartOptionsRendererWrapper, ChartSelect } from "@now/visualize";
 import { runInAction } from "mobx";
+import { ChartFactory } from "@now/utils";
 
 export const ElementOptions = observer(function ElementOptions() {
     const { id } = useParams<{ id: string }>();

@@ -1,7 +1,7 @@
-import { TableChartConfig } from "../table/class";
-import { BarChartConfig } from "./bar/class";
-import { LineChartConfig } from "./line/class";
-import { PieChartConfig } from "./pie/class";
+import { BarChartConfig } from "./charts/bar-class";
+import { LineChartConfig } from "./charts/line-class";
+import { PieChartConfig } from "./charts/pie-class";
+import { TableChartConfig } from "./charts/table-class";
 
 export type ChartTypes =
     | {

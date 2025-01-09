@@ -309,7 +309,7 @@ export class CanvasHelper {
                     break;
                 }
                 case ElementEnum.Line: {
-                    const { x: lx, y: ly } = value;
+                    const { sx: lx, sy: ly } = value;
                     x = lx;
                     y = ly;
                     break;

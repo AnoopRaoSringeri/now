@@ -2,8 +2,7 @@ import { BaseObject } from "../base-object";
 import { ChartObject } from "../types";
 import { CanvasBoard } from "../../../lib/canvas-board";
 import { Chart } from "../../visualize/chart";
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { ChartFactory } from "@now/visualize";
+import { ChartFactory } from "../../visualize/chart-factory";
 
 export class ChartNow extends BaseObject {
     object: ChartObject;
