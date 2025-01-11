@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import { useEffect, useRef } from "react";
 import { useParams } from "react-router";
-import { CanvasHelper, DefaultFont } from "../helpers/canvas-helpers";
 import { useCanvas } from "../hooks/use-canvas";
+import { CanvasHelper, DefaultFont } from "@now/utils";
 
 export const TextEditorWrapper = observer(function TextEditorWrapper() {
     const { id } = useParams<{ id: string }>();

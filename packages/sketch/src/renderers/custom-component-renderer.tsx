@@ -2,10 +2,9 @@ import { Button, Icon } from "@now/ui";
 
 import { observer } from "mobx-react";
 import { useMemo, useState } from "react";
-import { CanvasHelper } from "../helpers/canvas-helpers";
 import { useCanvas } from "../hooks/use-canvas";
 import { useParams } from "react-router";
-import { AiPrompt, BaseObject, CanvasBoard, ChartNow, ElementEnum } from "@now/utils";
+import { AiPrompt, BaseObject, CanvasBoard, CanvasHelper, ChartNow, ElementEnum } from "@now/utils";
 import { ChartsRenderer } from "./chart-renderer";
 import { AiPromptRenderer } from "./ai-prompt-renderer";
 import { DataUploader } from "../mini-components/data-uploader";
