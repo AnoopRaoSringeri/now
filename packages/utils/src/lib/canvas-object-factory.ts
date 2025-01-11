@@ -1,8 +1,10 @@
+import { BaseObject } from "../types/canvas/base-object";
 import { AiPrompt } from "../types/canvas/objects/ai-prompt";
 import { ChartNow } from "../types/canvas/objects/chart";
 import { Circle } from "../types/canvas/objects/circle";
 import { CanvasImage } from "../types/canvas/objects/image";
 import { Line } from "../types/canvas/objects/line";
+import { Pencil } from "../types/canvas/objects/pencil";
 import { Rectangle } from "../types/canvas/objects/rectangle";
 import { Square } from "../types/canvas/objects/square";
 import { Text } from "../types/canvas/objects/text";
@@ -13,17 +15,23 @@ import { CanvasBoard } from "./canvas-board";
 import { v4 as uuid } from "uuid";
 
 export class CanvasObjectFactory {
-    static createObject(object: CanvasObject, board: CanvasBoard) {
+    static createObject(id: string, object: CanvasObject, board: CanvasBoard) {
         switch (object.type) {
             case ElementEnum.Rectangle:
-                return new Rectangle(uuid(), object, board);
+                return new Rectangle(id, object, board);
+            case ElementEnum.Pencil:
+                return new Pencil(id, object, board);
+            case ElementEnum.Chart:
+                return new ChartNow(id, object, board);
             default:
-                throw Error();
+                return new BaseObject(id, object, board);
         }
     }
 
     static createNewObject(type: ElementEnum, position: Position, board: CanvasBoard) {
         switch (type) {
+            case ElementEnum.Pencil:
+                return new Pencil(uuid(), { type: type, value: { points: [[position.x, position.y]] } }, board);
             case ElementEnum.Square:
                 return new Square(uuid(), { type: type, value: { ...position, h: 0 } }, board);
             case ElementEnum.Rectangle:
@@ -41,7 +49,7 @@ export class CanvasObjectFactory {
                     board
                 );
             case ElementEnum.AiPrompt:
-                return new AiPrompt(uuid(), { type: type, value: { ...position, h: 0, w: 0 } }, board);
+                return new AiPrompt(uuid(), { type: type, value: { ...position, h: 0, w: 0, prompt: "" } }, board);
             case ElementEnum.Chart:
                 return new ChartNow(
                     uuid(),

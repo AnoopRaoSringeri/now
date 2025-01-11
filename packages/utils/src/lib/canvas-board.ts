@@ -18,7 +18,9 @@ import { Rectangle } from "../types/canvas/objects/rectangle";
 import { Text } from "../types/canvas/objects/text";
 import { CanvasImage } from "../types/canvas/objects/image";
 import { CanvasObjectFactory } from "./canvas-object-factory";
-
+import { AiPrompt } from "../types/canvas/objects/ai-prompt";
+import { ChartNow } from "../types/canvas/objects/chart";
+import { v4 as uuid } from "uuid";
 export class CanvasBoard implements ICanvas {
     private _lastTimestamp = 0;
     private _clicked = false;
@@ -29,7 +31,7 @@ export class CanvasBoard implements ICanvas {
     private _readOnly = false;
     private _cursorPosition: CursorPosition | null = null;
 
-    protected _activeObjects: BaseObject[] = [];
+    _activeObjects: BaseObject[] = [];
     private _hoveredObject: BaseObject | null = null;
 
     private EventManager: EventManager;
@@ -81,7 +83,8 @@ export class CanvasBoard implements ICanvas {
             image: observable,
             Image: computed,
             CustomComponentIds: computed,
-            getComponent: action
+            getComponent: action,
+            _activeObjects: observable
         });
     }
 
@@ -273,8 +276,28 @@ export class CanvasBoard implements ICanvas {
         return this.Elements.filter(CanvasHelper.isCustomElement).map((a) => a.id);
     }
 
-    getComponent(id: string) {
-        return this.Elements.find((t) => t.id === id)!;
+    getComponent(id: string):
+        | {
+              type: ElementEnum.AiPrompt;
+              component: AiPrompt;
+          }
+        | {
+              type: ElementEnum.Chart;
+              component: ChartNow;
+          } {
+        const component = this.ActiveObjects.find((t) => t.id === id) ?? this.Elements.find((t) => t.id === id)!;
+        switch (component.Type) {
+            case ElementEnum.AiPrompt:
+                return {
+                    type: ElementEnum.AiPrompt,
+                    component: component as AiPrompt
+                };
+            default:
+                return {
+                    type: ElementEnum.Chart,
+                    component: component as ChartNow
+                };
+        }
     }
 
     updateText(value: string) {
@@ -342,7 +365,7 @@ export class CanvasBoard implements ICanvas {
         this.Transform = metadata.transform;
         this.Zoom = metadata.transform.scaleX * CANVAS_SCALING_MULTIPLIER;
         const objArray = metadata.elements.map((ele) => {
-            return CanvasObjectFactory.createObject(ele, this);
+            return CanvasObjectFactory.createObject(ele.id, ele, this);
         });
         this.Elements = objArray;
         if (draw) {
@@ -434,9 +457,9 @@ export class CanvasBoard implements ICanvas {
             }
             const elementToCopy = this.Elements.find((e) => e.id === id);
             if (elementToCopy) {
-                const copyElement = CanvasObjectFactory.createObject(elementToCopy.getValues(), this);
-                copyElement.move(context, { x: 0, y: 0 }, "down");
-                copyElement.move(context, { x: 40, y: 40 }, "up");
+                const copyElement = CanvasObjectFactory.createObject(uuid(), elementToCopy.getValues(), this);
+                copyElement.move(context, { x: 0, y: 0 }, "down", false);
+                copyElement.move(context, { x: 40, y: 40 }, "up", false);
                 context.closePath();
                 this.Elements.push(copyElement);
                 this.SelectedElements = [copyElement];
@@ -460,7 +483,7 @@ export class CanvasBoard implements ICanvas {
         this.Helper.clearCanvasArea(context);
         const copiedItems: BaseObject[] = [];
         elementsToCopy.forEach((ele, i) => {
-            const copyElement = CanvasObjectFactory.createObject(ele.getValues(), this);
+            const copyElement = CanvasObjectFactory.createObject(uuid(), ele.getValues(), this);
             copyElement.move(context, { x: 0, y: 0 }, "down", false);
             copyElement.move(context, { x: 40, y: 40 }, "up", false);
             copiedItems.push(copyElement);
@@ -623,7 +646,7 @@ export class CanvasBoard implements ICanvas {
 
     toJSON(): CanvasMetadata {
         return {
-            elements: [...this.Elements.map((ele) => ele.getValues())],
+            elements: [...this.Elements.map((ele) => ele.toJSON())],
             size: { height: this.Height, width: this.Width },
             transform: this.Transform
         };

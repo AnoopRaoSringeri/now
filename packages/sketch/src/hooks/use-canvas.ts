@@ -1,6 +1,5 @@
 import { CanvasBoard } from "@now/utils";
 import { useEffect } from "react";
-// import { CanvasBoard } from "../canvas/canvas-board";
 
 const CanvasMap: Map<string, CanvasBoard> = new Map();
 let canvasBoard: CanvasBoard | null = null;

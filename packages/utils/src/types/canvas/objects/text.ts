@@ -8,6 +8,9 @@ export class Text extends BaseObject {
         super(id, object, board);
         this.object = object;
     }
+    get Value() {
+        return this.object.value;
+    }
     getValues(): TextObject {
         return this.object;
     }

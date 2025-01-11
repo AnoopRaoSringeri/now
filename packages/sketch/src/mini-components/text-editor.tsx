@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { useEffect, useRef } from "react";
 import { useParams } from "react-router";
-import { DefaultStyle, CanvasHelper, DefaultFont } from "../helpers/canvas-helpers";
+import { CanvasHelper, DefaultFont } from "../helpers/canvas-helpers";
 import { useCanvas } from "../hooks/use-canvas";
 
 export const TextEditorWrapper = observer(function TextEditorWrapper() {
@@ -38,10 +38,10 @@ export const TextEditorWrapper = observer(function TextEditorWrapper() {
         return null;
     }
 
-    const { x = 0, y = 0, style = DefaultStyle } = canvasBoard.Text?.getValues() ?? {};
+    const { x = 0, y = 0 } = canvasBoard.Text.Value;
 
     const { ax, ay } = CanvasHelper.getAbsolutePosition({ x, y }, canvasBoard.Transform);
-    const { font, ...rest } = style;
+    const { font, ...rest } = canvasBoard.Text.Style;
     const dFont = font ?? DefaultFont;
 
     return (

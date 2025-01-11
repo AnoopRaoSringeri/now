@@ -1,5 +1,4 @@
-import { ElementEnum, IObjectStyle } from "@now/utils";
-import { DefaultFont, DefaultStyle } from "./canvas-helpers";
+import { DefaultFont, DefaultStyle, ElementEnum, IObjectStyle } from "@now/utils";
 
 type T = keyof IObjectStyle;
 

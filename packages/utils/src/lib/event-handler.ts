@@ -2,10 +2,18 @@ import { v4 as uuid } from "uuid";
 
 import { CanvasBoard } from "./canvas-board";
 import { CanvasActionEnum, ElementEnum } from "../types/sketch-now/enums";
-import { CanvasHelper, CANVAS_SCALING_FACTOR, CANVAS_SCALING_LIMIT, CANVAS_SCALING_MULTIPLIER } from "./canvas-helpers";
+import {
+    CanvasHelper,
+    CANVAS_SCALING_FACTOR,
+    CANVAS_SCALING_LIMIT,
+    CANVAS_SCALING_MULTIPLIER,
+    SELECTION_ELEMENT_ID,
+    SelectionStyle
+} from "./canvas-helpers";
 import { CanvasObjectFactory } from "./canvas-object-factory";
 import { CanvasImage } from "../types/canvas/objects/image";
 import { Text } from "../types/canvas/objects/text";
+import { Rectangle } from "../types/canvas/objects/rectangle";
 
 export class EventManager {
     private readonly Board: CanvasBoard;
@@ -98,18 +106,8 @@ export class EventManager {
                         }
                     } else {
                         this.Board._currentCanvasAction = CanvasActionEnum.Select;
-                        // this.Board.TempSelectionArea = CanvasObjectFactory.createObject(
-                        //     {
-                        //         x: offsetX,
-                        //         y: offsetY,
-                        //         h: 0,
-                        //         w: 0,
-                        //         id: `temp-${SELECTION_ELEMENT_ID}`,
-                        //         style: SelectionStyle
-                        //     },
-                        //     this.Board
-                        // );
-                        this.Board.TempSelectionArea = CanvasObjectFactory.createObject(
+                        this.Board.TempSelectionArea = new Rectangle(
+                            `tem-selection-area-${SELECTION_ELEMENT_ID}`,
                             {
                                 type: ElementEnum.Rectangle,
                                 value: {
@@ -121,6 +119,7 @@ export class EventManager {
                             },
                             this.Board
                         );
+                        this.Board.TempSelectionArea.Style = SelectionStyle;
                         this.Board.TempSelectionArea?.create(context);
                     }
                 }
@@ -200,7 +199,8 @@ export class EventManager {
                             {
                                 ...this.Board.TempSelectionArea.Value,
                                 w: offsetX - x,
-                                h: offsetY - y
+                                h: offsetY - y,
+                                points: [[offsetX, offsetY]]
                             },
                             "move"
                         );
@@ -267,7 +267,15 @@ export class EventManager {
                                     //     ele.update(context, { h: uh, w: uw, x: ux, y: uy, points: [] }, "move", false);
                                     // }
                                     ele.updateValue(context, { h: uh, w: uw, x: ux, y: uy }, "move", false);
+                                    break;
                                 }
+                                default:
+                                    ele.updateValue(
+                                        context,
+                                        { ...ele.Value, points: [[offsetX, offsetY]] },
+                                        "move",
+                                        false
+                                    );
                             }
                         });
                     }
@@ -299,7 +307,8 @@ export class EventManager {
                             w: offsetX - x,
                             h: offsetY - y,
                             ex: offsetX,
-                            ey: offsetY
+                            ey: offsetY,
+                            points: [[offsetX, offsetY]]
                         },
                         "move"
                     );
@@ -425,7 +434,10 @@ export class EventManager {
                                     break;
                             }
                             ele.updateValue(context, { h: uh, w: uw, x: ux, y: uy }, "up", false);
+                            break;
                         }
+                        default:
+                            ele.updateValue(context, { ...ele.Value, points: [[offsetX, offsetY]] }, "up", false);
                     }
                 });
                 this.Board.SelectionElement = this.Board.TempSelectionArea;
@@ -495,7 +507,8 @@ export class EventManager {
                         {
                             ...ao.Value,
                             w: offsetX - x,
-                            h: offsetY - y
+                            h: offsetY - y,
+                            points: [[offsetX, offsetY]]
                         },
                         "up"
                     );

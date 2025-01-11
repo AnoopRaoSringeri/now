@@ -4,19 +4,14 @@ import { useParams } from "react-router";
 import { useCanvas } from "../hooks/use-canvas";
 import { ChartOptionsRendererWrapper, ChartSelect } from "@now/visualize";
 import { runInAction } from "mobx";
-import { ChartFactory, ElementEnum } from "@now/utils";
-import { ChartOptions } from "./chart-options";
+import { ChartFactory, ChartNow } from "@now/utils";
 
-export const ElementOptions = observer(function ElementOptions() {
+export const ChartOptions = observer(function ChartOptions({ element }: { element: ChartNow }) {
     const { id } = useParams<{ id: string }>();
     const { canvasBoard } = useCanvas(id ?? "new");
-    const selectedElements = canvasBoard.SelectedElements;
-    const copyEle = selectedElements[0];
-    if (!copyEle) {
-        return null;
-    }
-    const { type, component: element } = canvasBoard.getComponent(copyEle.id);
-    if (!element) {
+
+    const { chart } = element;
+    if (!chart) {
         return null;
     }
     function removeElement() {
@@ -29,7 +24,18 @@ export const ElementOptions = observer(function ElementOptions() {
 
     return (
         <div className="flex flex-col gap-4 " id={`element-options-${element.id}`}>
-            {type === ElementEnum.Chart ? <ChartOptions element={element} /> : null}
+            <div>
+                <Label>{"Chart Type"}</Label>
+                <ChartSelect
+                    value={chart.type}
+                    onChange={(c) => {
+                        runInAction(() => {
+                            element.chart = ChartFactory.createChart(c, chart.columnConfig);
+                        });
+                    }}
+                />
+            </div>
+            {element.chart ? <ChartOptionsRendererWrapper chart={chart} /> : null}
             <div className="flex gap-2">
                 <Button size="xs" variant="ghost" onClick={copyElement}>
                     <Icon name="Copy" size={20} />
