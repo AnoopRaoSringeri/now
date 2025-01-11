@@ -1,10 +1,10 @@
 import { Button, Icon } from "@now/ui";
 
 import { observer } from "mobx-react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useCanvas } from "../hooks/use-canvas";
 import { useParams } from "react-router";
-import { AiPrompt, BaseObject, CanvasBoard, CanvasHelper, ChartNow, ElementEnum } from "@now/utils";
+import { AiPrompt, BaseObject, CanvasBoard, CanvasHelper, ChartNow, cn, ElementEnum } from "@now/utils";
 import { ChartsRenderer } from "./chart-renderer";
 import { AiPromptRenderer } from "./ai-prompt-renderer";
 import { DataUploader } from "../mini-components/data-uploader";
@@ -33,7 +33,6 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
     const { x = 0, y = 0, h = 0, w = 0 } = component.Cords;
     const transform = board.Transform;
     const { ax, ay } = CanvasHelper.getAbsolutePosition({ x, y }, transform);
-    const [isLocked, setIsLocked] = useState(true);
 
     const style: React.CSSProperties = useMemo(
         () => ({
@@ -58,8 +57,8 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
     return (
         <div style={style}>
             <div style={{ zoom: transform.scaleX }} className="absolute top-[-40px] right-0 z-[60] flex">
-                <Button onClick={() => setIsLocked((pre) => !pre)} size="icon" variant="ghost">
-                    {isLocked ? <Icon name="LockOpen" /> : <Icon name="Lock" />}
+                <Button onClick={() => (component.IsLocked = !component.IsLocked)} size="icon" variant="ghost">
+                    {component.IsLocked ? <Icon name="LockOpen" /> : <Icon name="Lock" />}
                 </Button>
                 {component.Type === ElementEnum.Chart ? (
                     <DataUploader id={id} component={component as ChartNow} />
@@ -68,7 +67,10 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
                     <Icon name="Trash2" />
                 </Button>
             </div>
-            <div style={{ zoom: transform.scaleX }} className="size-full flex flex-col">
+            <div
+                style={{ zoom: transform.scaleX }}
+                className={cn("size-full flex flex-col", component.IsLocked ? "z-[100]" : "")}
+            >
                 <Renderer component={component} />
             </div>
         </div>

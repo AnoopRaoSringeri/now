@@ -12,11 +12,12 @@ export class BaseObject {
     toSVG(sRatio: Size) {
         throw new Error("Method not implemented.");
     }
+    readonly Board: CanvasBoard;
     private _isSelected = false;
     private _showSelection = false;
     private _isDragging = false;
     object: CanvasObject;
-    readonly Board: CanvasBoard;
+    isLocked = false;
     constructor(id: string, objectValue: CanvasObject, board: CanvasBoard) {
         this.object = objectValue;
         this.style = board.Style;
@@ -24,7 +25,8 @@ export class BaseObject {
         this.id = id;
         makeObservable(this, {
             object: observable,
-            Cords: computed
+            Cords: computed,
+            isLocked: observable
         });
     }
     private tmpX = 0;
@@ -79,6 +81,16 @@ export class BaseObject {
 
     set Value(value: CanvasObject["value"]) {
         this.object.value = value;
+    }
+
+    get IsLocked() {
+        return this.isLocked;
+    }
+
+    set IsLocked(value: boolean) {
+        runInAction(() => {
+            this.isLocked = value;
+        });
     }
 
     updateValue(

@@ -30,6 +30,11 @@ const ChartRenderer = observer(function ChartRenderer({ chart, chartData }: { ch
         case "Pie":
             return <PieChartNow chartConfig={typedChart.config} chartData={chart.ChartData} />;
         default:
-            return <CutomTable data={chartData.data} headers={chartData.columns} />;
+            return (
+                <CutomTable
+                    data={chartData.data}
+                    headers={[...chart.DimensionColumns, ...chart.MeasureColumns].map((c) => c.name)}
+                />
+            );
     }
 });

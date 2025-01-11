@@ -23,6 +23,8 @@ export class CanvasObjectFactory {
                 return new Pencil(id, object, board);
             case ElementEnum.Chart:
                 return new ChartNow(id, object, board);
+            case ElementEnum.AiPrompt:
+                return new AiPrompt(id, object, board);
             default:
                 return new BaseObject(id, object, board);
         }

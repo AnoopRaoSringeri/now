@@ -29,7 +29,7 @@ export const DataUploader = observer(function DataUploader({ id, component }: { 
 
     return (
         <Dialog onOpenChange={toggle} open={opened}>
-            <DialogTrigger className="flex items-center px-2" onClick={open}>
+            <DialogTrigger size="icon" variant="ghost" onClick={open}>
                 <Icon name="Upload" />
             </DialogTrigger>
             <DialogContent>

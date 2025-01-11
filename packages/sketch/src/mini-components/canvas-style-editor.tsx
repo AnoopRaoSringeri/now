@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 import { Renderer } from "../renderers/editor-renderer";
 import { OptionsWrapper } from "./options-wrapper";
 import { useCanvas } from "../hooks/use-canvas";
-import { ScrollArea } from "@now/ui";
+import { ScrollArea, ScrollBar } from "@now/ui";
 import { ElementEnum } from "@now/utils";
 import { OptionRegistry } from "../helpers/option-registry";
 
@@ -23,6 +23,7 @@ export const StyleEditorWrapper = observer(function StyleEditorWrapper() {
                         <OptionsWrapper />
                     </div>
                 )}
+                <ScrollBar />
             </ScrollArea>
         </div>
     );
