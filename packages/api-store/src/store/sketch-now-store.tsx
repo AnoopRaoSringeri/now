@@ -1,8 +1,9 @@
 import axios, { AxiosResponse } from "axios";
 import { makeAutoObservable } from "mobx";
-import { BaseUrl, getRequestConfig } from "./auth-store";
+import { getRequestConfig } from "./auth-store";
 import { CanvasMetadata, SavedCanvas } from "@now/utils";
 
+const BaseUrl = "https://localhost:3001/";
 class SketchStore {
     constructor() {
         makeAutoObservable(this);

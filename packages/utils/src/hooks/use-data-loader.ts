@@ -11,17 +11,21 @@ export function useDataLoader(chart: Chart, id: string) {
         refetch
     } = useQuery({
         queryFn: async () => {
-            return await uploadStore.GetData({
-                id,
-                measures: chart.MeasureColumns,
-                dimensions: chart.DimensionColumns,
-                columns:
-                    chart.MeasureColumns.length > 0 && chart.DimensionColumns.length > 0
-                        ? [chart.DimensionColumns[0], chart.MeasureColumns[0]]
-                        : []
-            });
+            if (chart.Source.id) {
+                return await uploadStore.GetData({
+                    id: chart.Source.id,
+                    measures: chart.MeasureColumns,
+                    dimensions: chart.DimensionColumns,
+                    columns:
+                        chart.MeasureColumns.length > 0 && chart.DimensionColumns.length > 0
+                            ? [chart.DimensionColumns[0], chart.MeasureColumns[0]]
+                            : []
+                });
+            } else {
+                return { data: [], columns: [] };
+            }
         },
-        queryKey: ["ChartData", id],
+        queryKey: ["ChartData", chart.Source.id],
         refetchOnMount: false,
         refetchOnReconnect: false,
         refetchOnWindowFocus: false

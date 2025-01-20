@@ -18,7 +18,10 @@ export const ChartOptions = observer(function ChartOptions({ element }: { elemen
                     value={chart.type}
                     onChange={(c) => {
                         runInAction(() => {
+                            const existing = chart.toJSON();
                             element.chart = ChartFactory.createChart(c, chart.columnConfig);
+                            element.chart.Source = existing.source;
+                            element.chart.ColumnConfig = existing.columnConfig;
                         });
                     }}
                 />

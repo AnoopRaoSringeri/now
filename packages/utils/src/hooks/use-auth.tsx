@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { LogInRequet } from "../types/auth/auth";
 import { useStore } from "./store-provider";
 import { toast } from "sonner";
@@ -8,6 +8,7 @@ export function useAuth() {
     const [loading, setLoading] = useState(false);
     const { authStore } = useStore();
     const navigate = useNavigate();
+    const location = useLocation();
     const isAuthenticated = localStorage.getItem("IsAuthenticated");
 
     const refreshToken = async () => {
@@ -17,6 +18,11 @@ export function useAuth() {
                 endSession();
             } else {
                 authStore.IsSessionValid = true;
+                const redirectURL = localStorage.getItem("RedirectURL");
+                if (redirectURL) {
+                    navigate(redirectURL);
+                    localStorage.removeItem("RedirectURL");
+                }
             }
         } else {
             endSession();
@@ -24,10 +30,13 @@ export function useAuth() {
     };
 
     const endSession = () => {
-        navigate("/");
+        if (location.pathname !== "/auth") {
+            localStorage.setItem("RedirectURL", location.pathname);
+        }
         localStorage.removeItem("IsAuthenticated");
         toast.error("Session expired login again");
         authStore.IsSessionValid = false;
+        navigate("/auth");
     };
 
     const logOut = async () => {
@@ -45,7 +54,13 @@ export function useAuth() {
             toast.success("Logged in successfully");
             localStorage.setItem("IsAuthenticated", "true");
             authStore.IsSessionValid = true;
-            navigate("/sketch-now");
+            const redirectURL = localStorage.getItem("RedirectURL");
+            if (redirectURL) {
+                navigate(redirectURL);
+                localStorage.removeItem("RedirectURL");
+            } else {
+                navigate("/sketch-now");
+            }
         } else {
             toast.error("User login failed");
         }

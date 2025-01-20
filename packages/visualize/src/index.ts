@@ -8,5 +8,7 @@ export * from "./charts/pie/pie-chart";
 
 export * from "./charts/line/line-chart";
 
+export * from "./charts/area/area-chart";
+
 export * from "./components/options-renderer";
 export * from "./components/chart-select-editor";

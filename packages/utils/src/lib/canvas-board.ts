@@ -54,6 +54,8 @@ export class CanvasBoard implements ICanvas {
 
     image: CanvasImage | null = null;
 
+    _deletedElements: BaseObject[] = [];
+
     constructor() {
         this.EventManager = new EventManager(this);
         this._canvas = createRef();
@@ -276,6 +278,16 @@ export class CanvasBoard implements ICanvas {
         return this.Elements.filter(CanvasHelper.isCustomElement).map((a) => a.id);
     }
 
+    get DeletedElements() {
+        return this._deletedElements;
+    }
+
+    set DeletedElements(eles: BaseObject[]) {
+        runInAction(() => {
+            this._deletedElements = eles;
+        });
+    }
+
     getComponent(id: string):
         | {
               type: ElementEnum.AiPrompt;
@@ -434,9 +446,15 @@ export class CanvasBoard implements ICanvas {
     }
 
     removeElement(id: string) {
-        this.Elements = this.Elements.filter((e) => e.id !== id);
-        this.SelectedElements = [];
-        this.redrawBoard();
+        runInAction(() => {
+            const removedElement = this.Elements.find((e) => e.id === id);
+            if (removedElement) {
+                this.DeletedElements.push(removedElement);
+            }
+            this.Elements = this.Elements.filter((e) => e.id !== id);
+            this.SelectedElements = [];
+            this.redrawBoard();
+        });
     }
 
     removeElements() {
@@ -645,10 +663,19 @@ export class CanvasBoard implements ICanvas {
     }
 
     toJSON(): CanvasMetadata {
+        const dsids: string[] = [];
+        this.DeletedElements.forEach((ele) => {
+            if (ele instanceof ChartNow) {
+                if (ele.chart.Source.id) {
+                    dsids.push(ele.chart.Source.id);
+                }
+            }
+        });
         return {
             elements: [...this.Elements.map((ele) => ele.toJSON())],
             size: { height: this.Height, width: this.Width },
-            transform: this.Transform
+            transform: this.Transform,
+            deletedSources: dsids
         };
     }
 

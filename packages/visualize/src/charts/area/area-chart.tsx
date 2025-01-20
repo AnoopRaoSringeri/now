@@ -1,3 +1,5 @@
+"use client";
+
 import {
     ChartConfig,
     Card,
@@ -10,17 +12,17 @@ import {
     ChartTooltipContent,
     CardFooter
 } from "@now/ui";
+import { AreaChartConfig, ChartData } from "@now/utils";
 import { TrendingUp } from "lucide-react";
 import React from "react";
-import { CartesianGrid, Line, LineChart as LineChartComponent, XAxis } from "recharts";
-import { ChartData, LineChartConfig } from "@now/utils";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-export const LineChartNow = React.memo(function LineChartNow({
+export const AreaChartNow = React.memo(function AreaChartNow({
     chartData,
     chartConfig: config
 }: {
     chartData: ChartData;
-    chartConfig: LineChartConfig;
+    chartConfig: AreaChartConfig;
 }) {
     const xAxis = config.dimensions.v.v;
 
@@ -43,12 +45,19 @@ export const LineChartNow = React.memo(function LineChartNow({
     return (
         <Card className="flex flex-col size-full bg-transparent">
             <CardHeader>
-                <CardTitle>Line Chart - Linear</CardTitle>
-                <CardDescription>January - June 2024</CardDescription>
+                <CardTitle>Area Chart - Stacked</CardTitle>
+                <CardDescription>Showing total visitors for the last 6 months</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 pb-0 overflow-hidden">
-                <ChartContainer config={chartConfig} className="size-full">
-                    <LineChartComponent accessibilityLayer data={chartData.data}>
+                <ChartContainer config={chartConfig}>
+                    <AreaChart
+                        accessibilityLayer
+                        data={chartData.data}
+                        margin={{
+                            left: 12,
+                            right: 12
+                        }}
+                    >
                         <CartesianGrid vertical={false} />
                         <XAxis
                             dataKey={xAxis.name}
@@ -57,25 +66,31 @@ export const LineChartNow = React.memo(function LineChartNow({
                             tickMargin={8}
                             tickFormatter={(value) => value.slice(0, 3)}
                         />
-                        <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                        <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dot" />} />
                         {yAxis.map((v) => (
-                            <Line
+                            <Area
                                 key={v.name}
                                 dataKey={v.name}
-                                type="linear"
+                                fillOpacity={0.4}
                                 stroke={`var(--color-${v.name})`}
-                                strokeWidth={2}
                                 dot={false}
+                                type="natural"
                             />
                         ))}
-                    </LineChartComponent>
+                    </AreaChart>
                 </ChartContainer>
             </CardContent>
-            <CardFooter className="flex-col items-start gap-2 text-sm">
-                <div className="flex gap-2 font-medium leading-none">
-                    Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+            <CardFooter>
+                <div className="flex w-full items-start gap-2 text-sm">
+                    <div className="grid gap-2">
+                        <div className="flex items-center gap-2 font-medium leading-none">
+                            Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+                        </div>
+                        <div className="flex items-center gap-2 leading-none text-muted-foreground">
+                            January - June 2024
+                        </div>
+                    </div>
                 </div>
-                <div className="leading-none text-muted-foreground">Showing total visitors for the last 6 months</div>
             </CardFooter>
         </Card>
     );

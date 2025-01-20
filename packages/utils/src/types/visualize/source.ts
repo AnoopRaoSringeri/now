@@ -1,10 +1,11 @@
 export type ChartSource =
-    | {
-          type: "File";
-          value: string;
-      }
-    | {
-          type: "Query";
-          connectionString: string;
-          query: string;
-      };
+    | (
+          | {
+                type: "File";
+            }
+          | {
+                type: "Query";
+                connectionString: string;
+                query: string;
+            }
+      ) & { name: string; id: string | null };

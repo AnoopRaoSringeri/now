@@ -1,6 +1,6 @@
 import { AppLoader } from "@now/ui";
 import { ChartData, Chart, useDataLoader, ChartNow, ChartFactory } from "@now/utils";
-import { BarChartNow, PieChartNow, CutomTable, LineChartNow } from "@now/visualize";
+import { BarChartNow, PieChartNow, CutomTable, LineChartNow, AreaChartNow } from "@now/visualize";
 import { observer } from "mobx-react";
 
 export const ChartsRenderer = observer(function ChartsRenderer({ component }: { component: ChartNow }) {
@@ -27,6 +27,8 @@ const ChartRenderer = observer(function ChartRenderer({ chart, chartData }: { ch
             return <BarChartNow chartConfig={typedChart.config} chartData={chart.ChartData} />;
         case "Line":
             return <LineChartNow chartConfig={typedChart.config} chartData={chart.ChartData} />;
+        case "Area":
+            return <AreaChartNow chartConfig={typedChart.config} chartData={chart.ChartData} />;
         case "Pie":
             return <PieChartNow chartConfig={typedChart.config} chartData={chart.ChartData} />;
         default:

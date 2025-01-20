@@ -47,6 +47,7 @@ export interface CanvasMetadata {
     elements: (CanvasObject & { id: string })[];
     size: Size;
     transform: ICanvasTransform;
+    deletedSources: string[];
 }
 
 export interface AdditionalCanvasOptions {

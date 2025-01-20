@@ -34,7 +34,7 @@ export const BarChartNow = observer(function BarChartNow({
     usedColumn.forEach((column) => {
         chartConfig[column.name] = {
             label: column.name,
-            color: "#2563eb"
+            color: `#${Math.random().toString(16).substr(-6)}`
         };
     });
 
