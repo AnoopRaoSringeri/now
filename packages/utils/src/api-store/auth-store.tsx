@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
+import { User } from "../types/auth/auth";
 
 export const BaseUrl = import.meta.env.VITE_SKETCH_NOW_URL;
 
@@ -13,6 +14,7 @@ export const getRequestConfig = (withCredentials?: boolean) => {
 };
 
 class AuthStore {
+    user: User | null = null;
     constructor() {
         makeAutoObservable(this);
     }
@@ -27,6 +29,11 @@ class AuthStore {
             this.isSessionValid = value;
         });
     }
+
+    get User() {
+        return this.user;
+    }
+
     async Login({
         username,
         password,
@@ -46,6 +53,13 @@ class AuthStore {
                 },
                 getRequestConfig(true)
             );
+            runInAction(() => {
+                this.user = {
+                    email,
+                    password,
+                    username
+                };
+            });
             return data;
         } catch (e) {
             return null;
@@ -103,8 +117,11 @@ class AuthStore {
 
     async IsValidSession(): Promise<boolean> {
         try {
-            await axios.get(`${BaseUrl}`, getRequestConfig(true));
-            return true;
+            const { data }: AxiosResponse<User | null> = await axios.get(`${BaseUrl}`, getRequestConfig(true));
+            runInAction(() => {
+                this.user = data;
+            });
+            return data != null;
         } catch (e) {
             return false;
         }

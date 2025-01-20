@@ -6,13 +6,14 @@ import { ImageInput } from "../mini-components/image-input";
 import { TextEditorWrapper } from "../mini-components/text-editor";
 import CanvasOptions from "./canvas-options";
 import { useCanvas } from "../hooks/use-canvas";
-import { AppLoader } from "@now/ui";
+import { AppLoader, useSidebar } from "@now/ui";
 import { useQuery } from "@tanstack/react-query";
 import { useStore } from "@now/utils";
 import { useFullscreen, useResizeObserver } from "@mantine/hooks";
 import { CustomComponentsRenderer } from "../renderers/custom-component-renderer";
 
 export const CanvasBoard = observer(function CanvasBoard() {
+    const { setOpen } = useSidebar();
     const { toggle, ref } = useFullscreen();
     const [resizer, rect] = useResizeObserver();
     const { id } = useParams<{ id: string }>();
@@ -41,6 +42,13 @@ export const CanvasBoard = observer(function CanvasBoard() {
     }, [rect]);
 
     useEffect(() => {
+        setOpen(false);
+        return () => {
+            setOpen(true);
+        };
+    }, []);
+
+    useEffect(() => {
         if (id && id !== "new" && data) {
             setSketchName(data.name);
             canvasBoard.loadBoard(data.metadata, {
@@ -62,10 +70,10 @@ export const CanvasBoard = observer(function CanvasBoard() {
             <TextEditorWrapper />
             <ImageInput />
             <CustomComponentsRenderer />
-            <canvas id="canvas-board" className="absolute z-10 overscroll-none" ref={canvasBoard.CanvasRef}></canvas>
+            <canvas id="canvas-board" className="absolute z-[1] overscroll-none" ref={canvasBoard.CanvasRef}></canvas>
             <canvas
                 id="canvas-board-copy"
-                className="absolute z-20 overscroll-none"
+                className="absolute z-[2] overscroll-none"
                 ref={canvasBoard.CanvasCopyRef}
             ></canvas>
         </div>

@@ -13,7 +13,7 @@ export const StyleEditorWrapper = observer(function StyleEditorWrapper() {
     const { canvasBoard } = useCanvas(id ?? "new");
 
     return (
-        <div className="absolute left-5 top-20 z-[100]  flex  flex-row items-center gap-1">
+        <div className="absolute left-5 top-20 z-[10]  flex  flex-row items-center gap-1">
             <ScrollArea>
                 {(canvasBoard.ElementType === ElementEnum.Move || canvasBoard.ElementType === ElementEnum.Pan) &&
                 canvasBoard.SelectedElements.length === 0 ? null : (

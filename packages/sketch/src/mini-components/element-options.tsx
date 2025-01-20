@@ -1,10 +1,8 @@
-import { Button, Icon, Label } from "@now/ui";
+import { Button, Icon } from "@now/ui";
 import { observer } from "mobx-react";
 import { useParams } from "react-router";
 import { useCanvas } from "../hooks/use-canvas";
-import { ChartOptionsRendererWrapper, ChartSelect } from "@now/visualize";
-import { runInAction } from "mobx";
-import { ChartFactory, ElementEnum } from "@now/utils";
+import { ElementEnum } from "@now/utils";
 import { ChartOptions } from "./chart-options";
 
 export const ElementOptions = observer(function ElementOptions() {
@@ -28,9 +26,9 @@ export const ElementOptions = observer(function ElementOptions() {
     }
 
     return (
-        <div className="flex flex-col gap-4 " id={`element-options-${element.id}`}>
+        <div className="flex flex-col gap-4 justify-end " id={`element-options-${element.id}`}>
             {type === ElementEnum.Chart ? <ChartOptions element={element} /> : null}
-            <div className="flex gap-2">
+            <div className="flex gap-4 justify-end">
                 <Button size="xs" variant="ghost" onClick={copyElement}>
                     <Icon name="Copy" size={20} />
                 </Button>

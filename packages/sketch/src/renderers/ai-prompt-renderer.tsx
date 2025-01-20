@@ -67,7 +67,7 @@ export const AiPromptRenderer = observer(function AiPromptRenderer({ component }
     return (
         <>
             <p className="flex-1 overflow-auto w-full whitespace-break-spaces ">{aiResult}</p>
-            <div className="h-[88px] w-full  flex items-end z-30 gap-1">
+            <div className="h-[88px] w-full  flex items-end z-[3] gap-1">
                 <div className="flex flex-col items-end flex-1 h-full">
                     <div className="flex flex-row items-center gap-2 ">
                         <Label htmlFor="use-json">Use JSON</Label>

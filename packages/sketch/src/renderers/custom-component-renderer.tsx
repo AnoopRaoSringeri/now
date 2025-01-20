@@ -56,7 +56,7 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
 
     return (
         <div style={style}>
-            <div style={{ zoom: transform.scaleX }} className="absolute top-[-40px] right-0 z-[60] flex">
+            <div style={{ zoom: transform.scaleX }} className="absolute top-[-40px] right-0 z-[6] flex">
                 <Button onClick={() => (component.IsLocked = !component.IsLocked)} size="icon" variant="ghost">
                     {component.IsLocked ? <Icon name="LockOpen" /> : <Icon name="Lock" />}
                 </Button>
@@ -69,7 +69,7 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
             </div>
             <div
                 style={{ zoom: transform.scaleX }}
-                className={cn("size-full flex flex-col", component.IsLocked ? "z-[100]" : "")}
+                className={cn("size-full flex flex-col", component.IsLocked ? "z-[10]" : "")}
             >
                 <Renderer component={component} />
             </div>

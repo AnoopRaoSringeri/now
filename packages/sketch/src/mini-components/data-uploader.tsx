@@ -87,14 +87,14 @@ export const DataUploader = observer(function DataUploader({ id, component }: { 
                     <div className="h-40 relative flex items-center justify-center">
                         <label
                             htmlFor={component.id}
-                            className="absolute z-50 flex items-center justify-center opacity-30"
+                            className="absolute z-[5] flex items-center justify-center opacity-30"
                         >
                             {file ? file.name : "Upload file"}
                         </label>
                         <input
                             name={component.id}
                             id={component.id}
-                            className="absolute z-50 size-full border-2 border-dashed border-gray-50/20 text-transparent  file:hidden"
+                            className="absolute z-[5] size-full border-2 border-dashed border-gray-50/20 text-transparent  file:hidden"
                             type="file"
                             title=" "
                             value={""}

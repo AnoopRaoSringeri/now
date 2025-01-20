@@ -56,7 +56,7 @@ const CanvasOptions = observer(function CanvasOptions({ name, onExpand }: { name
                         canvasBoard.ElementType = eleType;
                     }}
                 />
-                <div className="absolute right-5 top-5 z-[100]">
+                <div className="absolute right-5 top-5 z-[10]">
                     <div className="flex w-full max-w-sm items-center space-x-2">
                         <Input
                             type="text"
@@ -71,7 +71,7 @@ const CanvasOptions = observer(function CanvasOptions({ name, onExpand }: { name
                         </Button>
                     </div>
                 </div>
-                <div className="absolute left-5 top-5 z-[100] gap-1 flex ">
+                <div className="absolute left-5 top-5 z-[10] gap-1 flex ">
                     <Button size="sm" onClick={goToHome}>
                         <House size="20px" />
                     </Button>

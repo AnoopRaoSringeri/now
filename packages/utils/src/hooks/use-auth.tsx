@@ -90,5 +90,5 @@ export function useAuth() {
         setLoading(false);
     };
 
-    return { register, logOut, logIn, loading, refreshToken, forgotPassword, isAuthenticated };
+    return { register, logOut, logIn, loading, refreshToken, forgotPassword, isAuthenticated, user: authStore.User };
 }
