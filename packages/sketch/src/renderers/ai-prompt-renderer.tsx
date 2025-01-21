@@ -11,7 +11,7 @@ import {
     Label,
     Switch
 } from "@now/ui";
-import ollama from "ollama";
+import ollama from "ollama/browser";
 
 import { observer } from "mobx-react";
 import { useEffect, useState } from "react";

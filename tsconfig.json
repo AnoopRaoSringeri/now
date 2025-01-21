@@ -4,6 +4,8 @@
         "allowJs": false,
         "esModuleInterop": false,
         "allowSyntheticDefaultImports": true,
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
         "strict": true,
         "types": ["vite/client", "vitest"]
     },
