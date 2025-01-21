@@ -4,7 +4,7 @@
     "license": "MIT",
     "scripts": {
         "now": " npx nx serve now",
-        "now-build": " npx nx now:build"
+        "now-build": "yarn nx run now:build"
     },
     "private": true,
     "dependencies": {
