@@ -49,7 +49,7 @@ export const AreaChartNow = React.memo(function AreaChartNow({
                 <CardDescription>Showing total visitors for the last 6 months</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 pb-0 overflow-hidden">
-                <ChartContainer config={chartConfig}>
+                <ChartContainer config={chartConfig} className="size-full">
                     <AreaChart
                         accessibilityLayer
                         data={chartData.data}
