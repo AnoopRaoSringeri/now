@@ -1,0 +1,14 @@
+{
+  "record": {
+    "hosts": [
+      "localhost",
+      "192.168.1.3",
+      "127.0.0.1"
+    ],
+    "hash": {
+      "key": "eef3b33db43c0f42e5d1e85e23bac68b58f3f0c7c2b70e6845da8bd5e5a1c47d",
+      "cert": "b9311874b612c0c0dd4119e64d5a9ece3e8b1e72cdd8198ff9e9b833f283c100"
+    }
+  },
+  "configFilePath": "C:\\My-Projects\\Apps\\now\\certs\\config.json"
+}

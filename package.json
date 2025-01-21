@@ -48,6 +48,7 @@
         "tailwind-merge": "^2.5.5",
         "tailwindcss-animate": "^1.0.7",
         "uuid": "^11.0.3",
+        "vite-plugin-mkcert": "^1.17.6",
         "zod": "^3.24.0"
     },
     "devDependencies": {
