@@ -18,11 +18,11 @@ export default defineConfig({
     plugins: [
         react(),
         nxViteTsPaths(),
-        nxCopyAssetsPlugin(["*.md"]),
-        mkcert({
-            savePath: "../../certs", // save the generated certificate into certs directory
-            force: true // force generation of certs even without setting https property in the vite config
-        })
+        nxCopyAssetsPlugin(["*.md"])
+        // mkcert({
+        //     savePath: "../../certs", // save the generated certificate into certs directory
+        //     force: true // force generation of certs even without setting https property in the vite config
+        // })
     ],
     // Uncomment this if you are using workers.
     // worker: {
