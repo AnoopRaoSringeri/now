@@ -6,8 +6,8 @@
       "127.0.0.1"
     ],
     "hash": {
-      "key": "eef3b33db43c0f42e5d1e85e23bac68b58f3f0c7c2b70e6845da8bd5e5a1c47d",
-      "cert": "b9311874b612c0c0dd4119e64d5a9ece3e8b1e72cdd8198ff9e9b833f283c100"
+      "key": "0b2720d8ed7dbb52d99417527facd8943207573b0652fbf3b5c0187367860d2f",
+      "cert": "6ba7a14d8b73bfe72212f6f44dc8a2e33566436f07b0f6d0b1b978cbb207c783"
     }
   },
   "configFilePath": "C:\\My-Projects\\Apps\\now\\certs\\config.json"

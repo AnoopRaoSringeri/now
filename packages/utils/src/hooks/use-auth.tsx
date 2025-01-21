@@ -30,7 +30,7 @@ export function useAuth() {
     };
 
     const endSession = () => {
-        if (location.pathname !== "/auth") {
+        if (location.pathname !== "/auth" && location.pathname !== "/") {
             localStorage.setItem("RedirectURL", location.pathname);
         }
         localStorage.removeItem("IsAuthenticated");
