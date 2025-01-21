@@ -1,12 +1,10 @@
 import { Button, Icon } from "@now/ui";
 
 import { observer } from "mobx-react";
-import { useMemo, useState } from "react";
-import { CanvasBoard } from "../canvas/canvas-board";
-import { CanvasHelper } from "../helpers/canvas-helpers";
+import { useMemo } from "react";
 import { useCanvas } from "../hooks/use-canvas";
 import { useParams } from "react-router";
-import { ElementEnum, ICanvasObjectWithId } from "@now/utils";
+import { AiPrompt, BaseObject, CanvasBoard, CanvasHelper, ChartNow, cn, ElementEnum } from "@now/utils";
 import { ChartsRenderer } from "./chart-renderer";
 import { AiPromptRenderer } from "./ai-prompt-renderer";
 import { DataUploader } from "../mini-components/data-uploader";
@@ -31,11 +29,10 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
     id: string;
     board: CanvasBoard;
 }) {
-    const component = board.getComponent(id);
-    const { x = 0, y = 0, h = 0, w = 0 } = component.getValues();
+    const { component } = board.getComponent(id);
+    const { x = 0, y = 0, h = 0, w = 0 } = component.Cords;
     const transform = board.Transform;
     const { ax, ay } = CanvasHelper.getAbsolutePosition({ x, y }, transform);
-    const [isLocked, setIsLocked] = useState(true);
 
     const style: React.CSSProperties = useMemo(
         () => ({
@@ -59,27 +56,32 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
 
     return (
         <div style={style}>
-            <div style={{ zoom: transform.scaleX }} className="absolute top-[-40px] right-0 z-[60] flex">
-                <Button onClick={() => setIsLocked((pre) => !pre)} size="icon" variant="ghost">
-                    {isLocked ? <Icon name="LockOpen" /> : <Icon name="Lock" />}
+            <div style={{ zoom: transform.scaleX }} className="absolute top-[-40px] right-0 z-[6] flex">
+                <Button onClick={() => (component.IsLocked = !component.IsLocked)} size="icon" variant="ghost">
+                    {component.IsLocked ? <Icon name="LockOpen" /> : <Icon name="Lock" />}
                 </Button>
-                {component.type === ElementEnum.Chart ? <DataUploader id={id} component={component} /> : null}
+                {component.Type === ElementEnum.Chart ? (
+                    <DataUploader id={id} component={component as ChartNow} />
+                ) : null}
                 <Button onClick={removeElement} size="icon" variant="destructive">
                     <Icon name="Trash2" />
                 </Button>
             </div>
-            <div style={{ zoom: transform.scaleX }} className="size-full">
+            <div
+                style={{ zoom: transform.scaleX }}
+                className={cn("size-full flex flex-col", component.IsLocked ? "z-[10]" : "")}
+            >
                 <Renderer component={component} />
             </div>
         </div>
     );
 });
 
-const Renderer = observer(function Renderer({ component }: { component: ICanvasObjectWithId }) {
-    switch (component.type) {
+const Renderer = observer(function Renderer({ component }: { component: BaseObject }) {
+    switch (component.Type) {
         case ElementEnum.AiPrompt:
-            return <AiPromptRenderer component={component} />;
+            return <AiPromptRenderer component={component as AiPrompt} />;
         case ElementEnum.Chart:
-            return <ChartsRenderer component={component} />;
+            return <ChartsRenderer component={component as ChartNow} />;
     }
 });

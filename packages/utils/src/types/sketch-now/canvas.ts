@@ -1,4 +1,4 @@
-import { CanvasObject } from "./canvas-object";
+import { CanvasObject } from "../canvas/types";
 import { ICanvasTransform } from "./custom-canvas";
 
 export interface Position {
@@ -44,9 +44,10 @@ export type SavedCanvas = {
 };
 
 export interface CanvasMetadata {
-    elements: CanvasObject[];
+    elements: (CanvasObject & { id: string })[];
     size: Size;
     transform: ICanvasTransform;
+    deletedSources: string[];
 }
 
 export interface AdditionalCanvasOptions {

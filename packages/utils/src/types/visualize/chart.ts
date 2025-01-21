@@ -20,7 +20,7 @@ interface IChart {
 
 export type ChartMetadata = {
     type: ChartType;
-    source: ChartSource | null;
+    source: ChartSource;
     options: Record<string, ValueType>;
     config: ChartConfigMetadata;
     columnConfig: ColumnConfig[];
@@ -31,7 +31,11 @@ export class Chart implements IChart {
     columnConfig: ColumnConfig[] = [];
     chartData: ChartData = { data: [], columns: [] };
     options: ChartNowConfig = {};
-    source: ChartSource | null = null;
+    source: ChartSource = {
+        type: "File",
+        name: "",
+        id: ""
+    };
     config: ConfigType;
     constructor(config: ChartConfigMetadata, public type: ChartType) {
         this.config = {
@@ -49,8 +53,10 @@ export class Chart implements IChart {
             config: observable,
             columnConfig: observable,
             dataVersion: observable,
-            DataVersion: computed,
             chartData: observable,
+            source: observable,
+            Source: computed,
+            DataVersion: computed,
             MeasureColumns: computed,
             DimensionColumns: computed
         });
@@ -85,6 +91,14 @@ export class Chart implements IChart {
         runInAction(() => {
             this.chartData = chartData;
             this.ColumnConfig = chartData.columns.map((c) => ({ name: c, type: "string" }));
+        });
+    }
+    get Source() {
+        return toJS(this.source ?? {});
+    }
+    set Source(source: ChartSource) {
+        runInAction(() => {
+            this.source = source;
         });
     }
     set Measures(value: ChartConfigMetadata["measures"]) {

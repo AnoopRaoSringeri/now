@@ -1,10 +1,10 @@
 import { AppLoader } from "@now/ui";
-import { ICanvasObjectWithId, ChartData, Chart, useDataLoader } from "@now/utils";
-import { ChartFactory, BarChartNow, PieChartNow, CutomTable, LineChartNow } from "@now/visualize";
+import { ChartData, Chart, useDataLoader, ChartNow, ChartFactory } from "@now/utils";
+import { BarChartNow, PieChartNow, CutomTable, LineChartNow, AreaChartNow } from "@now/visualize";
 import { observer } from "mobx-react";
 
-export const ChartsRenderer = observer(function ChartsRenderer({ component }: { component: ICanvasObjectWithId }) {
-    const { chart } = component.getValues();
+export const ChartsRenderer = observer(function ChartsRenderer({ component }: { component: ChartNow }) {
+    const { chart } = component;
     const id = component.id;
     const { chartData, loading } = useDataLoader(chart!, id);
 
@@ -27,9 +27,16 @@ const ChartRenderer = observer(function ChartRenderer({ chart, chartData }: { ch
             return <BarChartNow chartConfig={typedChart.config} chartData={chart.ChartData} />;
         case "Line":
             return <LineChartNow chartConfig={typedChart.config} chartData={chart.ChartData} />;
+        case "Area":
+            return <AreaChartNow chartConfig={typedChart.config} chartData={chart.ChartData} />;
         case "Pie":
             return <PieChartNow chartConfig={typedChart.config} chartData={chart.ChartData} />;
         default:
-            return <CutomTable data={chartData.data} headers={chartData.columns} />;
+            return (
+                <CutomTable
+                    data={chartData.data}
+                    headers={[...chart.DimensionColumns, ...chart.MeasureColumns].map((c) => c.name)}
+                />
+            );
     }
 });

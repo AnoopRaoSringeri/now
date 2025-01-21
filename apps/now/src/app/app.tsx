@@ -72,6 +72,14 @@ export function App() {
                     <Route path="/chat-now" />
                 </Route>
                 <Route path="/commands" element={<NxWelcome title="now" />} />
+                <Route
+                    path="/canvas/playground"
+                    element={
+                        <Suspense fallback={<AppLoader />}>
+                            <CanvasBoard />
+                        </Suspense>
+                    }
+                />
             </Routes>
         </HashRouter>
     );

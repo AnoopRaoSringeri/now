@@ -10,9 +10,8 @@ import {
     Separator,
     Slider
 } from "@now/ui";
-import { IObjectStyle, Font, ChartEnum } from "@now/utils";
+import { IObjectStyle, Font, ChartEnum, DefaultFont } from "@now/utils";
 import { observer } from "mobx-react";
-import { DefaultFont } from "../helpers/canvas-helpers";
 import { RegistryOption, OptionTypeEnum } from "../helpers/option-registry";
 import { TwitterPicker } from "react-color";
 import { TwitterPickerStylesProps } from "react-color/lib/components/twitter/Twitter";

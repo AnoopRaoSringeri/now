@@ -15,8 +15,7 @@ import {
     ChartTooltipContent,
     CardFooter
 } from "@now/ui";
-import { PieChartConfig } from "./class";
-import { ChartData, formatText } from "@now/utils";
+import { ChartData, formatText, PieChartConfig } from "@now/utils";
 
 export const PieChartNow = React.memo(function PieChartNow({
     chartConfig: config,
@@ -50,11 +49,18 @@ export const PieChartNow = React.memo(function PieChartNow({
         }, [] as string[]);
     }, [chartData.data, dimension]);
 
+    const reducedData = React.useMemo(() => {
+        if (dimension == null) {
+            return [];
+        }
+        return chartData.data.map((d) => ({ ...d, fill: `var(--color-${d[dimension.name]})` }));
+    }, [chartData.data, dimension]);
+
     const chartConfig: ChartConfig = {};
     items.forEach((item) => {
         chartConfig[item] = {
             label: item,
-            color: "#2563eb"
+            color: `#${Math.random().toString(16).substr(-6)}`
         };
     });
 
@@ -73,7 +79,7 @@ export const PieChartNow = React.memo(function PieChartNow({
                     <PieChartComponent>
                         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
                         <Pie
-                            data={chartData.data}
+                            data={reducedData}
                             dataKey={measure.name}
                             nameKey={dimension.name}
                             innerRadius={60}

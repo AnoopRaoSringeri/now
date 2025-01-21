@@ -9,10 +9,8 @@ export const SelectionOptions = observer(function SelectionOptions() {
     const { canvasBoard } = useCanvas(id ?? "new");
     const element = canvasBoard.SelectionElement;
     if (!element || element.IsDragging) {
-        return <></>;
+        return null;
     }
-    // const { ax, ay } = element.getPosition();
-    // const { w = 0 } = element.getValues();
 
     function removeElement() {
         if (element) {
@@ -27,8 +25,7 @@ export const SelectionOptions = observer(function SelectionOptions() {
     }
 
     return (
-        <div className=" flex gap-4">
-            {/* <div className="absolute z-[100] flex " style={{ top: ay - 30, left: ax + w * canvasBoard.Transform.a - 68 }}> */}
+        <div className=" flex gap-4 justify-end">
             <Button size="xs" variant="ghost" onClick={copyElement}>
                 <Copy size={20} />
             </Button>

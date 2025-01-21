@@ -1,39 +1,12 @@
 import * as React from "react";
-import { MessageSquare, Palette, PieChart, SquareTerminal } from "lucide-react";
+import { MessageSquare, Palette, PieChart } from "lucide-react";
 
-import { NavMain } from "./nav-main";
 import { NavProjects } from "./nav-projects";
 import { NavUser } from "./nav-user";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarRail } from "./ui/sidebar";
+import { useAuth } from "@now/utils";
 
 const data = {
-    user: {
-        name: "now",
-        email: "m@example.com",
-        avatar: "/avatars/shadcn.jpg"
-    },
-    navMain: [
-        {
-            title: "Playground",
-            url: "#",
-            icon: SquareTerminal,
-            isActive: false,
-            items: [
-                {
-                    title: "History",
-                    url: "#"
-                },
-                {
-                    title: "Starred",
-                    url: "#"
-                },
-                {
-                    title: "Settings",
-                    url: "#"
-                }
-            ]
-        }
-    ],
     projects: [
         {
             name: "Sketch Now",
@@ -54,14 +27,17 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const { user } = useAuth();
+    if (!user) {
+        return null;
+    }
     return (
-        <Sidebar collapsible="icon" {...props}>
+        <Sidebar className="z-[20]" {...props}>
             <SidebarContent>
-                <NavMain items={data.navMain} />
                 <NavProjects projects={data.projects} />
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={data.user} />
+                <NavUser user={user} />
             </SidebarFooter>
             <SidebarRail />
         </Sidebar>

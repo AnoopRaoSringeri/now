@@ -1,9 +1,9 @@
-import { Button, Icon, Label } from "@now/ui";
+import { Button, Icon } from "@now/ui";
 import { observer } from "mobx-react";
 import { useParams } from "react-router";
 import { useCanvas } from "../hooks/use-canvas";
-import { ChartFactory, ChartOptionsRendererWrapper, ChartSelect } from "@now/visualize";
-import { runInAction } from "mobx";
+import { ElementEnum } from "@now/utils";
+import { ChartOptions } from "./chart-options";
 
 export const ElementOptions = observer(function ElementOptions() {
     const { id } = useParams<{ id: string }>();
@@ -13,12 +13,8 @@ export const ElementOptions = observer(function ElementOptions() {
     if (!copyEle) {
         return null;
     }
-    const element = canvasBoard.getComponent(copyEle.id);
+    const { type, component: element } = canvasBoard.getComponent(copyEle.id);
     if (!element) {
-        return null;
-    }
-    const { chart } = element;
-    if (!chart) {
         return null;
     }
     function removeElement() {
@@ -30,20 +26,9 @@ export const ElementOptions = observer(function ElementOptions() {
     }
 
     return (
-        <div className="flex flex-col gap-4 " id={`element-options-${element.id}`}>
-            <div>
-                <Label>{"Chart Type"}</Label>
-                <ChartSelect
-                    value={chart.type}
-                    onChange={(c) => {
-                        runInAction(() => {
-                            element.chart = ChartFactory.createChart(c, chart.columnConfig);
-                        });
-                    }}
-                />
-            </div>
-            {element.chart ? <ChartOptionsRendererWrapper chart={chart} /> : null}
-            <div className="flex gap-2">
+        <div className="flex flex-col gap-4 justify-end " id={`element-options-${element.id}`}>
+            {type === ElementEnum.Chart ? <ChartOptions element={element} /> : null}
+            <div className="flex gap-4 justify-end">
                 <Button size="xs" variant="ghost" onClick={copyElement}>
                     <Icon name="Copy" size={20} />
                 </Button>

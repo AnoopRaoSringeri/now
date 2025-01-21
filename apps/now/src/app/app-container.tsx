@@ -1,32 +1,15 @@
 import { AppSidebar, SidebarInset, SidebarProvider } from "@now/ui";
-import { useAuth, useStore } from "@now/utils";
+import { useAuth } from "@now/utils";
+import { observer } from "mobx-react";
 import { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router";
-import { toast } from "sonner";
+import { Outlet } from "react-router";
 
-export function AppContainer() {
-    const { authStore } = useStore();
-    const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
+export const AppContainer = observer(function AppContainer() {
+    const { refreshToken } = useAuth();
     useEffect(() => {
-        if (isAuthenticated === "true") {
-            refreshToken();
-        } else {
-            navigate("/auth");
-        }
-    }, [isAuthenticated]);
+        refreshToken();
+    }, []);
 
-    const refreshToken = async () => {
-        const res = await authStore.IsValidSession();
-        if (!res) {
-            navigate("/auth");
-            localStorage.removeItem("IsAuthenticated");
-            toast.error("Session expired login again");
-            authStore.IsSessionValid = false;
-        } else {
-            authStore.IsSessionValid = true;
-        }
-    };
     return (
         <SidebarProvider>
             <AppSidebar />
@@ -35,4 +18,4 @@ export function AppContainer() {
             </SidebarInset>
         </SidebarProvider>
     );
-}
+});
