@@ -80,7 +80,7 @@ export class CanvasObjectFactory {
                                     }
                                 },
                                 type: "Table",
-                                source: null,
+                                source: { id: null, name: "", type: "File" },
                                 options: {}
                             }
                         }
