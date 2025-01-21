@@ -1,6 +1,8 @@
 import { AbsPosition, Delta, Position, Size } from "./canvas";
 import { IObjectStyle } from "./object-styles";
-import { CanvasObject, ICanvasObject, IObjectValue, ObjectOptions } from "./canvas-object";
+import { IObjectValue, ObjectOptions } from "./canvas-object";
+import { BaseObject } from "../canvas/base-object";
+import { CanvasObject } from "../canvas/types";
 
 export type MouseAction = "down" | "move" | "up";
 
@@ -38,7 +40,7 @@ export interface ICanvasObjectMethods {
 export interface ICanvas {
     Transform: ICanvasTransform;
     Canvas: HTMLCanvasElement | null;
-    Elements: ICanvasObject[];
+    Elements: BaseObject[];
     toJSON: () => unknown;
     toSVG: (options: Size) => string;
 }

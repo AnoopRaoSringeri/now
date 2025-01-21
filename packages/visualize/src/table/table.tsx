@@ -36,6 +36,7 @@ export const CutomTable = React.memo(function CutomTable({
                 <TableBody className="size-full overflow-auto">{rows}</TableBody>
             </Table>
             <ScrollBar orientation="horizontal" />
+            <ScrollBar className="pt-[50px]" orientation="vertical" />
         </ScrollArea>
     );
 });

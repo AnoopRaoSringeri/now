@@ -8,11 +8,10 @@ import {
     ChartTooltip,
     ChartTooltipContent
 } from "@now/ui";
-import { ChartData } from "@now/utils";
+import { BarChartConfig, ChartData } from "@now/utils";
 import { observer } from "mobx-react";
 import React from "react";
 import { Bar, BarChart as BarChartComponent, CartesianGrid, XAxis } from "recharts";
-import { BarChartConfig } from "./class";
 
 export const BarChartNow = observer(function BarChartNow({
     chartData,
@@ -35,7 +34,7 @@ export const BarChartNow = observer(function BarChartNow({
     usedColumn.forEach((column) => {
         chartConfig[column.name] = {
             label: column.name,
-            color: "#2563eb"
+            color: `#${Math.random().toString(16).substr(-6)}`
         };
     });
 

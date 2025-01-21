@@ -42,4 +42,4 @@ export interface ICanvasObjectWithId extends ICanvasObject {
 
 export type PartialCanvasObject = Partial<ICanvasObject> & { id: string };
 
-export type CanvasObject = PartialCanvasObject & { type: ElementEnum };
+// export type CanvasObject = PartialCanvasObject & { type: ElementEnum };

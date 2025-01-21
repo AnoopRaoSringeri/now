@@ -20,7 +20,7 @@ export const ZoomController = observer(function ZoomController() {
         canvasBoard.fitToView();
     }
     return (
-        <div className="absolute bottom-5 right-5 z-[100]  flex  flex-row items-center gap-1">
+        <div className="absolute bottom-5 right-5 z-[10]  flex  flex-row items-center gap-1">
             <Search />
             <Label className="p-1 text-lg">{canvasBoard.Zoom.toFixed(2)}%</Label>
             <Button size="xs" variant="ghost" onClick={zoomIn}>

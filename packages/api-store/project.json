@@ -1,9 +1,0 @@
-{
-    "name": "api-store",
-    "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "packages/api-store/src",
-    "projectType": "library",
-    "tags": [],
-    "// targets": "to see all targets run: nx show project api-store --web",
-    "targets": {}
-}

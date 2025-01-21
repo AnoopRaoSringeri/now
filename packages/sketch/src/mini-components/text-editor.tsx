@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import { useEffect, useRef } from "react";
 import { useParams } from "react-router";
-import { DefaultStyle, CanvasHelper, DefaultFont } from "../helpers/canvas-helpers";
 import { useCanvas } from "../hooks/use-canvas";
+import { CanvasHelper, DefaultFont } from "@now/utils";
 
 export const TextEditorWrapper = observer(function TextEditorWrapper() {
     const { id } = useParams<{ id: string }>();
@@ -38,14 +38,14 @@ export const TextEditorWrapper = observer(function TextEditorWrapper() {
         return null;
     }
 
-    const { x = 0, y = 0, style = DefaultStyle } = canvasBoard.Text?.getValues() ?? {};
+    const { x = 0, y = 0 } = canvasBoard.Text.Value;
 
     const { ax, ay } = CanvasHelper.getAbsolutePosition({ x, y }, canvasBoard.Transform);
-    const { font, ...rest } = style;
+    const { font, ...rest } = canvasBoard.Text.Style;
     const dFont = font ?? DefaultFont;
 
     return (
-        <div className="absolute z-50 flex size-full overflow-hidden bg-transparent">
+        <div className="absolute z-[5] flex size-full overflow-hidden bg-transparent">
             <textarea
                 ref={inputRef}
                 id="canvas-text"

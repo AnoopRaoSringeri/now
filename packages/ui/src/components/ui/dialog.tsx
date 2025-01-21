@@ -5,10 +5,17 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 
 import { cn } from "@now/utils";
+import { ButtonProps, buttonVariants } from "./button";
 
 const Dialog = DialogPrimitive.Root;
 
-const DialogTrigger = DialogPrimitive.Trigger;
+// const DialogTrigger = DialogPrimitive.Trigger;
+const DialogTrigger = React.forwardRef<
+    React.ElementRef<typeof DialogPrimitive.Trigger>,
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger> & ButtonProps
+>(({ className, variant, size, ...props }, ref) => (
+    <DialogPrimitive.Trigger ref={ref} className={cn(buttonVariants({ variant, size, className }))} {...props} />
+));
 
 const DialogPortal = DialogPrimitive.Portal;
 

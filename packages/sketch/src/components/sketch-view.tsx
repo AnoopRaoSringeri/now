@@ -1,4 +1,4 @@
-import { AppLoader, Button, Label, ScrollArea } from "@now/ui";
+import { AppLoader, Button, Label, ScrollArea, ScrollBar } from "@now/ui";
 import { SavedCanvas, useStore } from "@now/utils";
 import { TrashIcon } from "lucide-react";
 import { observer } from "mobx-react";
@@ -40,6 +40,7 @@ export const SketchList = observer(function SketchList() {
                             <Sketch key={d._id} canvasId={d._id} name={d.name} onDelete={deleteSketch} />
                         ))}
                     </div>
+                    <ScrollBar />
                 </ScrollArea>
             )}
         </div>

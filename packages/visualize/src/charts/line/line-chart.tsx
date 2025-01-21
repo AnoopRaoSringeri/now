@@ -13,15 +13,14 @@ import {
 import { TrendingUp } from "lucide-react";
 import React from "react";
 import { CartesianGrid, Line, LineChart as LineChartComponent, XAxis } from "recharts";
-import { BarChartConfig } from "../bar/class";
-import { ChartData } from "@now/utils";
+import { ChartData, LineChartConfig } from "@now/utils";
 
 export const LineChartNow = React.memo(function LineChartNow({
     chartData,
     chartConfig: config
 }: {
     chartData: ChartData;
-    chartConfig: BarChartConfig;
+    chartConfig: LineChartConfig;
 }) {
     const xAxis = config.dimensions.v.v;
 
@@ -37,7 +36,7 @@ export const LineChartNow = React.memo(function LineChartNow({
     usedColumn.forEach((column) => {
         chartConfig[column.name] = {
             label: column.name,
-            color: "#2563eb"
+            color: `#${Math.random().toString(16).substr(-6)}`
         };
     });
 

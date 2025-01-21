@@ -27,6 +27,8 @@ export * from "./components/ui/select";
 export * from "./components/ui/command";
 export * from "./components/ui/dialog";
 export * from "./components/ui/badge";
+export * from "./components/ui/switch";
+export * from "./components/ui/radio-group";
 
 export * from "./components/multi-select";
 
