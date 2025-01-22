@@ -61,7 +61,7 @@ export const DataUploader = observer(function DataUploader({ id, component }: { 
                         type="text"
                         value={component.chart.Source.name}
                         onChange={(e) => {
-                            component.chart.Source.name = e.target.value;
+                            component.chart.Source = { ...component.chart.Source, name: e.target.value };
                         }}
                     />
                     {component.chart.Source.id ? (
