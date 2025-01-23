@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { X } from "lucide-react";
+import { Loader, X } from "lucide-react";
 
 import { cn } from "@now/utils";
 import { ButtonProps, buttonVariants } from "./button";
@@ -13,8 +13,11 @@ const Dialog = DialogPrimitive.Root;
 const DialogTrigger = React.forwardRef<
     React.ElementRef<typeof DialogPrimitive.Trigger>,
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger> & ButtonProps
->(({ className, variant, size, ...props }, ref) => (
-    <DialogPrimitive.Trigger ref={ref} className={cn(buttonVariants({ variant, size, className }))} {...props} />
+>(({ className, variant, size, children, loading, ...props }, ref) => (
+    <DialogPrimitive.Trigger ref={ref} className={cn(buttonVariants({ variant, size, className }))} {...props}>
+        {loading ? <Loader className="mr-2 size-4 animate-spin" /> : null}
+        {children}
+    </DialogPrimitive.Trigger>
 ));
 
 const DialogPortal = DialogPrimitive.Portal;

@@ -2,7 +2,7 @@ import { Label } from "@now/ui";
 import { observer } from "mobx-react";
 import { ChartOptionsRendererWrapper, ChartSelect } from "@now/visualize";
 import { runInAction } from "mobx";
-import { ChartFactory, ChartNow } from "@now/utils";
+import { ChartNow } from "@now/utils";
 
 export const ChartOptions = observer(function ChartOptions({ element }: { element: ChartNow }) {
     const { chart } = element;
@@ -15,13 +15,10 @@ export const ChartOptions = observer(function ChartOptions({ element }: { elemen
             <div>
                 <Label>{"Chart Type"}</Label>
                 <ChartSelect
-                    value={chart.type}
+                    value={chart.Type}
                     onChange={(c) => {
                         runInAction(() => {
-                            const existing = chart.toJSON();
-                            element.chart = ChartFactory.createChart(c, chart.columnConfig);
-                            element.chart.Source = existing.source;
-                            element.chart.ColumnConfig = existing.columnConfig;
+                            chart.Type = c;
                         });
                     }}
                 />

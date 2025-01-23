@@ -56,20 +56,28 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
 
     return (
         <div style={style}>
-            <div style={{ zoom: transform.scaleX }} className="absolute top-[-40px] right-0 z-[6] flex">
-                <Button onClick={() => (component.IsLocked = !component.IsLocked)} size="icon" variant="ghost">
-                    {component.IsLocked ? <Icon name="LockOpen" /> : <Icon name="Lock" />}
-                </Button>
-                {component.Type === ElementEnum.Chart ? (
-                    <DataUploader id={id} component={component as ChartNow} />
-                ) : null}
-                <Button onClick={removeElement} size="icon" variant="destructive">
-                    <Icon name="Trash2" />
-                </Button>
-            </div>
+            {board.ReadOnly ? null : (
+                <div style={{ zoom: transform.scaleX }} className="absolute top-[-40px] right-0 z-[6] flex">
+                    <Button
+                        onClick={() => {
+                            component.IsLocked = !component.IsLocked;
+                        }}
+                        size="icon"
+                        variant="ghost"
+                    >
+                        {component.IsLocked ? <Icon name="LockOpen" /> : <Icon name="Lock" />}
+                    </Button>
+                    {component.Type === ElementEnum.Chart ? (
+                        <DataUploader id={id} component={component as ChartNow} />
+                    ) : null}
+                    <Button onClick={removeElement} size="icon" variant="destructive">
+                        <Icon name="Trash2" />
+                    </Button>
+                </div>
+            )}
             <div
                 style={{ zoom: transform.scaleX }}
-                className={cn("size-full flex flex-col", component.IsLocked ? "z-[10]" : "")}
+                className={cn("size-full flex flex-col", component.IsLocked || board.ReadOnly ? "z-[10]" : "")}
             >
                 <Renderer component={component} />
             </div>

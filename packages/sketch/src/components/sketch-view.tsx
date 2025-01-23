@@ -1,4 +1,4 @@
-import { AppLoader, Button, Label, ScrollArea, ScrollBar } from "@now/ui";
+import { AppLoader, Button, Icon, Label, ScrollArea, ScrollBar } from "@now/ui";
 import { SavedCanvas, useStore } from "@now/utils";
 import { TrashIcon } from "lucide-react";
 import { observer } from "mobx-react";
@@ -70,6 +70,10 @@ const Sketch = function Sketch({
         retry: false
     });
 
+    const gotoView = () => {
+        navigate(`/sketch-now/sketch-viewer/${canvasId}`);
+    };
+
     const onClick = () => {
         navigate(`/sketch-now/sketch/${canvasId}`);
     };
@@ -82,14 +86,22 @@ const Sketch = function Sketch({
                 </div>
             ) : (
                 <>
-                    <div className="absolute right-0 top-0 ">
+                    <div className="absolute right-0 top-0 gap-2">
+                        <Button
+                            size="xs"
+                            variant="ghost"
+                            onClick={() => gotoView()}
+                            className="opacity-0  transition duration-300 group-hover:opacity-100"
+                        >
+                            <Icon name="Eye" size={20} color="white" />
+                        </Button>
                         <Button
                             size="xs"
                             variant="destructive"
                             onClick={() => onDelete(canvasId)}
                             className="opacity-0  transition duration-300 group-hover:opacity-100"
                         >
-                            <TrashIcon size={20} color="white" />
+                            <Icon name="Trash" size={20} color="white" />
                         </Button>
                     </div>
                     <img

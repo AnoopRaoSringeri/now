@@ -1,4 +1,4 @@
-import { CanvasBoard, SketchNow } from "@now/sketch";
+import { BoardViewer, CanvasBoard, SketchNow } from "@now/sketch";
 import NxWelcome from "./nx-welcome";
 import { HashRouter, Route, Routes } from "react-router";
 import { AppContainer } from "./app-container";
@@ -64,6 +64,14 @@ export function App() {
                             element={
                                 <Suspense fallback={<AppLoader />}>
                                     <CanvasBoard />
+                                </Suspense>
+                            }
+                        />
+                        <Route
+                            path="sketch-viewer/:id"
+                            element={
+                                <Suspense fallback={<AppLoader />}>
+                                    <BoardViewer />
                                 </Suspense>
                             }
                         />

@@ -4,7 +4,7 @@ import { ChartTypes } from "./chart-types";
 import { LineChart, LineChartConfig } from "./charts/line-class";
 import { PieChart, PieChartConfig } from "./charts/pie-class";
 import { TableChart, TableChartConfig } from "./charts/table-class";
-import { ChartType, ColumnConfig } from "./types";
+import { ChartConfigMetadata, ChartType, ColumnConfig } from "./types";
 import { AreaChart, AreaChartConfig } from "./charts/area-class";
 
 export class ChartFactory {
@@ -103,6 +103,85 @@ export class ChartFactory {
         chartObj.ColumnConfig = chart.columnConfig;
         chartObj.Source = chart.source;
         return chartObj;
+    }
+
+    static convertChartConfig(metadata: ChartConfigMetadata, type: ChartType) {
+        let transformedMetadata: ChartConfigMetadata = metadata;
+        switch (type) {
+            case "Table": {
+                transformedMetadata = {
+                    dimensions: {
+                        t: "m",
+                        v: {
+                            t: "mcs",
+                            v:
+                                metadata.dimensions.v.t === "scs"
+                                    ? metadata.dimensions.v.v
+                                        ? [metadata.dimensions.v.v]
+                                        : []
+                                    : metadata.dimensions.v.v
+                        }
+                    },
+                    measures: {
+                        t: "m",
+                        v: {
+                            t: "mcs",
+                            v:
+                                metadata.measures.v.t === "scs"
+                                    ? metadata.measures.v.v
+                                        ? [metadata.measures.v.v]
+                                        : []
+                                    : metadata.measures.v.v
+                        }
+                    }
+                };
+                break;
+            }
+            case "Pie": {
+                transformedMetadata = {
+                    dimensions: {
+                        t: "s",
+                        v: {
+                            t: "scs",
+                            v: metadata.dimensions.v.t === "scs" ? metadata.dimensions.v.v : metadata.dimensions.v.v[0]
+                        }
+                    },
+                    measures: {
+                        t: "s",
+                        v: {
+                            t: "scs",
+                            v: metadata.measures.v.t === "scs" ? metadata.measures.v.v : metadata.measures.v.v[0]
+                        }
+                    }
+                };
+                break;
+            }
+            default: {
+                transformedMetadata = {
+                    dimensions: {
+                        t: "s",
+                        v: {
+                            t: "scs",
+                            v: metadata.dimensions.v.t === "scs" ? metadata.dimensions.v.v : metadata.dimensions.v.v[0]
+                        }
+                    },
+                    measures: {
+                        t: "m",
+                        v: {
+                            t: "mcs",
+                            v:
+                                metadata.measures.v.t === "scs"
+                                    ? metadata.measures.v.v
+                                        ? [metadata.measures.v.v]
+                                        : []
+                                    : metadata.measures.v.v
+                        }
+                    }
+                };
+                break;
+            }
+        }
+        return transformedMetadata;
     }
 
     static getChartConfig(chart: Chart): ChartTypes {

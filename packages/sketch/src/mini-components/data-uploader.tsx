@@ -23,8 +23,10 @@ export const DataUploader = observer(function DataUploader({ id, component }: { 
     const [file, setFile] = useState<File | null>(null);
     const [mode, setMode] = useState<ChartDataUpdateMode>("insert");
     const [opened, { close, open, toggle }] = useDisclosure(false);
+    const [loading, setLoading] = useState(false);
 
     const upload = async () => {
+        setLoading(true);
         if (component.chart && file) {
             if (component.chart.Source.id) {
                 if (component.chart.Source.type === "File") {
@@ -43,11 +45,12 @@ export const DataUploader = observer(function DataUploader({ id, component }: { 
     const onClose = () => {
         close();
         setFile(null);
+        setLoading(false);
     };
 
     return (
         <Dialog onOpenChange={toggle} open={opened}>
-            <DialogTrigger size="icon" variant="ghost" onClick={open}>
+            <DialogTrigger size="icon" variant="ghost" onClick={open} loading={loading}>
                 <Icon name="Upload" />
             </DialogTrigger>
             <DialogContent>

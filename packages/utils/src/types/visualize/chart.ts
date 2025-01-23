@@ -9,6 +9,7 @@ import { ChartConfigMetadata, ChartType, ColumnConfig } from "./types";
 import { ValueType } from "./value-types";
 import { ChartData } from "./chart-data";
 import { ChartSource } from "./source";
+import { ChartFactory } from "./chart-factory";
 
 interface IChart {
     type: ChartType;
@@ -58,7 +59,8 @@ export class Chart implements IChart {
             Source: computed,
             DataVersion: computed,
             MeasureColumns: computed,
-            DimensionColumns: computed
+            DimensionColumns: computed,
+            Config: computed
         });
     }
     onChange(key: string, value: ValueType) {
@@ -66,8 +68,12 @@ export class Chart implements IChart {
             this.options[key].onChange(value);
         });
     }
+    get Type() {
+        return this.type;
+    }
     set Type(chartType: ChartType) {
         runInAction(() => {
+            this.Config = ChartFactory.convertChartConfig(this.Config, chartType);
             this.type = chartType;
         });
     }
