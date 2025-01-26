@@ -8,21 +8,22 @@ import { ScrollArea, ScrollBar } from "@now/ui";
 import { ElementEnum } from "@now/utils";
 import { OptionRegistry } from "../helpers/option-registry";
 
-export const StyleEditorWrapper = observer(function StyleEditorWrapper() {
+export const CustomizationPanelWrapper = observer(function StyleEditorWrapper() {
     const { id } = useParams<{ id: string }>();
     const { canvasBoard } = useCanvas(id ?? "new");
+
+    if (canvasBoard.UiStateManager.HideCustomizationPanel) {
+        return null;
+    }
 
     return (
         <div className="absolute left-5 top-20 z-[10]  flex  flex-row items-center gap-1">
             <ScrollArea>
-                {(canvasBoard.ElementType === ElementEnum.Move || canvasBoard.ElementType === ElementEnum.Pan) &&
-                canvasBoard.SelectedElements.length === 0 ? null : (
-                    <div className="flex h-full w-[225px] flex-col gap-4 rounded-sm bg-slate-500 p-5">
-                        {canvasBoard.ElementType === ElementEnum.Move ? null : <CanvasStyleEditor />}
-                        <ElementStyleEditor />
-                        <OptionsWrapper />
-                    </div>
-                )}
+                <div className="flex h-full w-[225px] flex-col gap-4 rounded-sm bg-slate-500 p-5">
+                    {canvasBoard.ElementType === ElementEnum.Move ? null : <CanvasStyleEditor />}
+                    <ElementStyleEditor />
+                    <OptionsWrapper />
+                </div>
                 <ScrollBar />
             </ScrollArea>
         </div>

@@ -5,7 +5,7 @@ import { observer } from "mobx-react";
 
 export const ChartsRenderer = observer(function ChartsRenderer({ component }: { component: ChartNow }) {
     const { chart } = component;
-    const { columns, loading } = useDataLoader(chart!);
+    const { loading } = useDataLoader(chart!);
 
     if (chart == null) {
         return null;
@@ -14,7 +14,11 @@ export const ChartsRenderer = observer(function ChartsRenderer({ component }: { 
     return (
         <>
             <AppLoader loading={loading} />
-            {columns.length > 0 ? <ChartRenderer chart={chart} /> : null}
+            {chart.IsConfigured ? (
+                <ChartRenderer chart={chart} />
+            ) : (
+                <div className="size-full flex justify-center items-center">Not Configured</div>
+            )}
         </>
     );
 });

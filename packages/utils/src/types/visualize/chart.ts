@@ -171,6 +171,9 @@ export class Chart implements IChart {
             }
         });
     }
+    get IsConfigured() {
+        return this.DimensionColumns.length > 0 && this.MeasureColumns.length > 0;
+    }
     resetConfig() {
         runInAction(() => {
             if (this.config.measures.t === "s") {

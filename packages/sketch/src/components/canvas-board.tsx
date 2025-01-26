@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router";
 
 import { ImageInput } from "../mini-components/image-input";
@@ -9,16 +9,14 @@ import { useCanvas } from "../hooks/use-canvas";
 import { AppLoader, useSidebar } from "@now/ui";
 import { useQuery } from "@tanstack/react-query";
 import { useStore } from "@now/utils";
-import { useFullscreen, useResizeObserver } from "@mantine/hooks";
+import { useResizeObserver } from "@mantine/hooks";
 import { CustomComponentsRenderer } from "../renderers/custom-component-renderer";
 
 export const CanvasBoard = observer(function CanvasBoard() {
     const { setOpen } = useSidebar();
-    const { toggle, ref } = useFullscreen();
     const [resizer, rect] = useResizeObserver();
     const { id } = useParams<{ id: string }>();
     const { canvasBoard, onResize } = useCanvas(id ?? "new");
-    const [sketchName, setSketchName] = useState("");
     const { sketchStore } = useStore();
     const canvas = canvasBoard.CanvasRef;
 
@@ -48,23 +46,23 @@ export const CanvasBoard = observer(function CanvasBoard() {
 
     useEffect(() => {
         if (id && id !== "new" && data) {
-            setSketchName(data.name);
             canvasBoard.loadBoard(data.metadata, {
                 draw: true,
                 height: window.innerHeight,
                 width: window.innerWidth,
                 readonly: false
             });
+            canvasBoard.UiStateManager.BoardName = data.name;
         } else {
             canvasBoard.createBoard({});
         }
     }, [canvas, canvasBoard, data, id]);
 
     return (
-        <div ref={ref} className="size-full">
+        <div ref={canvasBoard.UiStateManager.BoardContainerRef} className="size-full">
             <div className="size-full absolute z-0" ref={resizer} />
             <AppLoader loading={sketchLoading} />
-            <CanvasOptions name={sketchName} onExpand={toggle} />
+            <CanvasOptions />
             <TextEditorWrapper />
             <ImageInput />
             <CustomComponentsRenderer />

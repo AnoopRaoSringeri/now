@@ -43,8 +43,7 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            flexDirection: "column",
-            padding: 10
+            flexDirection: "column"
         }),
         [ax, ay, h, transform.scaleX, w]
     );

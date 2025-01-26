@@ -39,5 +39,5 @@ export function useDataLoader(chart: Chart) {
         refetch();
     }, [chart.DataVersion, refetch, chart.MeasureColumns, chart.DimensionColumns]);
 
-    return { columns: chart.Source?.columns ?? [], loading: dataLoading };
+    return { loading: dataLoading };
 }

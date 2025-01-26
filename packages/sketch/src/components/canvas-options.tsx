@@ -1,29 +1,25 @@
 import { observer } from "mobx-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import ElementSelector from "./element-selector";
 import { Badge, Button, Collapsible, CollapsibleContent, CollapsibleTrigger, Icon, Input, Label } from "@now/ui";
 import { Expand, House, Save } from "lucide-react";
 import { useCanvas } from "../hooks/use-canvas";
-import { StyleEditorWrapper } from "../mini-components/canvas-style-editor";
+import { CustomizationPanelWrapper } from "../mini-components/canvas-style-editor";
 import { ZoomController } from "../mini-components/zoom-controller";
 import { useStore } from "@now/utils";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { DataUploader, DataUploaderHandle } from "../mini-components/data-uploader";
 
-const CanvasOptions = observer(function CanvasOptions({ name, onExpand }: { name: string; onExpand?: () => unknown }) {
+const CanvasOptions = observer(function CanvasOptions() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const [sketchName, setSketchName] = useState(name);
     const { canvasBoard } = useCanvas(id ?? "new");
     const { sketchStore } = useStore();
 
-    useEffect(() => {
-        setSketchName(name);
-    }, [name]);
-
     const saveBoard = async () => {
+        const sketchName = canvasBoard.UiStateManager.BoardName;
         console.log(canvasBoard.Canvas.toDataURL());
         if (id && id !== "new") {
             await sketchStore.UpdateSketch(id, canvasBoard.toJSON(), sketchName, canvasBoard.Canvas.toDataURL());
@@ -49,6 +45,10 @@ const CanvasOptions = observer(function CanvasOptions({ name, onExpand }: { name
         navigate("/sketch-now");
     };
 
+    const onExpand = () => {
+        canvasBoard.UiStateManager.toggleFullScreen();
+    };
+
     return (
         <div className="absolute flex size-full overflow-hidden bg-transparent">
             <div className=" flex size-full items-center justify-center bg-transparent">
@@ -62,9 +62,9 @@ const CanvasOptions = observer(function CanvasOptions({ name, onExpand }: { name
                         <Input
                             type="text"
                             placeholder="Name"
-                            value={sketchName}
+                            value={canvasBoard.UiStateManager.BoardName}
                             onChange={(e) => {
-                                setSketchName(e.target.value);
+                                canvasBoard.UiStateManager.BoardName = e.target.value;
                             }}
                         />
                         <Button size="sm" onClick={() => mutate()} loading={isPending}>
@@ -81,7 +81,7 @@ const CanvasOptions = observer(function CanvasOptions({ name, onExpand }: { name
                         <Expand size="20px" />
                     </Button>
                 </div>
-                <StyleEditorWrapper />
+                <CustomizationPanelWrapper />
                 <ZoomController />
             </div>
         </div>

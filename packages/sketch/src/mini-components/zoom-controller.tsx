@@ -9,16 +9,17 @@ export const ZoomController = observer(function ZoomController() {
     const { canvasBoard } = useCanvas(id ?? "new");
 
     function zoomIn() {
-        canvasBoard.zoomIn();
+        canvasBoard.UiStateManager.zoomIn();
     }
 
     function zoomOut() {
-        canvasBoard.zoomOut();
+        canvasBoard.UiStateManager.zoomOut();
     }
 
     function fitToView() {
-        canvasBoard.fitToView();
+        canvasBoard.UiStateManager.fitToView();
     }
+
     return (
         <div className="absolute bottom-5 right-5 z-[10]  flex  flex-row items-center gap-1">
             <Search />

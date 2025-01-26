@@ -4,14 +4,7 @@ import { Position, Size, CanvasMetadata, AdditionalCanvasOptions } from "../type
 import { ICanvas, CursorPosition, ICanvasTransform } from "../types/sketch-now/custom-canvas";
 import { ElementEnum, CanvasActionEnum } from "../types/sketch-now/enums";
 import { IObjectStyle } from "../types/sketch-now/object-styles";
-import {
-    DefaultStyle,
-    CanvasHelper,
-    CANVAS_SCALING_MULTIPLIER,
-    CANVAS_ZOOM_IN_OUT_FACTOR,
-    CANVAS_SCALING_LIMIT,
-    MIN_INTERVAL
-} from "./canvas-helpers";
+import { DefaultStyle, CanvasHelper, CANVAS_SCALING_MULTIPLIER, MIN_INTERVAL } from "./canvas-helpers";
 import { EventManager } from "./event-handler";
 import { BaseObject } from "../types/canvas/base-object";
 import { Rectangle } from "../types/canvas/objects/rectangle";
@@ -22,6 +15,7 @@ import { AiPrompt } from "../types/canvas/objects/ai-prompt";
 import { ChartNow } from "../types/canvas/objects/chart";
 import { v4 as uuid } from "uuid";
 import { SourceManager } from "./source-manager";
+import { UiStateManager } from "./ui-state-manager";
 export class CanvasBoard implements ICanvas {
     private _lastTimestamp = 0;
     private _clicked = false;
@@ -37,6 +31,7 @@ export class CanvasBoard implements ICanvas {
 
     private EventManager: EventManager;
     SourceManager: SourceManager;
+    UiStateManager: UiStateManager;
 
     _elementType: ElementEnum = ElementEnum.Move;
     _isElementSelectorLocked = true;
@@ -64,6 +59,7 @@ export class CanvasBoard implements ICanvas {
         this._canvasCopy = createRef();
         this.Helper = new CanvasHelper(this);
         this.SourceManager = new SourceManager(this);
+        this.UiStateManager = new UiStateManager(this);
         makeObservable(this, {
             _elementType: observable,
             ElementType: computed,
@@ -534,63 +530,6 @@ export class CanvasBoard implements ICanvas {
         });
         this.ActiveObjects = copiedItems;
         this.saveBoard();
-    }
-
-    zoomIn() {
-        if (this.CanvasCopy) {
-            const contextCopy = this.CanvasCopy.getContext("2d");
-            if (contextCopy) {
-                this.Helper.clearCanvasArea(contextCopy);
-            }
-        }
-        const context = this.Canvas.getContext("2d");
-        if (context) {
-            this.Helper.clearCanvasArea(context);
-        }
-        this.Transform = {
-            ...this.Transform,
-            scaleX: this.Transform.scaleX + CANVAS_ZOOM_IN_OUT_FACTOR,
-            scaleY: this.Transform.scaleY + CANVAS_ZOOM_IN_OUT_FACTOR
-        };
-        this.Zoom = this.Transform.scaleX * CANVAS_SCALING_MULTIPLIER;
-        this.redrawBoard();
-    }
-
-    zoomOut() {
-        if (this.CanvasCopy) {
-            const contextCopy = this.CanvasCopy.getContext("2d");
-            if (contextCopy) {
-                this.Helper.clearCanvasArea(contextCopy);
-            }
-        }
-        const context = this.Canvas.getContext("2d");
-        if (context) {
-            this.Helper.clearCanvasArea(context);
-        }
-        const newScale = Math.max(CANVAS_SCALING_LIMIT, this.Transform.scaleX - CANVAS_ZOOM_IN_OUT_FACTOR);
-        this.Transform = {
-            ...this.Transform,
-            scaleX: newScale,
-            scaleY: newScale
-        };
-        this.Zoom = this.Transform.scaleX * CANVAS_SCALING_MULTIPLIER;
-        this.redrawBoard();
-    }
-
-    fitToView() {
-        if (this.CanvasCopy) {
-            const contextCopy = this.CanvasCopy.getContext("2d");
-            if (contextCopy) {
-                this.Helper.clearCanvasArea(contextCopy);
-            }
-        }
-        const context = this.Canvas.getContext("2d");
-        if (context) {
-            this.Helper.clearCanvasArea(context);
-        }
-        this.Transform = CanvasHelper.GetDefaultTransForm();
-        this.Zoom = 100;
-        this.redrawBoard();
     }
 
     saveBoard() {
