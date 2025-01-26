@@ -5,7 +5,7 @@ import { observer } from "mobx-react";
 
 export const ChartsRenderer = observer(function ChartsRenderer({ component }: { component: ChartNow }) {
     const { chart } = component;
-    const { loading } = useDataLoader(chart!);
+    const { loading } = useDataLoader(chart!, component.id);
 
     if (chart == null) {
         return null;

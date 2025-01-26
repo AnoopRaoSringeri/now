@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useStore } from "./store-provider";
 import { useEffect } from "react";
 
-export function useDataLoader(chart: Chart) {
+export function useDataLoader(chart: Chart, chartId: string) {
     const { uploadStore } = useStore();
     const {
         data,
@@ -22,7 +22,7 @@ export function useDataLoader(chart: Chart) {
                 return { data: [], columns: [] };
             }
         },
-        queryKey: ["ChartData", chart.Source?.id],
+        queryKey: ["ChartData", chartId],
         refetchOnMount: false,
         // refetchOnReconnect: false,
         refetchOnWindowFocus: false
