@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import ElementSelector from "./element-selector";
-import { Button, Input } from "@now/ui";
+import { Badge, Button, Collapsible, CollapsibleContent, CollapsibleTrigger, Icon, Input, Label } from "@now/ui";
 import { Expand, House, Save } from "lucide-react";
 import { useCanvas } from "../hooks/use-canvas";
 import { StyleEditorWrapper } from "../mini-components/canvas-style-editor";
@@ -10,6 +10,7 @@ import { ZoomController } from "../mini-components/zoom-controller";
 import { useStore } from "@now/utils";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
+import { DataUploader, DataUploaderHandle } from "../mini-components/data-uploader";
 
 const CanvasOptions = observer(function CanvasOptions({ name, onExpand }: { name: string; onExpand?: () => unknown }) {
     const { id } = useParams<{ id: string }>();
@@ -71,6 +72,7 @@ const CanvasOptions = observer(function CanvasOptions({ name, onExpand }: { name
                         </Button>
                     </div>
                 </div>
+                <SourceSelector />
                 <div className="absolute left-5 top-5 z-[10] gap-1 flex ">
                     <Button size="sm" onClick={goToHome}>
                         <House size="20px" />
@@ -82,6 +84,71 @@ const CanvasOptions = observer(function CanvasOptions({ name, onExpand }: { name
                 <StyleEditorWrapper />
                 <ZoomController />
             </div>
+        </div>
+    );
+});
+
+const SourceSelector = observer(function SourceSelector() {
+    const [opened, setOpened] = useState(false);
+    const { id } = useParams<{ id: string }>();
+    const { canvasBoard } = useCanvas(id ?? "new");
+    const dataUploaderRef = useRef<DataUploaderHandle>(null);
+
+    return (
+        <div className="absolute right-5 top-20 max-h-[400px] z-[10]">
+            <DataUploader ref={dataUploaderRef} sourceManager={canvasBoard.SourceManager} />
+            <Collapsible open={opened} onOpenChange={setOpened} className="flex flex-row align-top">
+                <div>
+                    <CollapsibleTrigger className="h-7">
+                        {opened ? <Icon name="ChevronsRight" /> : <Icon name="ChevronsLeft" />}
+                    </CollapsibleTrigger>
+                </div>
+                <CollapsibleContent className="CollapsibleContent">
+                    <div className="w-[200px] flex flex-col space-y-2">
+                        {canvasBoard.SourceManager.Sources.map((source) => (
+                            <Badge
+                                key={source.id}
+                                variant={
+                                    canvasBoard.SourceManager.SelectedSource?.id !== source.id ? "outline" : "secondary"
+                                }
+                                className="h-7 cursor-pointer flex justify-between items-center gap-2"
+                                onClick={() => {
+                                    canvasBoard.SourceManager.SelectedSource = source;
+                                }}
+                            >
+                                <Label className="flex-1"> {source.name}</Label>
+                                <Icon
+                                    name="Upload"
+                                    size="18px"
+                                    className="cursor-pointer"
+                                    onClick={() => {
+                                        dataUploaderRef.current?.update(source);
+                                    }}
+                                />
+                                <Icon
+                                    name="X"
+                                    size="18px"
+                                    color="red"
+                                    className="cursor-pointer"
+                                    onClick={() => {
+                                        canvasBoard.SourceManager.removeSource(source.id);
+                                    }}
+                                />
+                            </Badge>
+                        ))}
+                        <Button
+                            size="xs"
+                            variant="default"
+                            className="w-full flex justify-center"
+                            onClick={() => {
+                                dataUploaderRef.current?.uploadNew();
+                            }}
+                        >
+                            Add
+                        </Button>
+                    </div>
+                </CollapsibleContent>
+            </Collapsible>
         </div>
     );
 });

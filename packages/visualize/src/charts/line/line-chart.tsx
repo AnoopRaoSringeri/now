@@ -13,15 +13,12 @@ import {
 import { TrendingUp } from "lucide-react";
 import React from "react";
 import { CartesianGrid, Line, LineChart as LineChartComponent, XAxis } from "recharts";
-import { ChartData, LineChartConfig } from "@now/utils";
+import { ChartRowData, LineChart, LineChartConfig } from "@now/utils";
+import { observer } from "mobx-react";
 
-export const LineChartNow = React.memo(function LineChartNow({
-    chartData,
-    chartConfig: config
-}: {
-    chartData: ChartData;
-    chartConfig: LineChartConfig;
-}) {
+export const LineChartNow = observer(function LineChartNow({ chart }: { chart: LineChart }) {
+    const chartData: ChartRowData[] = chart.ChartData;
+    const config = chart.Config as LineChartConfig;
     const xAxis = config.dimensions.v.v;
 
     const yAxis = config.measures.v.v;
@@ -48,7 +45,7 @@ export const LineChartNow = React.memo(function LineChartNow({
             </CardHeader>
             <CardContent className="flex-1 pb-0 overflow-hidden">
                 <ChartContainer config={chartConfig} className="size-full">
-                    <LineChartComponent accessibilityLayer data={chartData.data}>
+                    <LineChartComponent accessibilityLayer data={chartData}>
                         <CartesianGrid vertical={false} />
                         <XAxis
                             dataKey={xAxis.name}

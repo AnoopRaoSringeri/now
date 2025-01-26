@@ -15,15 +15,12 @@ import {
     ChartTooltipContent,
     CardFooter
 } from "@now/ui";
-import { ChartData, formatText, PieChartConfig } from "@now/utils";
+import { ChartRowData, formatText, PieChart, PieChartConfig } from "@now/utils";
+import { observer } from "mobx-react";
 
-export const PieChartNow = React.memo(function PieChartNow({
-    chartConfig: config,
-    chartData
-}: {
-    chartData: ChartData;
-    chartConfig: PieChartConfig;
-}) {
+export const PieChartNow = observer(function PieChartNow({ chart }: { chart: PieChart }) {
+    const chartData: ChartRowData[] = chart.ChartData;
+    const config = chart.Config as PieChartConfig;
     const measure = config.measures.v.v;
 
     const dimension = config.dimensions.v.v;
@@ -33,28 +30,28 @@ export const PieChartNow = React.memo(function PieChartNow({
             return 0;
         }
 
-        return chartData.data.reduce((acc, curr) => acc + Number(curr[measure.name]), 0);
-    }, [chartData.data, measure]);
+        return chartData.reduce((acc, curr) => acc + Number(curr[measure.name]), 0);
+    }, [chartData, measure]);
 
     const items = React.useMemo(() => {
         if (dimension == null) {
             return [];
         }
 
-        return chartData.data.reduce((r, curr) => {
+        return chartData.reduce((r, curr) => {
             if (!r.includes(curr[dimension.name])) {
                 r.push(curr[dimension.name]);
             }
             return r;
         }, [] as string[]);
-    }, [chartData.data, dimension]);
+    }, [chartData, dimension]);
 
     const reducedData = React.useMemo(() => {
         if (dimension == null) {
             return [];
         }
-        return chartData.data.map((d) => ({ ...d, fill: `var(--color-${d[dimension.name]})` }));
-    }, [chartData.data, dimension]);
+        return chartData.map((d) => ({ ...d, fill: `var(--color-${d[dimension.name]})` }));
+    }, [chartData, dimension]);
 
     const chartConfig: ChartConfig = {};
     items.forEach((item) => {

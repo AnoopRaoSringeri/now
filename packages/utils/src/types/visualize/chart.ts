@@ -5,38 +5,31 @@ import {
     ChartNowConfig,
     MultiColumnSelectEditorValue
 } from "./editor-value-types";
-import { ChartConfigMetadata, ChartType, ColumnConfig } from "./types";
+import { ChartConfigMetadata, ChartType } from "./types";
 import { ValueType } from "./value-types";
-import { ChartData } from "./chart-data";
+import { ChartRowData } from "./chart-data";
 import { ChartSource } from "./source";
 import { ChartFactory } from "./chart-factory";
 
 interface IChart {
     type: ChartType;
     config: ConfigType;
-    columnConfig: ColumnConfig[];
     onChange: (key: string, value: ValueType) => void;
     toJSON: () => ChartMetadata;
 }
 
 export type ChartMetadata = {
     type: ChartType;
-    source: ChartSource;
+    source: ChartSource | null;
     options: Record<string, ValueType>;
     config: ChartConfigMetadata;
-    columnConfig: ColumnConfig[];
 };
 
 export class Chart implements IChart {
     dataVersion = 0;
-    columnConfig: ColumnConfig[] = [];
-    chartData: ChartData = { data: [], columns: [] };
+    chartData: ChartRowData[] = [];
     options: ChartNowConfig = {};
-    source: ChartSource = {
-        type: "File",
-        name: "",
-        id: ""
-    };
+    source: ChartSource | null = null;
     config: ConfigType;
     constructor(config: ChartConfigMetadata, public type: ChartType) {
         this.config = {
@@ -52,7 +45,6 @@ export class Chart implements IChart {
         makeObservable(this, {
             type: observable,
             config: observable,
-            columnConfig: observable,
             dataVersion: observable,
             chartData: observable,
             source: observable,
@@ -77,11 +69,6 @@ export class Chart implements IChart {
             this.type = chartType;
         });
     }
-    set ColumnConfig(columns: ColumnConfig[]) {
-        runInAction(() => {
-            this.columnConfig = columns;
-        });
-    }
     get DataVersion() {
         return toJS(this.dataVersion);
     }
@@ -93,19 +80,21 @@ export class Chart implements IChart {
     get ChartData() {
         return toJS(this.chartData);
     }
-    set ChartData(chartData: ChartData) {
+    set ChartData(chartData: ChartRowData[]) {
         runInAction(() => {
             this.chartData = chartData;
-            this.ColumnConfig = chartData.columns.map((c) => ({ name: c, type: "string" }));
         });
     }
     get Source() {
-        return toJS(this.source ?? {});
+        return toJS(this.source);
     }
-    set Source(source: ChartSource) {
+    set Source(source: ChartSource | null) {
         runInAction(() => {
             this.source = source;
         });
+    }
+    get ColumnConfig() {
+        return this.Source ? this.Source.columns : [];
     }
     set Measures(value: ChartConfigMetadata["measures"]) {
         runInAction(() => {
@@ -182,6 +171,20 @@ export class Chart implements IChart {
             }
         });
     }
+    resetConfig() {
+        runInAction(() => {
+            if (this.config.measures.t === "s") {
+                this.config.measures = { t: "s", v: new ColumnSelectEditorValue({ t: "scs", v: null }) };
+            } else {
+                this.config.measures = { t: "m", v: new MultiColumnSelectEditorValue({ t: "mcs", v: [] }) };
+            }
+            if (this.config.dimensions.t === "s") {
+                this.config.dimensions = { t: "s", v: new ColumnSelectEditorValue({ t: "scs", v: null }) };
+            } else {
+                this.config.dimensions = { t: "m", v: new MultiColumnSelectEditorValue({ t: "mcs", v: [] }) };
+            }
+        });
+    }
     toJSON() {
         const options: Record<string, ValueType> = {};
         Object.keys(this.options).forEach((key) => {
@@ -191,8 +194,7 @@ export class Chart implements IChart {
             type: this.type,
             source: this.source,
             options,
-            config: this.Config,
-            columnConfig: this.columnConfig
+            config: this.Config
         };
     }
 }

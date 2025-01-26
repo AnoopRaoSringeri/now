@@ -1,4 +1,5 @@
 import { CanvasObject } from "../canvas/types";
+import { ChartSource } from "../visualize/source";
 import { ICanvasTransform } from "./custom-canvas";
 
 export interface Position {
@@ -47,6 +48,7 @@ export interface CanvasMetadata {
     elements: (CanvasObject & { id: string })[];
     size: Size;
     transform: ICanvasTransform;
+    sources: ChartSource[];
     deletedSources: string[];
 }
 

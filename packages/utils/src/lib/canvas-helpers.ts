@@ -251,11 +251,13 @@ export class CanvasHelper {
     }
 
     hoveredElement(mouseCords: Position, elements: BaseObject[]) {
-        return elements.find(
-            (e) =>
-                this.isUnderMouse(mouseCords, e.getValues()) ||
-                this.getCursorPosition(mouseCords, e.getValues()) !== "m"
-        );
+        return this.Board.ReadOnly
+            ? null
+            : elements.find(
+                  (e) =>
+                      this.isUnderMouse(mouseCords, e.getValues()) ||
+                      this.getCursorPosition(mouseCords, e.getValues()) !== "m"
+              );
     }
 
     static getElementsInsideArea(area: Position & Size, elements: BaseObject[]) {

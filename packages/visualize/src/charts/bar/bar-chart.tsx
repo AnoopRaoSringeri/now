@@ -8,20 +8,14 @@ import {
     ChartTooltip,
     ChartTooltipContent
 } from "@now/ui";
-import { BarChartConfig, ChartData } from "@now/utils";
+import { BarChart, BarChartConfig, ChartRowData } from "@now/utils";
 import { observer } from "mobx-react";
 import React from "react";
 import { Bar, BarChart as BarChartComponent, CartesianGrid, XAxis } from "recharts";
 
-export const BarChartNow = observer(function BarChartNow({
-    chartData,
-    chartConfig: config
-}: {
-    chartData: ChartData;
-    chartConfig: BarChartConfig;
-}) {
-    const memoizedData = chartData.data;
-
+export const BarChartNow = observer(function BarChartNow({ chart }: { chart: BarChart }) {
+    const chartData: ChartRowData[] = chart.ChartData;
+    const config = chart.Config as BarChartConfig;
     const xAxis = config.dimensions.v.v;
 
     if (xAxis == null || config.measures.v.v.length === 0) {
@@ -40,7 +34,7 @@ export const BarChartNow = observer(function BarChartNow({
 
     return (
         <ChartContainer config={chartConfig} className="size-full">
-            <BarChartComponent accessibilityLayer data={memoizedData}>
+            <BarChartComponent accessibilityLayer data={chartData}>
                 <CartesianGrid vertical={false} />
                 <XAxis dataKey={xAxis.name} tickLine={false} tickMargin={10} axisLine={false} />
                 <ChartTooltip content={<ChartTooltipContent />} />

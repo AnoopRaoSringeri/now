@@ -1,3 +1,5 @@
+import { ColumnConfig } from "./types";
+
 export type ChartSource =
     | (
           | {
@@ -8,4 +10,4 @@ export type ChartSource =
                 connectionString: string;
                 query: string;
             }
-      ) & { name: string; id: string | null };
+      ) & { name: string; id: string; columns: ColumnConfig[] };

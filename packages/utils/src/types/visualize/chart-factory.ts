@@ -100,7 +100,6 @@ export class ChartFactory {
 
     static restoreChart(chart: ChartMetadata) {
         const chartObj = new Chart(chart.config, chart.type);
-        chartObj.ColumnConfig = chart.columnConfig;
         chartObj.Source = chart.source;
         return chartObj;
     }

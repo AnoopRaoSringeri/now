@@ -29,6 +29,7 @@ export * from "./components/ui/dialog";
 export * from "./components/ui/badge";
 export * from "./components/ui/switch";
 export * from "./components/ui/radio-group";
+export * from "./components/ui/collapsible";
 
 export * from "./components/multi-select";
 

@@ -21,6 +21,7 @@ import { CanvasObjectFactory } from "./canvas-object-factory";
 import { AiPrompt } from "../types/canvas/objects/ai-prompt";
 import { ChartNow } from "../types/canvas/objects/chart";
 import { v4 as uuid } from "uuid";
+import { SourceManager } from "./source-manager";
 export class CanvasBoard implements ICanvas {
     private _lastTimestamp = 0;
     private _clicked = false;
@@ -35,6 +36,7 @@ export class CanvasBoard implements ICanvas {
     private _hoveredObject: BaseObject | null = null;
 
     private EventManager: EventManager;
+    SourceManager: SourceManager;
 
     _elementType: ElementEnum = ElementEnum.Move;
     _isElementSelectorLocked = true;
@@ -61,6 +63,7 @@ export class CanvasBoard implements ICanvas {
         this._canvas = createRef();
         this._canvasCopy = createRef();
         this.Helper = new CanvasHelper(this);
+        this.SourceManager = new SourceManager(this);
         makeObservable(this, {
             _elementType: observable,
             ElementType: computed,
@@ -98,9 +101,9 @@ export class CanvasBoard implements ICanvas {
     }
 
     get CanvasCopy() {
-        if (this.ReadOnly) {
-            return null;
-        }
+        // if (this.ReadOnly) {
+        //     return null;
+        // }
         return this._canvasCopy.current!;
     }
 
@@ -380,6 +383,7 @@ export class CanvasBoard implements ICanvas {
             return CanvasObjectFactory.createObject(ele.id, ele, this);
         });
         this.Elements = objArray;
+        this.SourceManager.Sources = metadata.sources;
         if (draw) {
             this.redrawBoard();
         }
@@ -665,13 +669,14 @@ export class CanvasBoard implements ICanvas {
     toJSON(): CanvasMetadata {
         const dsids: string[] = [];
         this.DeletedElements.forEach((ele) => {
-            if (ele instanceof ChartNow) {
+            if (ele instanceof ChartNow && ele.chart.Source) {
                 if (ele.chart.Source.id) {
                     dsids.push(ele.chart.Source.id);
                 }
             }
         });
         return {
+            sources: this.SourceManager.Sources,
             elements: [...this.Elements.map((ele) => ele.toJSON())],
             size: { height: this.Height, width: this.Width },
             transform: this.Transform,

@@ -7,7 +7,6 @@ import { useParams } from "react-router";
 import { AiPrompt, BaseObject, CanvasBoard, CanvasHelper, ChartNow, cn, ElementEnum } from "@now/utils";
 import { ChartsRenderer } from "./chart-renderer";
 import { AiPromptRenderer } from "./ai-prompt-renderer";
-import { DataUploader } from "../mini-components/data-uploader";
 
 export const CustomComponentsRenderer = observer(function CustomComponentsRenderer() {
     const { id } = useParams<{ id: string }>();
@@ -67,9 +66,6 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
                     >
                         {component.IsLocked ? <Icon name="LockOpen" /> : <Icon name="Lock" />}
                     </Button>
-                    {component.Type === ElementEnum.Chart ? (
-                        <DataUploader id={id} component={component as ChartNow} />
-                    ) : null}
                     <Button onClick={removeElement} size="icon" variant="destructive">
                         <Icon name="Trash2" />
                     </Button>

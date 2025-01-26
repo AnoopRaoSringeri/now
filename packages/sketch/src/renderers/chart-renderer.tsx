@@ -1,12 +1,11 @@
 import { AppLoader } from "@now/ui";
-import { ChartData, Chart, useDataLoader, ChartNow, ChartFactory } from "@now/utils";
+import { Chart, useDataLoader, ChartNow, ChartFactory } from "@now/utils";
 import { BarChartNow, PieChartNow, CutomTable, LineChartNow, AreaChartNow } from "@now/visualize";
 import { observer } from "mobx-react";
 
 export const ChartsRenderer = observer(function ChartsRenderer({ component }: { component: ChartNow }) {
     const { chart } = component;
-    const id = component.id;
-    const { chartData, loading } = useDataLoader(chart!, id);
+    const { columns, loading } = useDataLoader(chart!);
 
     if (chart == null) {
         return null;
@@ -15,28 +14,23 @@ export const ChartsRenderer = observer(function ChartsRenderer({ component }: { 
     return (
         <>
             <AppLoader loading={loading} />
-            {chartData && chartData.columns.length > 0 ? <ChartRenderer chart={chart} chartData={chartData} /> : null}
+            {columns.length > 0 ? <ChartRenderer chart={chart} /> : null}
         </>
     );
 });
 
-const ChartRenderer = observer(function ChartRenderer({ chart, chartData }: { chart: Chart; chartData: ChartData }) {
+const ChartRenderer = observer(function ChartRenderer({ chart }: { chart: Chart }) {
     const typedChart = ChartFactory.getChartConfig(chart);
     switch (typedChart.type) {
         case "Bar":
-            return <BarChartNow chartConfig={typedChart.config} chartData={chart.ChartData} />;
+            return <BarChartNow chart={chart} />;
         case "Line":
-            return <LineChartNow chartConfig={typedChart.config} chartData={chart.ChartData} />;
+            return <LineChartNow chart={chart} />;
         case "Area":
-            return <AreaChartNow chartConfig={typedChart.config} chartData={chart.ChartData} />;
+            return <AreaChartNow chart={chart} />;
         case "Pie":
-            return <PieChartNow chartConfig={typedChart.config} chartData={chart.ChartData} />;
+            return <PieChartNow chart={chart} />;
         default:
-            return (
-                <CutomTable
-                    data={chartData.data}
-                    headers={[...chart.DimensionColumns, ...chart.MeasureColumns].map((c) => c.name)}
-                />
-            );
+            return <CutomTable chart={chart} />;
     }
 });

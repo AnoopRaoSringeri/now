@@ -62,7 +62,6 @@ export class CanvasObjectFactory {
                             h: 0,
                             w: 0,
                             metadata: {
-                                columnConfig: [],
                                 config: {
                                     dimensions: {
                                         t: "m",
@@ -80,7 +79,7 @@ export class CanvasObjectFactory {
                                     }
                                 },
                                 type: "Table",
-                                source: { id: null, name: "", type: "File" },
+                                source: null,
                                 options: {}
                             }
                         }

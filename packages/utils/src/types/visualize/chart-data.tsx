@@ -1,6 +1,8 @@
+import { ColumnConfig } from "./types";
+
 export type ChartRowData = Record<string, string>;
 
-export type ChartData = { data: ChartRowData[]; columns: string[] };
+export type ChartData = { data: ChartRowData[]; columns: ColumnConfig[] };
 
 export type ChartDataUpdateRequest = {
     id: string;

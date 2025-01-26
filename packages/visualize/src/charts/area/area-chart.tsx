@@ -12,18 +12,14 @@ import {
     ChartTooltipContent,
     CardFooter
 } from "@now/ui";
-import { AreaChartConfig, ChartData } from "@now/utils";
+import { AreaChart, AreaChartConfig, ChartRowData } from "@now/utils";
 import { TrendingUp } from "lucide-react";
-import React from "react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { observer } from "mobx-react";
+import { Area, AreaChart as AreaChartComponent, CartesianGrid, XAxis } from "recharts";
 
-export const AreaChartNow = React.memo(function AreaChartNow({
-    chartData,
-    chartConfig: config
-}: {
-    chartData: ChartData;
-    chartConfig: AreaChartConfig;
-}) {
+export const AreaChartNow = observer(function AreaChartNow({ chart }: { chart: AreaChart }) {
+    const chartData: ChartRowData[] = chart.ChartData;
+    const config = chart.Config as AreaChartConfig;
     const xAxis = config.dimensions.v.v;
 
     const yAxis = config.measures.v.v;
@@ -50,9 +46,9 @@ export const AreaChartNow = React.memo(function AreaChartNow({
             </CardHeader>
             <CardContent className="flex-1 pb-0 overflow-hidden">
                 <ChartContainer config={chartConfig} className="size-full">
-                    <AreaChart
+                    <AreaChartComponent
                         accessibilityLayer
-                        data={chartData.data}
+                        data={chartData}
                         margin={{
                             left: 12,
                             right: 12
@@ -77,7 +73,7 @@ export const AreaChartNow = React.memo(function AreaChartNow({
                                 type="natural"
                             />
                         ))}
-                    </AreaChart>
+                    </AreaChartComponent>
                 </ChartContainer>
             </CardContent>
             <CardFooter>

@@ -40,6 +40,7 @@ export interface ICanvasObjectMethods {
 export interface ICanvas {
     Transform: ICanvasTransform;
     Canvas: HTMLCanvasElement | null;
+    ReadOnly: boolean;
     Elements: BaseObject[];
     toJSON: () => unknown;
     toSVG: (options: Size) => string;

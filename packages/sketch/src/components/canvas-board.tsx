@@ -32,9 +32,7 @@ export const CanvasBoard = observer(function CanvasBoard() {
         },
         queryKey: ["Sketch", id],
         refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
-        retry: false
+        refetchOnWindowFocus: false
     });
 
     useEffect(() => {

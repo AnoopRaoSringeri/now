@@ -5,6 +5,7 @@ import { NavProjects } from "./nav-projects";
 import { NavUser } from "./nav-user";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarRail } from "./ui/sidebar";
 import { useAuth } from "@now/utils";
+import { ModeToggle } from "./mode-toggle";
 
 const data = {
     projects: [
@@ -37,6 +38,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <NavProjects projects={data.projects} />
             </SidebarContent>
             <SidebarFooter>
+                <ModeToggle />
                 <NavUser user={user} />
             </SidebarFooter>
             <SidebarRail />

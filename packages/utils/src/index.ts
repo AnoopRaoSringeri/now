@@ -42,3 +42,5 @@ export * from "./hooks/use-auth";
 //
 export * from "./hooks/store-provider";
 export * from "./hooks/chart-provider";
+//
+export * from "./lib/source-manager";

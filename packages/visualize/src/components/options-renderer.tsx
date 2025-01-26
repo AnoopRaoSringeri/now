@@ -1,10 +1,19 @@
-import { Chart, ColumnConfig, EditorValue, formatText } from "@now/utils";
+import {
+    Chart,
+    ColumnConfig,
+    EditorValue,
+    formatText,
+    MultiColumnSelectValue,
+    SingleColumnSelectValue
+} from "@now/utils";
 import { MultiColumnSelectEditor } from "../editors/multi-column-select-editor";
 import { ColumnSelectEditor } from "../editors/column-select-editor";
 import { observer } from "mobx-react";
 import { Label } from "@now/ui";
 export const ChartOptionsRendererWrapper = observer(function ChartOptionsRendererWrapper({ chart }: { chart: Chart }) {
-    const { config, columnConfig, options } = chart;
+    const { config, options } = chart;
+
+    const columnConfig = chart.ColumnConfig;
 
     return (
         <div className="flex flex-col gap-4">
@@ -41,7 +50,7 @@ const ChartOptionsRenderer = observer(function ChartOptionsRenderer({
                 <MultiColumnSelectEditor
                     editorValue={editorValue}
                     option={option}
-                    value={editorValue.value}
+                    value={editorValue.Value as MultiColumnSelectValue}
                     columns={columns}
                 />
             );
@@ -50,7 +59,7 @@ const ChartOptionsRenderer = observer(function ChartOptionsRenderer({
                 <ColumnSelectEditor
                     editorValue={editorValue}
                     option={option}
-                    value={editorValue.value}
+                    value={editorValue.Value as SingleColumnSelectValue}
                     columns={columns}
                 />
             );
