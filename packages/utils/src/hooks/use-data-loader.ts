@@ -1,7 +1,7 @@
 import { Chart } from "../types/visualize/chart";
-import { useQuery } from "@tanstack/react-query";
 import { useStore } from "./store-provider";
 import { useEffect } from "react";
+import { QueryKeys, useQueryNow } from "./use-query-now";
 
 export function useDataLoader(chart: Chart, chartId: string) {
     const { uploadStore } = useStore();
@@ -9,7 +9,7 @@ export function useDataLoader(chart: Chart, chartId: string) {
         data,
         isLoading: dataLoading,
         refetch
-    } = useQuery({
+    } = useQueryNow({
         queryFn: async () => {
             if (chart.Source && chart.MeasureColumns.length > 0 && chart.DimensionColumns.length > 0) {
                 return await uploadStore.GetData({
@@ -22,10 +22,7 @@ export function useDataLoader(chart: Chart, chartId: string) {
                 return { data: [], columns: [] };
             }
         },
-        queryKey: ["ChartData", chartId],
-        refetchOnMount: false,
-        // refetchOnReconnect: false,
-        refetchOnWindowFocus: false
+        queryKey: [QueryKeys.ChartData, chartId]
     });
 
     useEffect(() => {

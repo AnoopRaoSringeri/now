@@ -57,13 +57,7 @@ export const PieChartNow = observer(function PieChartNow({ chart }: { chart: Pie
         <ChartContainer config={chartConfig} className="mx-auto size-full">
             <PieChartComponent>
                 <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                <Pie
-                    data={reducedData}
-                    dataKey={measure.name}
-                    nameKey={dimension.name}
-                    innerRadius={60}
-                    strokeWidth={5}
-                >
+                <Pie data={reducedData} dataKey={measure.name} nameKey={dimension.name}>
                     <Label
                         content={({ viewBox }) => {
                             if (viewBox && "cx" in viewBox && "cy" in viewBox) {

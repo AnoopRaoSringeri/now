@@ -2,6 +2,16 @@ import { createContext, ReactNode, useContext } from "react";
 import SketchStore from "../api-store/sketch-now-store";
 import AuthStore from "../api-store/auth-store";
 import UploadStore from "../api-store/upload-store";
+import { QueryClient } from "@tanstack/react-query";
+
+export const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: true,
+            staleTime: 1000 * 60 * 5
+        }
+    }
+});
 
 const store = {
     authStore: new AuthStore(),
@@ -9,14 +19,14 @@ const store = {
     uploadStore: new UploadStore()
 };
 
-const StoreContex = createContext(store);
+const StoreContext = createContext(store);
 
 const useStore = () => {
-    return useContext(StoreContex);
+    return useContext(StoreContext);
 };
 
 const StoreProvider = ({ children }: { children: ReactNode }) => {
-    const storeValue = useContext(StoreContex);
-    return <StoreContex.Provider value={storeValue}>{children}</StoreContex.Provider>;
+    const storeValue = useContext(StoreContext);
+    return <StoreContext.Provider value={storeValue}>{children}</StoreContext.Provider>;
 };
 export { StoreProvider, useStore };

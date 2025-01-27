@@ -7,8 +7,7 @@ import { TextEditorWrapper } from "../mini-components/text-editor";
 import CanvasOptions from "./canvas-options";
 import { useCanvas } from "../hooks/use-canvas";
 import { AppLoader, useSidebar } from "@now/ui";
-import { useQuery } from "@tanstack/react-query";
-import { useStore } from "@now/utils";
+import { QueryKeys, useQueryNow, useStore } from "@now/utils";
 import { useResizeObserver } from "@mantine/hooks";
 import { CustomComponentsRenderer } from "../renderers/custom-component-renderer";
 
@@ -20,7 +19,7 @@ export const CanvasBoard = observer(function CanvasBoard() {
     const { sketchStore } = useStore();
     const canvas = canvasBoard.CanvasRef;
 
-    const { data, isLoading: sketchLoading } = useQuery({
+    const { data, isLoading: sketchLoading } = useQueryNow({
         queryFn: async () => {
             if (id && id !== "new") {
                 return await sketchStore.GetSketchById(id);
@@ -28,9 +27,7 @@ export const CanvasBoard = observer(function CanvasBoard() {
                 return null;
             }
         },
-        queryKey: ["Sketch", id],
-        refetchOnMount: false,
-        refetchOnWindowFocus: false
+        queryKey: [QueryKeys.Sketch, id ?? "new"]
     });
 
     useEffect(() => {

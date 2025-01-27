@@ -44,3 +44,5 @@ export * from "./hooks/store-provider";
 export * from "./hooks/chart-provider";
 //
 export * from "./lib/source-manager";
+//
+export * from "./hooks/use-query-now";

@@ -7,15 +7,16 @@ import { Expand, House, Save } from "lucide-react";
 import { useCanvas } from "../hooks/use-canvas";
 import { CustomizationPanelWrapper } from "../mini-components/canvas-style-editor";
 import { ZoomController } from "../mini-components/zoom-controller";
-import { useStore } from "@now/utils";
+import { QueryKeys, useStore } from "@now/utils";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataUploader, DataUploaderHandle } from "../mini-components/data-uploader";
 
 const CanvasOptions = observer(function CanvasOptions() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { canvasBoard } = useCanvas(id ?? "new");
+    const queryClient = useQueryClient();
     const { sketchStore } = useStore();
 
     const saveBoard = async () => {
@@ -38,7 +39,15 @@ const CanvasOptions = observer(function CanvasOptions() {
     };
 
     const { mutate, isPending } = useMutation({
-        mutationFn: () => saveBoard()
+        mutationFn: () => saveBoard(),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: [QueryKeys.SketchList]
+            });
+            queryClient.invalidateQueries({
+                queryKey: [QueryKeys.Sketch, id]
+            });
+        }
     });
 
     const goToHome = () => {

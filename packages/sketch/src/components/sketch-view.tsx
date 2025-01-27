@@ -1,37 +1,36 @@
 import { AppLoader, Button, Icon, Label, ScrollArea, ScrollBar } from "@now/ui";
-import { SavedCanvas, useStore } from "@now/utils";
-import { TrashIcon } from "lucide-react";
+import { QueryKeys, useQueryNow, useStore } from "@now/utils";
 import { observer } from "mobx-react";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { NoSketch } from "../helpers/no-sketch-page";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const SketchList = observer(function SketchList() {
+    const queryClient = useQueryClient();
     const { sketchStore } = useStore();
-    const [sketches, setSketches] = useState<SavedCanvas[]>([]);
-    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        loadData();
-    }, []);
+    const { data: sketches, isLoading: loading } = useQueryNow({
+        queryFn: async () => {
+            return await sketchStore.GetAllSketches();
+        },
+        queryKey: [QueryKeys.SketchList]
+    });
 
-    const loadData = async () => {
-        setLoading(true);
-        const sketches = await sketchStore.GetAllSketches();
-        setSketches(sketches);
-        setLoading(false);
-    };
+    const { mutate } = useMutation({
+        mutationFn: async (id: string) => {
+            await sketchStore.DeleteSketch(id);
+        },
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: [QueryKeys.SketchList] })
+    });
 
-    const deleteSketch = async (canvasId: string) => {
-        setSketches(sketches.filter((s) => s._id !== canvasId));
-        await sketchStore.DeleteSketch(canvasId);
+    const deleteSketch = (id: string) => {
+        mutate(id);
     };
 
     return (
         <div className="flex size-full items-center justify-center">
             {loading ? <AppLoader /> : null}
-            {sketches.length === 0 && !loading ? (
+            {sketches == null || (sketches.length === 0 && !loading) ? (
                 <NoSketch />
             ) : (
                 <ScrollArea className="size-full p-5" type="auto">
@@ -59,11 +58,11 @@ const Sketch = function Sketch({
     const { sketchStore } = useStore();
     const navigate = useNavigate();
 
-    const { data, isLoading } = useQuery({
+    const { data, isLoading } = useQueryNow({
         queryFn: async () => {
             return await sketchStore.GetImageData(canvasId);
         },
-        queryKey: ["SketchImageData", canvasId],
+        queryKey: [QueryKeys.SketchImageData, canvasId],
         refetchOnMount: false,
         refetchOnReconnect: false,
         refetchOnWindowFocus: false,
@@ -108,6 +107,7 @@ const Sketch = function Sketch({
                         onClick={onClick}
                         className=" box-content aspect-square h-[200px] w-[300px] cursor-pointer rounded-sm border-2 border-gray-500/30 object-cover"
                         src={data ?? ""}
+                        alt=""
                     />
                 </>
             )}

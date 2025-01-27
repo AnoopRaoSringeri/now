@@ -4,8 +4,7 @@ import { useParams } from "react-router";
 
 import { useCanvas } from "../hooks/use-canvas";
 import { AppLoader, useSidebar } from "@now/ui";
-import { useQuery } from "@tanstack/react-query";
-import { useStore } from "@now/utils";
+import { QueryKeys, useQueryNow, useStore } from "@now/utils";
 import { useFullscreen, useResizeObserver } from "@mantine/hooks";
 import { CustomComponentsRenderer } from "../renderers/custom-component-renderer";
 
@@ -18,19 +17,15 @@ export const BoardViewer = observer(function BoardViewer() {
     const { sketchStore } = useStore();
     const canvas = canvasBoard.CanvasRef;
 
-    const { data, isLoading: sketchLoading } = useQuery({
+    const { data, isLoading: sketchLoading } = useQueryNow({
         queryFn: async () => {
-            if (id && id !== "new") {
+            if (id) {
                 return await sketchStore.GetSketchById(id);
             } else {
                 return null;
             }
         },
-        queryKey: ["Sketch", id],
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
-        retry: false
+        queryKey: [QueryKeys.Sketch, id ?? 0]
     });
 
     useEffect(() => {
