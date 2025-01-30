@@ -13,10 +13,12 @@ import {
     DropdownMenuTrigger
 } from "./ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "./ui/sidebar";
-import { User } from "@now/utils";
+import { useAuth, User } from "@now/utils";
+import { observer } from "mobx-react";
 
-export function NavUser({ user }: { user: User }) {
+export const NavUser = observer(({ user }: { user: User }) => {
     const { isMobile } = useSidebar();
+    const { logOut } = useAuth();
 
     return (
         <SidebarMenu>
@@ -83,7 +85,7 @@ export function NavUser({ user }: { user: User }) {
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={logOut}>
                             <LogOut />
                             Log out
                         </DropdownMenuItem>
@@ -92,4 +94,4 @@ export function NavUser({ user }: { user: User }) {
             </SidebarMenuItem>
         </SidebarMenu>
     );
-}
+});

@@ -16,14 +16,22 @@ class UploadStore {
         }
     }
 
-    async UpdateData(file: File, id: string, mode: ChartDataUpdateMode): Promise<ChartData> {
+    async UpdateData(
+        file: File,
+        id: string,
+        mode: ChartDataUpdateMode,
+        isFirstRowHeader?: boolean
+    ): Promise<ChartData> {
         try {
             const formData = new FormData();
             formData.append("id", id);
             formData.append("mode", mode);
             formData.append("file", file);
             const { data }: AxiosResponse<ChartData> = await axios.post(`${BaseUrl}update`, formData, {
-                withCredentials: true
+                withCredentials: true,
+                params: {
+                    isFirstRowHeader
+                }
             });
             return data;
         } catch (e) {

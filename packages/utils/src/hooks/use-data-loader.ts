@@ -16,7 +16,7 @@ export function useDataLoader(chart: Chart, chartId: string) {
                     id: chart.Source.id,
                     measures: chart.MeasureColumns,
                     dimensions: chart.DimensionColumns,
-                    columns: [chart.DimensionColumns[0], chart.MeasureColumns[0]]
+                    columns: [...chart.DimensionColumns, ...chart.MeasureColumns]
                 });
             } else {
                 return { data: [], columns: [] };
@@ -26,7 +26,7 @@ export function useDataLoader(chart: Chart, chartId: string) {
     });
 
     useEffect(() => {
-        if (data == null || data.data.length === 0) {
+        if (data == null || data.data?.length === 0) {
             return;
         }
         chart.ChartData = data.data;
