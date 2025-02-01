@@ -58,7 +58,21 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
 
     return (
         <div style={style}>
-            {board.ReadOnly || !component.IsSelected ? null : (
+            {board.ReadOnly ? null : !component.IsSelected ? (
+                component.IsLocked ? (
+                    <div style={{ zoom: transform.scaleX }} className="absolute top-[-40px] right-0 z-[6] flex">
+                        <Button
+                            onClick={() => {
+                                component.IsLocked = !component.IsLocked;
+                            }}
+                            size="icon"
+                            variant="ghost"
+                        >
+                            <Icon name="LockOpen" />
+                        </Button>
+                    </div>
+                ) : null
+            ) : (
                 <div style={{ zoom: transform.scaleX }} className="absolute top-[-40px] right-0 z-[6] flex">
                     <Button onClick={copyElement} size="icon" variant="ghost">
                         <Icon name="Copy" />
