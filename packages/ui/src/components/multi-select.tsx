@@ -15,6 +15,7 @@ import {
     CommandSeparator
 } from "./ui/command";
 import { Badge } from "./ui/badge";
+import { Label } from "./ui/label";
 
 /**
  * Variants for the multi-select component to handle different styles.
@@ -28,7 +29,8 @@ const multiSelectVariants = cva(
                 default: "border-foreground/10 text-foreground bg-card hover:bg-card/80",
                 secondary: "border-foreground/10 bg-secondary text-secondary-foreground hover:bg-secondary/80",
                 destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-                inverted: "inverted"
+                inverted: "inverted",
+                none: "hover:scale-100 hover:-translate-y-0"
             }
         },
         defaultVariants: {
@@ -185,7 +187,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
                     >
                         {selectedValues.length > 0 ? (
                             <div className="flex justify-between items-center w-full">
-                                <div className="flex flex-wrap items-center">
+                                <div className="flex flex-wrap items-center w-full overflow-hidden">
                                     {selectedValues.slice(0, maxCount).map((value) => {
                                         const option = options.find((o) => o.value === value);
                                         const IconComponent = option?.icon;
@@ -193,13 +195,14 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
                                             <Badge
                                                 key={value}
                                                 className={cn(
+                                                    "max-w-full overflow-hidden",
                                                     isAnimating ? "animate-bounce" : "",
                                                     multiSelectVariants({ variant })
                                                 )}
                                                 style={{ animationDuration: `${animation}s` }}
                                             >
                                                 {IconComponent && <IconComponent className="h-4 w-4 mr-2" />}
-                                                {option?.label}
+                                                <Label varient="small">{option?.label}</Label>
                                                 <XIcon
                                                     className="ml-2 h-4 w-4 cursor-pointer"
                                                     onClick={(event) => {

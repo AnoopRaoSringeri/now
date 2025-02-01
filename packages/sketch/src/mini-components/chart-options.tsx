@@ -12,7 +12,7 @@ export const ChartOptions = observer(function ChartOptions({ element }: { elemen
 
     return (
         <>
-            <div>
+            <div className="w-full">
                 <Label>{"Chart Type"}</Label>
                 <ChartSelect
                     value={chart.Type}

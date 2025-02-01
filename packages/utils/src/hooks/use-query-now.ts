@@ -4,7 +4,8 @@ export enum QueryKeys {
     Sketch = "Sketch",
     ChartData = "ChartData",
     SketchImageData = "SketchImageData",
-    SketchList = "SketchList"
+    SketchList = "SketchList",
+    SourceData = "SourceData"
 }
 
 export type QueryKey = [QueryKeys] | [QueryKeys, string | number];

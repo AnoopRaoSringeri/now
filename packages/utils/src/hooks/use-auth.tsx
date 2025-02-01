@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { LogInRequet } from "../types/auth/auth";
 import { useStore } from "./store-provider";
-import { toast } from "sonner";
+import { useToast } from "@now/ui";
 
 export function useAuth() {
     const [loading, setLoading] = useState(false);
@@ -10,6 +10,7 @@ export function useAuth() {
     const navigate = useNavigate();
     const location = useLocation();
     const isAuthenticated = localStorage.getItem("IsAuthenticated");
+    const { toast } = useToast();
 
     const refreshToken = async () => {
         if (isAuthenticated === "true") {
@@ -34,7 +35,7 @@ export function useAuth() {
             localStorage.setItem("RedirectURL", location.pathname);
         }
         localStorage.removeItem("IsAuthenticated");
-        toast.error("Session expired login again");
+        toast({ variant: "destructive", description: "Session expired login again" });
         authStore.IsSessionValid = false;
         navigate("/auth");
     };
@@ -44,14 +45,14 @@ export function useAuth() {
         localStorage.removeItem("IsAuthenticated");
         authStore.IsSessionValid = false;
         navigate("/");
-        toast.error("User logged out successfully");
+        toast({ variant: "destructive", description: "User logged out successfully" });
     };
 
     const logIn = async (values: LogInRequet) => {
         setLoading(true);
         const response = await authStore.Login(values);
         if (response) {
-            toast.success("Logged in successfully");
+            toast({ variant: "default", description: "Logged in successfully" });
             localStorage.setItem("IsAuthenticated", "true");
             authStore.IsSessionValid = true;
             const redirectURL = localStorage.getItem("RedirectURL");
@@ -62,7 +63,7 @@ export function useAuth() {
                 navigate("/sketch-now");
             }
         } else {
-            toast.error("User login failed");
+            toast({ variant: "destructive", description: "User login failed" });
         }
         setLoading(false);
     };
@@ -71,10 +72,10 @@ export function useAuth() {
         setLoading(true);
         const res = await authStore.Register(values);
         if (res) {
-            toast.success("User registered successfully");
+            toast({ variant: "default", description: "User registered successfully" });
             navigate("/auth");
         } else {
-            toast.error("User registration failed");
+            toast({ variant: "destructive", description: "User registration failed" });
         }
         setLoading(false);
     };
@@ -83,9 +84,9 @@ export function useAuth() {
         setLoading(true);
         const res = await authStore.ForgotPassword(email);
         if (res) {
-            toast.success("Forgot password link has been sent to the email");
+            toast({ variant: "default", description: "Forgot password link has been sent to the email" });
         } else {
-            toast.error("Forgot password failed");
+            toast({ variant: "destructive", description: "Forgot password failed" });
         }
         setLoading(false);
     };

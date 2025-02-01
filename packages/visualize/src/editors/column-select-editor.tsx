@@ -19,7 +19,7 @@ export const ColumnSelectEditor = function ColumnSelectEditor({
 
     return (
         <Select onValueChange={handleChange} value={value.v?.name}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select..." />
             </SelectTrigger>
             <SelectContent>

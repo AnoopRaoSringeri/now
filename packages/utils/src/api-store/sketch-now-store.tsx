@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { makeAutoObservable } from "mobx";
 import { CanvasMetadata, SavedCanvas } from "../../../utils/src/types/sketch-now/canvas";
 import { BaseUrl, getRequestConfig } from "./auth-store";
+import { ChartRowData } from "../types/visualize/chart-data";
 
 class SketchStore {
     constructor() {
@@ -64,6 +65,18 @@ class SketchStore {
             return true;
         } catch (e) {
             return false;
+        }
+    }
+
+    async GetSourceData(id: string): Promise<ChartRowData[]> {
+        try {
+            const { data }: AxiosResponse<ChartRowData[]> = await axios.get(
+                `${BaseUrl}sourceData/${id}`,
+                getRequestConfig(true)
+            );
+            return data;
+        } catch (e) {
+            return [];
         }
     }
 

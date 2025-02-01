@@ -11,7 +11,6 @@ import { Rectangle } from "../types/canvas/objects/rectangle";
 import { Text } from "../types/canvas/objects/text";
 import { CanvasImage } from "../types/canvas/objects/image";
 import { CanvasObjectFactory } from "./canvas-object-factory";
-import { AiPrompt } from "../types/canvas/objects/ai-prompt";
 import { ChartNow } from "../types/canvas/objects/chart";
 import { v4 as uuid } from "uuid";
 import { SourceManager } from "./source-manager";
@@ -287,28 +286,8 @@ export class CanvasBoard implements ICanvas {
         });
     }
 
-    getComponent(id: string):
-        | {
-              type: ElementEnum.AiPrompt;
-              component: AiPrompt;
-          }
-        | {
-              type: ElementEnum.Chart;
-              component: ChartNow;
-          } {
-        const component = this.ActiveObjects.find((t) => t.id === id) ?? this.Elements.find((t) => t.id === id)!;
-        switch (component.Type) {
-            case ElementEnum.AiPrompt:
-                return {
-                    type: ElementEnum.AiPrompt,
-                    component: component as AiPrompt
-                };
-            default:
-                return {
-                    type: ElementEnum.Chart,
-                    component: component as ChartNow
-                };
-        }
+    getComponent(id: string) {
+        return this.ActiveObjects.find((t) => t.id === id) ?? this.Elements.find((t) => t.id === id)!;
     }
 
     updateText(value: string) {

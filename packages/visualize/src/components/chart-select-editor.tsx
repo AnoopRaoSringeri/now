@@ -12,7 +12,7 @@ export const ChartSelect = function ChartSelect({
 }) {
     return (
         <Select onValueChange={onChange} value={value}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select..." />
             </SelectTrigger>
             <SelectContent>

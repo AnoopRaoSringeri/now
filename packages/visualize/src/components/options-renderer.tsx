@@ -10,23 +10,24 @@ import { MultiColumnSelectEditor } from "../editors/multi-column-select-editor";
 import { ColumnSelectEditor } from "../editors/column-select-editor";
 import { observer } from "mobx-react";
 import { Label } from "@now/ui";
+
 export const ChartOptionsRendererWrapper = observer(function ChartOptionsRendererWrapper({ chart }: { chart: Chart }) {
     const { config, options } = chart;
 
     const columnConfig = chart.ColumnConfig;
 
     return (
-        <div className="flex flex-col gap-4">
-            <div>
+        <div className="flex flex-col gap-2 w-full">
+            <div className="w-full">
                 <Label>{formatText("dimension")}</Label>
                 <ChartOptionsRenderer columns={columnConfig} editorValue={config.dimensions.v} option="dimension" />
             </div>
-            <div>
+            <div className="w-full">
                 <Label>{formatText("measure")}</Label>
                 <ChartOptionsRenderer columns={columnConfig} editorValue={config.measures.v} option="measure" />
             </div>
             {Object.keys(options).map((key) => (
-                <div key={key}>
+                <div key={key} className="w-full">
                     <Label>{formatText(key)}</Label>
                     <ChartOptionsRenderer option={key} editorValue={options[key]} columns={columnConfig} />
                 </div>

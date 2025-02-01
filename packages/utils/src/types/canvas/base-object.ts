@@ -13,7 +13,7 @@ export class BaseObject {
         throw new Error("Method not implemented.");
     }
     readonly Board: CanvasBoard;
-    private _isSelected = false;
+    isSelected = false;
     private _showSelection = false;
     private _isDragging = false;
     object: CanvasObject;
@@ -26,7 +26,8 @@ export class BaseObject {
         makeObservable(this, {
             object: observable,
             Cords: computed,
-            isLocked: observable
+            isLocked: observable,
+            isSelected: observable
         });
     }
     private tmpX = 0;
@@ -38,11 +39,13 @@ export class BaseObject {
     order = 0;
 
     get IsSelected() {
-        return this._isSelected;
+        return this.isSelected;
     }
 
     set IsSelected(value: boolean) {
-        this._isSelected = value;
+        runInAction(() => {
+            this.isSelected = value;
+        });
     }
 
     get IsDragging() {

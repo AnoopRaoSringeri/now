@@ -77,7 +77,9 @@ const ElementSelector = observer(function ElementSelector({ onChange }: { onChan
 
     return (
         <div className="absolute top-5 z-[10] flex flex-col items-center gap-1">
-            {selectedOption ? <Label className="text-xs ">{selectedOption.description}</Label> : null}
+            <div className="-mt-[20px] h-4 flex items-center justify-center">
+                {selectedOption ? <Label className="text-xs">{selectedOption.description}</Label> : null}
+            </div>
             <div className=" flex flex-row items-center gap-1">
                 <Button
                     size="sm"

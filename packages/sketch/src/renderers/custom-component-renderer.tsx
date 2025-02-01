@@ -28,7 +28,7 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
     id: string;
     board: CanvasBoard;
 }) {
-    const { component } = board.getComponent(id);
+    const component = board.getComponent(id);
     const { x = 0, y = 0, h = 0, w = 0 } = component.Cords;
     const transform = board.Transform;
     const { ax, ay } = CanvasHelper.getAbsolutePosition({ x, y }, transform);
@@ -52,10 +52,17 @@ const CustomComponentRendererWrapper = observer(function CustomComponentRenderer
         board.removeElement(id);
     };
 
+    function copyElement() {
+        board.copyElement(id);
+    }
+
     return (
         <div style={style}>
-            {board.ReadOnly ? null : (
+            {board.ReadOnly || !component.IsSelected ? null : (
                 <div style={{ zoom: transform.scaleX }} className="absolute top-[-40px] right-0 z-[6] flex">
+                    <Button onClick={copyElement} size="icon" variant="ghost">
+                        <Icon name="Copy" />
+                    </Button>
                     <Button
                         onClick={() => {
                             component.IsLocked = !component.IsLocked;

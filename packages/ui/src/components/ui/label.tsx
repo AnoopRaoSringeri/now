@@ -3,7 +3,16 @@ import * as LabelPrimitive from "@radix-ui/react-label";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@now/utils";
 
-const labelVariants = cva("text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70");
+const labelVariants = cva(
+    "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 w-full overflow-hidden text-ellipsis",
+    {
+        variants: {
+            varient: {
+                small: "font-normal text-sm leading-tight"
+            }
+        }
+    }
+);
 
 const Label = React.forwardRef<
     React.ElementRef<typeof LabelPrimitive.Root>,

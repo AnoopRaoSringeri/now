@@ -20,11 +20,12 @@ export const MultiColumnSelectEditor = observer(function MultiColumnSelectEditor
 
     return (
         <MultiSelect
+            className="w-full"
             options={columns.map((c) => ({ label: c.name, value: c.name }))}
             onValueChange={handleChange}
             defaultValue={value.v.map((v) => v.name)}
             placeholder="Select column"
-            variant="inverted"
+            variant="none"
             maxCount={3}
         />
     );

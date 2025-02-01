@@ -30,6 +30,8 @@ export * from "./components/ui/badge";
 export * from "./components/ui/switch";
 export * from "./components/ui/radio-group";
 export * from "./components/ui/collapsible";
+export * from "./components/ui/drawer";
+export * from "./components/table";
 
 export * from "./components/multi-select";
 
