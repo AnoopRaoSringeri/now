@@ -6,6 +6,7 @@ import { PieChart, PieChartConfig } from "./charts/pie-class";
 import { TableChart, TableChartConfig } from "./charts/table-class";
 import { ChartConfigMetadata, ChartType, ColumnConfig } from "./types";
 import { AreaChart, AreaChartConfig } from "./charts/area-class";
+import { RadarChartConfig } from "./charts/radar-class";
 
 export class ChartFactory {
     static createChart(type: ChartType, columnConfig: ColumnConfig[]) {
@@ -193,6 +194,8 @@ export class ChartFactory {
                 return { type: "Area", config: chart.Config as AreaChartConfig };
             case "Pie":
                 return { type: "Pie", config: chart.Config as PieChartConfig };
+            case "Radar":
+                return { type: "Radar", config: chart.Config as RadarChartConfig };
             default:
                 return { type: "Table", config: chart.Config as TableChartConfig };
         }

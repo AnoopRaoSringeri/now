@@ -1,6 +1,6 @@
 import { AppLoader } from "@now/ui";
 import { Chart, useDataLoader, ChartNow, ChartFactory } from "@now/utils";
-import { BarChartNow, PieChartNow, CutomTable, LineChartNow, AreaChartNow } from "@now/visualize";
+import { BarChartNow, PieChartNow, CutomTable, LineChartNow, AreaChartNow, RadarChartNow } from "@now/visualize";
 import { observer } from "mobx-react";
 
 export const ChartsRenderer = observer(function ChartsRenderer({ component }: { component: ChartNow }) {
@@ -34,6 +34,8 @@ const ChartRenderer = observer(function ChartRenderer({ chart }: { chart: Chart 
             return <AreaChartNow chart={chart} />;
         case "Pie":
             return <PieChartNow chart={chart} />;
+        case "Radar":
+            return <RadarChartNow chart={chart} />;
         default:
             return <CutomTable chart={chart} />;
     }

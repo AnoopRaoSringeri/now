@@ -26,6 +26,7 @@ export * from "./types/visualize/chart-types";
 export * from "./types/visualize/charts/bar-class";
 export * from "./types/visualize/charts/pie-class";
 export * from "./types/visualize/charts/line-class";
+export * from "./types/visualize/charts/radar-class";
 export * from "./types/visualize/charts/area-class";
 export * from "./types/visualize/charts/table-class";
 

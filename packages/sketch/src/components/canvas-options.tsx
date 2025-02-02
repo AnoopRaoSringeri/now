@@ -21,8 +21,12 @@ import { QueryKeys, useStore } from "@now/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataUploader, DataUploaderHandle } from "../mini-components/data-uploader";
 import { SourceViewer, SourceViewerHandle } from "../mini-components/source-viewer";
+import { useScreenshot } from "use-react-screenshot";
 
 const CanvasOptions = observer(function CanvasOptions() {
+    const [, takeScreenshot] = useScreenshot({
+        quality: 1.0
+    });
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { canvasBoard } = useCanvas(id ?? "new");
@@ -31,10 +35,10 @@ const CanvasOptions = observer(function CanvasOptions() {
     const { toast } = useToast();
 
     const saveBoard = async () => {
+        const image = await saveImage();
         const sketchName = canvasBoard.UiStateManager.BoardName;
-        console.log(canvasBoard.Canvas.toDataURL());
         if (id && id !== "new") {
-            await sketchStore.UpdateSketch(id, canvasBoard.toJSON(), sketchName, canvasBoard.Canvas.toDataURL());
+            await sketchStore.UpdateSketch(id, canvasBoard.toJSON(), sketchName, image);
             toast({ variant: "default", description: "Sketch saved successfully" });
         } else {
             const response = await sketchStore.SaveSketch(
@@ -67,6 +71,14 @@ const CanvasOptions = observer(function CanvasOptions() {
 
     const onExpand = () => {
         canvasBoard.UiStateManager.toggleFullScreen();
+    };
+
+    const saveImage = (): Promise<string> => {
+        return new Promise((resolve) => {
+            takeScreenshot(canvasBoard.UiStateManager.BoardContainerRef.current).then((image: string) => {
+                resolve(image);
+            });
+        });
     };
 
     return (

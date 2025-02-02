@@ -62,11 +62,7 @@ const Sketch = function Sketch({
         queryFn: async () => {
             return await sketchStore.GetImageData(canvasId);
         },
-        queryKey: [QueryKeys.SketchImageData, canvasId],
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
-        retry: false
+        queryKey: [QueryKeys.SketchImageData, canvasId]
     });
 
     const gotoView = () => {
@@ -105,7 +101,7 @@ const Sketch = function Sketch({
                     </div>
                     <img
                         onClick={onClick}
-                        className=" box-content aspect-square h-[200px] w-[300px] cursor-pointer rounded-sm border-2 border-gray-500/30 object-cover"
+                        className=" box-content aspect-square h-[200px] w-[300px] cursor-pointer rounded-sm border-2 border-gray-500/30"
                         src={data ?? ""}
                         alt=""
                     />
