@@ -127,19 +127,15 @@ export class EventManager {
         } else {
             if (this.Board.ElementType === ElementEnum.Text) {
                 if (!this.Board.Text) {
-                    this.Board.Text = new Text(
-                        uuid(),
+                    this.Board.Text = CanvasObjectFactory.createNewObject(
+                        this.Board.ElementType,
                         {
-                            type: ElementEnum.Text,
-                            value: {
-                                x: offsetX,
-                                y: offsetY,
-                                value: ""
-                            }
+                            x: offsetX,
+                            y: offsetY
                         },
                         this.Board
-                    );
-                    this.Board.Text?.create(context);
+                    ) as Text;
+                    this.Board.Text.create(context);
                 }
             } else if (this.Board.ElementType === ElementEnum.Image) {
                 this.Board.Image = new CanvasImage(
@@ -156,7 +152,7 @@ export class EventManager {
                     },
                     this.Board
                 );
-                this.Board.Image?.create(context);
+                this.Board.Image.create(context);
             } else {
                 const newObj = CanvasObjectFactory.createNewObject(
                     this.Board.ElementType,

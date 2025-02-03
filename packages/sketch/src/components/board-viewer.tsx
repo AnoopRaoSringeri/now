@@ -1,18 +1,19 @@
 import { observer } from "mobx-react";
 import { useEffect } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 import { useCanvas } from "../hooks/use-canvas";
-import { AppLoader, useSidebar } from "@now/ui";
+import { AppLoader, Button, useSidebar } from "@now/ui";
 import { QueryKeys, useQueryNow, useStore } from "@now/utils";
-import { useFullscreen, useResizeObserver } from "@mantine/hooks";
+import { useResizeObserver } from "@mantine/hooks";
 import { CustomComponentsRenderer } from "../renderers/custom-component-renderer";
+import { House, Expand } from "lucide-react";
 
 export const BoardViewer = observer(function BoardViewer() {
     const { setOpen } = useSidebar();
-    const { ref } = useFullscreen();
     const [resizer, rect] = useResizeObserver();
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const { canvasBoard, onResize } = useCanvas(id ?? "new");
     const { sketchStore } = useStore();
     const canvas = canvasBoard.CanvasRef;
@@ -52,8 +53,24 @@ export const BoardViewer = observer(function BoardViewer() {
         }
     }, [canvas, canvasBoard, data, id]);
 
+    const goToHome = () => {
+        navigate("/sketch-now");
+    };
+
+    const onExpand = () => {
+        canvasBoard.UiStateManager.toggleFullScreen();
+    };
+
     return (
-        <div ref={ref} className="size-full">
+        <div ref={canvasBoard.UiStateManager.BoardContainerRef} className="size-full">
+            <div className="absolute left-5 top-5 z-[10] gap-1 flex ">
+                <Button size="sm" onClick={goToHome}>
+                    <House size="20px" />
+                </Button>
+                <Button size="sm" onClick={onExpand}>
+                    <Expand size="20px" />
+                </Button>
+            </div>
             <div className="size-full absolute z-0" ref={resizer} />
             <AppLoader loading={sketchLoading} />
             <CustomComponentsRenderer />

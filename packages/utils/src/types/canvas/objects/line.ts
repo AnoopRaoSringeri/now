@@ -31,7 +31,6 @@ export class Line extends BaseObject {
     }
 
     updateValue(ctx: CanvasRenderingContext2D, objectValue: LinePoints, action: MouseAction, clearCanvas = true) {
-        console.log(objectValue);
         const { sx, sy, ex, ey } = objectValue;
         if (action === "down") {
             this.Board.Helper.applyStyles(ctx, this.style);

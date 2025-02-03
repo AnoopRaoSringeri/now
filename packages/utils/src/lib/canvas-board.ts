@@ -261,7 +261,9 @@ export class CanvasBoard implements ICanvas {
     }
 
     set Text(value: Text | null) {
-        this.text = value;
+        runInAction(() => {
+            this.text = value;
+        });
     }
 
     get Image() {
@@ -299,7 +301,7 @@ export class CanvasBoard implements ICanvas {
             if (!context) {
                 return;
             }
-            this.Text.updateValue(context, { ...this.Text.Value, value }, "down");
+            this.Text.updateValue(context, { ...this.Text.Value, value }, "down", false);
             this.PointerOrigin = null;
             this.Elements.push(this.Text);
             this.Text = null;

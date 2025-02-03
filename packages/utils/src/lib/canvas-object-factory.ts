@@ -17,14 +17,24 @@ import { v4 as uuid } from "uuid";
 export class CanvasObjectFactory {
     static createObject(id: string, object: CanvasObject, board: CanvasBoard) {
         switch (object.type) {
-            case ElementEnum.Rectangle:
-                return new Rectangle(id, object, board);
             case ElementEnum.Pencil:
                 return new Pencil(id, object, board);
-            case ElementEnum.Chart:
-                return new ChartNow(id, object, board);
+            case ElementEnum.Square:
+                return new Square(id, object, board);
+            case ElementEnum.Rectangle:
+                return new Rectangle(id, object, board);
+            case ElementEnum.Image:
+                return new CanvasImage(id, object, board);
+            case ElementEnum.Text:
+                return new Text(id, object, board);
+            case ElementEnum.Circle:
+                return new Circle(id, object, board);
+            case ElementEnum.Line:
+                return new Line(id, object, board);
             case ElementEnum.AiPrompt:
                 return new AiPrompt(id, object, board);
+            case ElementEnum.Chart:
+                return new ChartNow(id, object, board);
             default:
                 return new BaseObject(id, object, board);
         }
@@ -88,13 +98,6 @@ export class CanvasObjectFactory {
                 );
             default:
                 throw Error();
-        }
-    }
-
-    static loadObject(id: string, object: CanvasObject, board: CanvasBoard) {
-        switch (object.type) {
-            case ElementEnum.Rectangle:
-                return new Rectangle(id, object, board);
         }
     }
 }

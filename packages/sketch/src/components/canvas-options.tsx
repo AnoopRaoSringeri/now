@@ -139,7 +139,7 @@ const SourceSelector = observer(function SourceSelector() {
                         </CollapsibleTrigger>
                     </div>
                     <CollapsibleContent className="CollapsibleContent">
-                        <div className="flex flex-col space-y-2">
+                        <div className="flex flex-col space-y-2  w-[250px]">
                             {canvasBoard.SourceManager.Sources.map((source) => (
                                 <Badge
                                     key={source.id}
@@ -153,7 +153,7 @@ const SourceSelector = observer(function SourceSelector() {
                                         canvasBoard.SourceManager.SelectedSource = source;
                                     }}
                                 >
-                                    <Label className="flex-1 w-[150px]"> {source.name}</Label>
+                                    <Label className="flex-1 cursor-pointer"> {source.name}</Label>
                                     <Icon
                                         name="Eye"
                                         size="18px"

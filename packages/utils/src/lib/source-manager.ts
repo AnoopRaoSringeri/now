@@ -54,6 +54,9 @@ export class SourceManager {
         runInAction(() => {
             const selectedElement = this.Board.SelectedElements[0];
             if (selectedElement && selectedElement instanceof ChartNow) {
+                if (selectedElement.chart.Source?.id === source?.id) {
+                    return;
+                }
                 selectedElement.chart.Source = source;
                 selectedElement.chart.resetConfig();
             }

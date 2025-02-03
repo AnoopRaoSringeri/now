@@ -84,7 +84,7 @@ const Sketch = function Sketch({
                     <div className="absolute right-0 top-0 gap-2">
                         <Button
                             size="xs"
-                            variant="ghost"
+                            variant="secondary"
                             onClick={() => gotoView()}
                             className="opacity-0  transition duration-300 group-hover:opacity-100"
                         >

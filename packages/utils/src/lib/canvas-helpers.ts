@@ -19,7 +19,7 @@ export const DefaultStyle: IObjectStyle = {
     strokeStyle: "#fff",
     strokeWidth: 1,
     opacity: 100,
-    font: null
+    font: DefaultFont
 };
 
 export const SelectionStyle: IObjectStyle = {

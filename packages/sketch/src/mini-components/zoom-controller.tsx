@@ -22,9 +22,9 @@ export const ZoomController = observer(function ZoomController() {
 
     return (
         <div className="absolute bottom-5 right-5 z-[10]  flex  flex-row items-center gap-1">
-            <Search />
+            <Search size={40} />
             <Label className="p-1 text-lg">{canvasBoard.Zoom.toFixed(2)}%</Label>
-            <Button size="xs" variant="ghost" onClick={zoomIn}>
+            <Button size="xs" variant="simple" onClick={zoomIn}>
                 <Plus size={20} />
             </Button>
             <Button size="xs" variant="simple" onClick={zoomOut}>

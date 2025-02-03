@@ -391,6 +391,10 @@ export class BaseObject {
                 w = w - x;
                 return { x, y, h, w };
             }
+            case ElementEnum.Text: {
+                ({ x, y } = value);
+                return { x, y, h, w };
+            }
             default:
                 return { x, y, h, w };
         }
