@@ -19,8 +19,6 @@ export class Text extends BaseObject {
         this.Board.Helper.applyStyles(ctx, this.style);
         const texts = this.Value.value.split("\n");
         texts.forEach((text, i) => {
-            const metrics = ctx.measureText(text);
-            console.log(text, metrics);
             ctx.fillText(text, x, y + i * Number(this.style.font?.size ?? 1));
         });
         ctx.restore();
