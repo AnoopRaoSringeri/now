@@ -36,7 +36,7 @@ export class CanvasBoard implements ICanvas {
     _isElementSelectorLocked = true;
     _currentCanvasAction: CanvasActionEnum = CanvasActionEnum.Select;
     _zoom = 100;
-    _style: IObjectStyle = DefaultStyle;
+    _style: IObjectStyle = DefaultStyle();
     _selectedElements: BaseObject[] = [];
     _canvasTransform: ICanvasTransform = CanvasHelper.GetDefaultTransForm();
 

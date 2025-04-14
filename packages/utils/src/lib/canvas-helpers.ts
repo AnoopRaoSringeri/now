@@ -5,22 +5,22 @@ import { ICanvasTransform, ICanvas, CursorPosition } from "../types/sketch-now/c
 import { ElementEnum } from "../types/sketch-now/enums";
 import { Font, IObjectStyle } from "../types/sketch-now/object-styles";
 
-export const DefaultFont: Font = {
+export const DefaultFont = (): Font => ({
     color: "white",
     style: "normal",
     varient: "normal",
     weight: 200,
     size: 30,
     family: "Arial"
-};
+});
 
-export const DefaultStyle: IObjectStyle = {
+export const DefaultStyle = (): IObjectStyle => ({
     fillColor: "transparent",
     strokeStyle: "#fff",
     strokeWidth: 1,
     opacity: 100,
-    font: DefaultFont
-};
+    font: DefaultFont()
+});
 
 export const SelectionStyle: IObjectStyle = {
     fillColor: "#ccffff10",

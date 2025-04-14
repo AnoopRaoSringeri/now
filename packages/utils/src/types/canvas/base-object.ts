@@ -35,7 +35,7 @@ export class BaseObject {
     private tmpH = 0;
     private tmpW = 0;
     id = uuid();
-    style = DefaultStyle;
+    style = DefaultStyle();
     order = 0;
 
     get IsSelected() {
