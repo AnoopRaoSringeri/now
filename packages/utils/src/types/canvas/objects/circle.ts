@@ -12,8 +12,8 @@ export class Circle extends BaseObject {
     sa = 0;
     ro = 0;
     ea = 2 * Math.PI;
-    constructor(id: string, object: CircleObject, board: CanvasBoard) {
-        super(id, object, board);
+    constructor(id: string, object: CircleObject, board: CanvasBoard, style: IObjectStyle) {
+        super(id, object, board, style);
         this.object = object;
     }
 

@@ -10,8 +10,8 @@ import {
     CollapsibleTrigger,
     Icon,
     Input,
-    Label,
-    useToast
+    Label
+    // useToast
 } from "@now/ui";
 import { Expand, House, Save } from "lucide-react";
 import { useCanvas } from "../hooks/use-canvas";
@@ -22,6 +22,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataUploader, DataUploaderHandle } from "../mini-components/data-uploader";
 import { SourceViewer, SourceViewerHandle } from "../mini-components/source-viewer";
 import { useScreenshot } from "use-react-screenshot";
+import { toast } from "sonner";
 
 const CanvasOptions = observer(function CanvasOptions() {
     const [, takeScreenshot] = useScreenshot({
@@ -32,14 +33,15 @@ const CanvasOptions = observer(function CanvasOptions() {
     const { canvasBoard } = useCanvas(id ?? "new");
     const queryClient = useQueryClient();
     const { sketchStore } = useStore();
-    const { toast } = useToast();
+    // const { toast } = useToast();
 
     const saveBoard = async () => {
         const image = await saveImage();
         const sketchName = canvasBoard.UiStateManager.BoardName;
         if (id && id !== "new") {
             await sketchStore.UpdateSketch(id, canvasBoard.toJSON(), sketchName, image);
-            toast({ variant: "default", description: "Sketch saved successfully" });
+            toast.success("Sketch saved successfully");
+            // toast({ variant: "default", description: "Sketch saved successfully" });
         } else {
             const response = await sketchStore.SaveSketch(
                 canvasBoard.toJSON(),
@@ -47,7 +49,8 @@ const CanvasOptions = observer(function CanvasOptions() {
                 canvasBoard.Canvas.toDataURL()
             );
             if (response) {
-                toast({ variant: "default", description: "Sketch updated successfully" });
+                toast.success("Sketch updated successfully");
+                // toast({ variant: "default", description: "Sketch updated successfully" });
                 navigate(`/sketch-now/sketch/${response._id}`);
             }
         }

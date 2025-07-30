@@ -5,6 +5,7 @@ import getStroke, { StrokeOptions } from "perfect-freehand";
 import { CursorPosition, MouseAction } from "../../sketch-now/custom-canvas";
 import { runInAction, toJS } from "mobx";
 import { Delta, Position } from "../../sketch-now/canvas";
+import { IObjectStyle } from "../../sketch-now/object-styles";
 
 const options: StrokeOptions = {
     smoothing: 0.01,
@@ -45,8 +46,8 @@ function getSvgPathFromStroke(points: number[][], closed = true) {
 export class Pencil extends BaseObject {
     private tmpPoints: [number, number][] = [];
     object: PencilObject;
-    constructor(id: string, object: PencilObject, board: CanvasBoard) {
-        super(id, object, board);
+    constructor(id: string, object: PencilObject, board: CanvasBoard, style: IObjectStyle) {
+        super(id, object, board, style);
         this.object = object;
     }
 

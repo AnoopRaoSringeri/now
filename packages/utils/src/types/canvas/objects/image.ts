@@ -4,12 +4,13 @@ import { CanvasBoard } from "../../../lib/canvas-board";
 import { CanvasHelper } from "../../../lib/canvas-helpers";
 import { Delta, Position } from "../../sketch-now/canvas";
 import { CursorPosition, MouseAction } from "../../sketch-now/custom-canvas";
+import { IObjectStyle } from "../../sketch-now/object-styles";
 
 export class CanvasImage extends BaseObject {
     object: ImageObject;
     image = new Image();
-    constructor(id: string, object: ImageObject, board: CanvasBoard) {
-        super(id, object, board);
+    constructor(id: string, object: ImageObject, board: CanvasBoard, style: IObjectStyle) {
+        super(id, object, board, style);
         this.object = object;
     }
 

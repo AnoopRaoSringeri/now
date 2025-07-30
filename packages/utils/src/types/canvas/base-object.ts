@@ -2,7 +2,7 @@ import { v4 as uuid } from "uuid";
 import { computed, makeObservable, observable, runInAction, toJS } from "mobx";
 import { CanvasBoard } from "../../lib/canvas-board";
 import { CanvasHelper, DefaultStyle } from "../../lib/canvas-helpers";
-import { Position, Delta, AbsPosition, Size } from "../sketch-now/canvas";
+import { Position, Delta, AbsPosition, Size, CanvasElement } from "../sketch-now/canvas";
 import { MouseAction, CursorPosition } from "../sketch-now/custom-canvas";
 import { IObjectStyle } from "../sketch-now/object-styles";
 import { CanvasObject, XYHW } from "./types";
@@ -18,9 +18,9 @@ export class BaseObject {
     private _isDragging = false;
     object: CanvasObject;
     isLocked = false;
-    constructor(id: string, objectValue: CanvasObject, board: CanvasBoard) {
+    constructor(id: string, objectValue: CanvasObject, board: CanvasBoard, style: IObjectStyle) {
         this.object = objectValue;
-        this.style = board.Style;
+        this.style = style;
         this.Board = board;
         this.id = id;
         makeObservable(this, {
@@ -399,7 +399,7 @@ export class BaseObject {
                 return { x, y, h, w };
         }
     }
-    toJSON(): CanvasObject & { id: string } {
-        return { ...this.object, id: this.id };
+    toJSON(): CanvasElement {
+        return { ...this.object, id: this.id, style: this.Style };
     }
 }

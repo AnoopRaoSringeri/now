@@ -17,7 +17,7 @@ import { observer } from "mobx-react";
 import { useEffect, useState } from "react";
 import { AiGenerator } from "@now/visualize";
 import { Loader } from "lucide-react";
-import { AiPrompt } from "@now/utils";
+import { AiPrompt, isValidJson } from "@now/utils";
 import { useDisclosure } from "@mantine/hooks";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 
@@ -39,7 +39,7 @@ export const AiPromptRenderer = observer(function AiPromptRenderer({ component }
                 const response = await ollama.generate({
                     model: "gemma2:2b",
                     prompt: component.Prompt ?? "",
-                    format: json
+                    format: JSON.parse(json)
                 });
                 updateResult(response.response);
             } else {
@@ -54,7 +54,7 @@ export const AiPromptRenderer = observer(function AiPromptRenderer({ component }
                     updateResult(lines.join(""));
                 }
             }
-        } catch (e) {
+        } catch {
             setLoading(false);
         }
     }
@@ -100,6 +100,8 @@ export const JsonInput = observer(function JsonInput({
         setJsonContent(json);
     }, [json]);
 
+    const isValid = isValidJson(jsonContent);
+
     return (
         <Dialog onOpenChange={toggle} open={opened}>
             <DialogTrigger size="icon" variant="ghost" onClick={open}>
@@ -110,7 +112,7 @@ export const JsonInput = observer(function JsonInput({
                     <DialogTitle>Add the JSON format</DialogTitle>
                     <DialogDescription />
                 </DialogHeader>
-                <div className="h-40 relative flex items-center justify-center">
+                <div className="h-40 overflow-auto">
                     <CodeEditor
                         value={jsonContent}
                         language="json"
@@ -118,16 +120,16 @@ export const JsonInput = observer(function JsonInput({
                         onChange={(evn) => setJsonContent(evn.target.value)}
                         padding={15}
                         indentWidth={4}
+                        minHeight={160}
                         style={{
-                            overflow: "auto",
                             width: "100%",
-                            height: "100%",
                             fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace"
                         }}
                     />
                 </div>
                 <DialogFooter>
                     <Button
+                        disabled={!isValid}
                         onClick={() => {
                             console.log(jsonContent);
                             onChange(jsonContent);

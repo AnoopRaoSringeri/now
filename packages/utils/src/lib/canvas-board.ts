@@ -117,6 +117,7 @@ export class CanvasBoard implements ICanvas {
     set ElementType(type: ElementEnum) {
         if (type !== this._elementType) {
             this.Text = null;
+            this._style = DefaultStyle(type === ElementEnum.Text);
             this._elementType = type;
             this._activeObjects = [];
             this.unSelectElements();
@@ -357,7 +358,7 @@ export class CanvasBoard implements ICanvas {
         this.Transform = metadata.transform;
         this.Zoom = metadata.transform.scaleX * CANVAS_SCALING_MULTIPLIER;
         const objArray = metadata.elements.map((ele) => {
-            return CanvasObjectFactory.createObject(ele.id, ele, this);
+            return CanvasObjectFactory.createObject(ele.id, ele, this, ele.style);
         });
         this.Elements = objArray;
         this.SourceManager.Sources = metadata.sources;
@@ -456,7 +457,12 @@ export class CanvasBoard implements ICanvas {
             }
             const elementToCopy = this.Elements.find((e) => e.id === id);
             if (elementToCopy) {
-                const copyElement = CanvasObjectFactory.createObject(uuid(), elementToCopy.getValues(), this);
+                const copyElement = CanvasObjectFactory.createObject(
+                    uuid(),
+                    elementToCopy.getValues(),
+                    this,
+                    this.Style
+                );
                 copyElement.move(context, { x: 0, y: 0 }, "down", false);
                 copyElement.move(context, { x: 40, y: 40 }, "up", false);
                 context.closePath();
@@ -482,7 +488,7 @@ export class CanvasBoard implements ICanvas {
         this.Helper.clearCanvasArea(context);
         const copiedItems: BaseObject[] = [];
         elementsToCopy.forEach((ele, i) => {
-            const copyElement = CanvasObjectFactory.createObject(uuid(), ele.getValues(), this);
+            const copyElement = CanvasObjectFactory.createObject(uuid(), ele.getValues(), this, this.Style);
             copyElement.move(context, { x: 0, y: 0 }, "down", false);
             copyElement.move(context, { x: 40, y: 40 }, "up", false);
             copiedItems.push(copyElement);

@@ -14,12 +14,12 @@ export const DefaultFont = (): Font => ({
     family: "Arial"
 });
 
-export const DefaultStyle = (): IObjectStyle => ({
+export const DefaultStyle = (withFont?: boolean): IObjectStyle => ({
     fillColor: "transparent",
     strokeStyle: "#fff",
     strokeWidth: 1,
     opacity: 100,
-    font: DefaultFont()
+    font: withFont ? DefaultFont() : null
 });
 
 export const SelectionStyle: IObjectStyle = {

@@ -1,6 +1,7 @@
 import { CanvasObject } from "../canvas/types";
 import { ChartSource } from "../visualize/source";
 import { ICanvasTransform } from "./custom-canvas";
+import { IObjectStyle } from "./object-styles";
 
 export interface Position {
     x: number;
@@ -44,8 +45,10 @@ export type SavedCanvas = {
     dataUrl?: string;
 };
 
+export type CanvasElement = CanvasObject & { id: string; style: IObjectStyle };
+
 export interface CanvasMetadata {
-    elements: (CanvasObject & { id: string })[];
+    elements: CanvasElement[];
     size: Size;
     transform: ICanvasTransform;
     sources: ChartSource[];

@@ -10,7 +10,8 @@ export default defineConfig({
     cacheDir: "../../node_modules/.vite/apps/now",
     server: {
         port: 4200,
-        host: "0.0.0.0"
+        host: "0.0.0.0",
+         allowedHosts: true
     },
     preview: {
         port: 4300,
