@@ -26,7 +26,7 @@ export type XY = {
     y: number;
 };
 
-export type TextValue = XY & { value: string };
+export type TextValue = XYHW & { value: string };
 
 export type PointsArray = {
     points: [number, number][];

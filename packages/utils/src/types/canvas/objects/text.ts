@@ -22,6 +22,12 @@ export class Text extends BaseObject {
         texts.forEach((text, i) => {
             ctx.fillText(text, x, y + i * Number(this.style.font?.size ?? 1));
         });
+        const metrics = ctx.measureText(this.Value.value);
+        this.Value.w = metrics.width;
+        this.Value.h = (metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent) * texts.length;
+        if (this.IsSelected) {
+            this.select(this.Value);
+        }
         ctx.restore();
     }
 

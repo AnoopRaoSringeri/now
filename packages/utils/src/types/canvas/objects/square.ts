@@ -14,19 +14,19 @@ export class Square extends BaseObject {
         return this.object.value;
     }
 
+    create(ctx: CanvasRenderingContext2D) {
+        const { x, y, h } = this.Value;
+        this.Board.Helper.applyStyles(ctx, this.style);
+        ctx.strokeRect(x, y, h, h);
+        ctx.fillRect(x, y, h, h);
+    }
+
     draw(ctx: CanvasRenderingContext2D) {
         this.create(ctx);
         if (this.IsSelected) {
             this.select({});
         }
         ctx.restore();
-    }
-
-    create(ctx: CanvasRenderingContext2D) {
-        const { x, y, h } = this.Value;
-        this.Board.Helper.applyStyles(ctx, this.style);
-        ctx.strokeRect(x, y, h, h);
-        ctx.fillRect(x, y, h, h);
     }
 
     getValues(): SquareObject {

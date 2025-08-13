@@ -22,6 +22,7 @@ export class CanvasBoard implements ICanvas {
     private _canvasCopy: React.RefObject<HTMLCanvasElement>;
     _elements: BaseObject[] = [];
     private _pointerOrigin: Position | null = null;
+    private _currentPointer: Position = { x: 0, y: 0 };
     private _readOnly = false;
     private _cursorPosition: CursorPosition | null = null;
 
@@ -229,6 +230,14 @@ export class CanvasBoard implements ICanvas {
         this._pointerOrigin = origin;
     }
 
+    get CurrentPointer() {
+        return this._currentPointer;
+    }
+
+    set CurrentPointer(position: Position) {
+        this._currentPointer = position;
+    }
+
     get CursorPosition() {
         return this._cursorPosition;
     }
@@ -306,6 +315,8 @@ export class CanvasBoard implements ICanvas {
             this.PointerOrigin = null;
             this.Elements.push(this.Text);
             this.Text = null;
+            this.HoveredObject = null;
+            this.CursorPosition = null;
             this.redrawBoard();
         });
     }

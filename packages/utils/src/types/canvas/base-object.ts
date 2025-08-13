@@ -102,6 +102,9 @@ export class BaseObject {
         action: MouseAction,
         clearCanvas = true
     ) {
+        if (!this.Board.PointerOrigin) {
+            return;
+        }
         this.object.value = objectValue;
         switch (this.object.type) {
             case ElementEnum.AiPrompt:
@@ -123,6 +126,31 @@ export class BaseObject {
                 }
                 ctx.strokeRect(x, y, w, h);
                 ctx.fillRect(x, y, w, h);
+                ctx.restore();
+                break;
+            }
+            case ElementEnum.Square: {
+                let { x, y } = this.object.value;
+                const h = this.object.value.h;
+                const w = this.Board.CurrentPointer.x - this.Board.PointerOrigin.x;
+                this.Board.Helper.applyStyles(ctx, this.style);
+                if (clearCanvas) {
+                    this.Board.Helper.clearCanvasArea(ctx);
+                }
+                const ah = Math.min(Math.abs(w), Math.abs(h));
+                if (h < 0 && w < 0) {
+                    x = this.Board.PointerOrigin.x - ah;
+                    y = this.Board.PointerOrigin.y - ah;
+                } else if (h < 0) {
+                    y = this.Board.PointerOrigin.y - ah;
+                } else if (w < 0) {
+                    x = this.Board.PointerOrigin.x - ah;
+                }
+                if (action === "up") {
+                    this.object.value = { h: ah, x, y };
+                }
+                ctx.strokeRect(x, y, ah, ah);
+                ctx.fillRect(x, y, ah, ah);
                 ctx.restore();
             }
         }
@@ -157,6 +185,32 @@ export class BaseObject {
                         this.tmpY = 0;
                         this.IsDragging = false;
                     }
+                    break;
+                }
+                case ElementEnum.Square: {
+                    const { x, y } = position;
+                    this.Board.Helper.applyStyles(ctx, this.style);
+                    if (clearCanvas) {
+                        this.Board.Helper.clearCanvasArea(ctx);
+                    }
+                    if (action === "down") {
+                        this.tmpX = this.object.value.x;
+                        this.tmpY = this.object.value.y;
+                    }
+                    this.IsDragging = true;
+                    const offsetX = x + this.tmpX;
+                    const offsetY = y + this.tmpY;
+                    ctx.strokeRect(offsetX, offsetY, this.object.value.h, this.object.value.h);
+                    ctx.fillRect(offsetX, offsetY, this.object.value.h, this.object.value.h);
+                    this.select({ x: offsetX, y: offsetY });
+                    ctx.restore();
+                    this.object.value.x = offsetX;
+                    this.object.value.y = offsetY;
+                    if (action === "up") {
+                        this.tmpX = 0;
+                        this.tmpY = 0;
+                        this.IsDragging = false;
+                    }
                 }
             }
         });
@@ -164,6 +218,9 @@ export class BaseObject {
 
     resize(ctx: CanvasRenderingContext2D, delta: Delta, cPos: CursorPosition, action: MouseAction, clearCanvas = true) {
         return runInAction(() => {
+            if (!this.Board.PointerOrigin) {
+                return;
+            }
             const { dx, dy } = delta;
             this.Board.Helper.applyStyles(ctx, this.style);
             if (clearCanvas) {
@@ -280,6 +337,107 @@ export class BaseObject {
                     }
                     return { x, y, h, w };
                 }
+                case ElementEnum.Square: {
+                    if (action === "down") {
+                        this.tmpX = this.object.value.x;
+                        this.tmpY = this.object.value.y;
+                        this.tmpH = this.object.value.h;
+                    }
+                    let y = this.tmpY;
+                    let x = this.tmpX;
+                    switch (cPos) {
+                        case "tl":
+                            x = x + w;
+                            y = y + h;
+                            if (h < 0) {
+                                h = Math.abs(Math.abs(h) + this.tmpH);
+                            } else {
+                                h = Math.abs(this.tmpH - Math.abs(h));
+                            }
+                            if (w < 0) {
+                                w = Math.abs(Math.abs(w) + this.tmpH);
+                            } else {
+                                w = Math.abs(this.tmpH - Math.abs(w));
+                            }
+                            break;
+                        case "tr":
+                            y = y + h;
+                            if (h < 0) {
+                                h = Math.abs(this.tmpH + Math.abs(h));
+                            } else {
+                                h = Math.abs(Math.abs(h) - this.tmpH);
+                            }
+                            if (w < 0) {
+                                w = this.tmpH + w;
+                            } else {
+                                w = Math.abs(this.tmpH + Math.abs(w));
+                            }
+                            break;
+                        case "bl":
+                            x = x + w;
+                            if (h < 0) {
+                                h = this.tmpH - Math.abs(h);
+                            } else {
+                                h = Math.abs(Math.abs(h) + this.tmpH);
+                            }
+                            if (w < 0) {
+                                w = Math.abs(this.tmpH + Math.abs(w));
+                            } else {
+                                w = Math.abs(this.tmpH - Math.abs(w));
+                            }
+                            break;
+                        case "br":
+                            if (h < 0) {
+                                h = h + this.tmpH;
+                            } else {
+                                h = Math.abs(this.tmpH + Math.abs(h));
+                            }
+                            if (w < 0) {
+                                w = this.tmpH + w;
+                            } else {
+                                w = Math.abs(this.tmpH + Math.abs(w));
+                            }
+                            break;
+                        case "t":
+                            break;
+                        case "b":
+                            break;
+                        case "l":
+                            break;
+                        case "r":
+                            break;
+                    }
+                    if (x >= this.tmpX + this.tmpH) {
+                        x = this.tmpX + this.tmpH;
+                    }
+                    if (y >= this.tmpY + this.tmpH) {
+                        y = this.tmpY + this.tmpH;
+                    }
+                    if (h < 0) {
+                        y = y + h;
+                        h = Math.abs(h);
+                    }
+                    if (w < 0) {
+                        x = x + w;
+                        w = Math.abs(w);
+                    }
+                    const side = Math.min(w, h);
+                    ctx.strokeRect(x, y, side, side);
+                    ctx.fillRect(x, y, side, side);
+                    ctx.restore();
+                    this.select({ h: side, w: side, x, y });
+                    this.object.value.h = side;
+                    this.object.value.x = x;
+                    this.object.value.y = y;
+                    if (action === "up") {
+                        this.tmpX = 0;
+                        this.tmpY = 0;
+                        this.tmpH = 0;
+                        this.tmpW = 0;
+                        this.IsDragging = false;
+                    }
+                    return { x, y, h: side, w: side };
+                }
                 default:
                     return { x: 0, y: 0, h, w };
             }
@@ -291,6 +449,7 @@ export class BaseObject {
             case ElementEnum.AiPrompt:
             case ElementEnum.Chart:
             case ElementEnum.Image:
+            case ElementEnum.Square:
             case ElementEnum.Rectangle: {
                 this.Board.Helper.applyStyles(ctx, this.style);
                 if (this.IsSelected) {

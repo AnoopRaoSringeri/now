@@ -10,7 +10,11 @@ export const TextEditorWrapper = observer(function TextEditorWrapper() {
     const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
     useEffect(() => {
-        inputRef.current?.focus();
+        if (inputRef.current) {
+            inputRef.current.focus();
+            inputRef.current.value = canvasBoard.Text?.Value.value ?? "";
+            autoResize();
+        }
     }, [canvasBoard.Text != null]);
 
     useEffect(() => {
@@ -42,7 +46,7 @@ export const TextEditorWrapper = observer(function TextEditorWrapper() {
 
     const { ax, ay } = CanvasHelper.getAbsolutePosition({ x, y }, canvasBoard.Transform);
     const { font, ...rest } = canvasBoard.Text.Style;
-    const dFont = font ?? DefaultFont;
+    const dFont = font ?? DefaultFont();
 
     return (
         <div className="absolute z-[5] flex size-full overflow-hidden bg-transparent">
@@ -51,10 +55,9 @@ export const TextEditorWrapper = observer(function TextEditorWrapper() {
                 id="canvas-text"
                 className="absolute  m-0 block resize-none overflow-hidden whitespace-pre border-none bg-transparent p-0 outline-none focus:border-none focus:ring-0 focus:ring-offset-0 focus-visible:border-none focus-visible:ring-0 focus-visible:ring-offset-0 "
                 style={{
-                    top: ay - Number(canvasBoard.Transform.scaleX * Number(dFont.size)) * 0.14,
+                    top: ay - 2,
                     left: ax,
-                    ...CanvasHelper.getFontStyle(dFont),
-                    fontSize: canvasBoard.Transform.scaleX * Number(dFont.size),
+                    ...CanvasHelper.getFontStyle(dFont, canvasBoard.Transform.scaleX),
                     ...rest
                 }}
                 onBlur={(e) => onBlur(e.target.value)}

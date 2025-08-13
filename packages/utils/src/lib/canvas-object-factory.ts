@@ -62,7 +62,12 @@ export class CanvasObjectFactory {
                     board.Style
                 );
             case ElementEnum.Text:
-                return new Text(uuid(), { type: type, value: { ...position, value: "" } }, board, board.Style);
+                return new Text(
+                    uuid(),
+                    { type: type, value: { ...position, value: "", h: Number(board.Style.font?.size ?? 0), w: 0 } },
+                    board,
+                    board.Style
+                );
             case ElementEnum.Circle:
                 return new Circle(uuid(), { type: type, value: { ...position, h: 0, w: 0 } }, board, board.Style);
             case ElementEnum.Line:

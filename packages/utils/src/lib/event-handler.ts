@@ -52,8 +52,12 @@ export class EventManager {
                         (e) => CanvasHelper.isCustomElement(e) || e.id !== this.Board.HoveredObject!.id
                     );
                     this.Board.redrawBoard();
-                    this.Board.ActiveObjects = [this.Board.HoveredObject];
-                    this.Board.SelectedElements = [this.Board.HoveredObject];
+                    if (this.Board.HoveredObject instanceof Text) {
+                        this.Board.Text = this.Board.HoveredObject;
+                    } else {
+                        this.Board.ActiveObjects = [this.Board.HoveredObject];
+                        this.Board.SelectedElements = [this.Board.HoveredObject];
+                    }
                     if (this.Board._currentCanvasAction === CanvasActionEnum.Resize && this.Board.CursorPosition) {
                         this.Board.ActiveObjects.forEach((ao) => {
                             ao.resize(context, { dx: 0, dy: 0 }, this.Board.CursorPosition!, "down");
@@ -117,7 +121,8 @@ export class EventManager {
                                     w: 0
                                 }
                             },
-                            this.Board
+                            this.Board,
+                            this.Board.Style
                         );
                         this.Board.TempSelectionArea.Style = SelectionStyle;
                         this.Board.TempSelectionArea?.create(context);
@@ -150,7 +155,8 @@ export class EventManager {
                             value: ""
                         }
                     },
-                    this.Board
+                    this.Board,
+                    this.Board.Style
                 );
                 this.Board.Image.create(context);
             } else {
@@ -177,6 +183,10 @@ export class EventManager {
             return;
         }
         const { offsetX, offsetY } = CanvasHelper.getCurrentMousePosition(e, this.Board.Transform);
+        this.Board.CurrentPointer = {
+            x: offsetX,
+            y: offsetY
+        };
         if (this.Board.PointerOrigin) {
             const { x, y } = this.Board.PointerOrigin;
             if (this.Board._currentCanvasAction === CanvasActionEnum.Pan) {
@@ -518,6 +528,7 @@ export class EventManager {
             this.Board.redrawBoard();
             this.Board._currentCanvasAction = CanvasActionEnum.Select;
             this.Board.TempSelectionArea = null;
+            // this.Board.Text = null;
         }
     }
 

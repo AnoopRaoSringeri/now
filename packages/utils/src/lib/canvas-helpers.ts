@@ -1,3 +1,4 @@
+import { CSSProperties } from "react";
 import { BaseObject } from "../types/canvas/base-object";
 import { CanvasObject } from "../types/canvas/types";
 import { Size, Position } from "../types/sketch-now/canvas";
@@ -81,6 +82,7 @@ export class CanvasHelper {
         switch (type) {
             case ElementEnum.Square:
                 ({ y: cy, x: cx, h } = value);
+                w = h;
                 break;
             case ElementEnum.Rectangle:
             case ElementEnum.Circle:
@@ -180,6 +182,8 @@ export class CanvasHelper {
             case ElementEnum.Pencil:
                 ({ points } = value);
                 break;
+            case ElementEnum.Text:
+                ({ x: cx, y: cy, h, w } = value);
         }
         //TODO: Style
         const wFactor = 0;
@@ -362,26 +366,27 @@ export class CanvasHelper {
         ctx.lineWidth = strokeWidth;
         ctx.globalAlpha = opacity / 100;
         ctx.lineCap = "round";
-        ctx.font = CanvasHelper.getFont(font);
+        ctx.font = CanvasHelper.getFont(font, 1);
         if (font) {
             ctx.fillStyle = font.color;
             ctx.textBaseline = "top";
         }
     }
 
-    static getFont(font: Font | null) {
+    static getFont(font: Font | null, scale: number) {
         if (font) {
             const { size, family, style: fStyle, varient, weight } = font;
-            return `${fStyle} ${varient} ${weight} ${size}px ${family} `;
+            const aSize = (typeof size === "string" ? Number(size.replace("px", "")) : size) * scale;
+            return `${fStyle} ${varient} ${weight} ${aSize}px/${aSize}px ${family} `;
         } else {
             return "";
         }
     }
 
-    static getFontStyle(font: Font | null) {
+    static getFontStyle(font: Font | null, scale: number): CSSProperties {
         if (font) {
             const { color } = font;
-            return { font: this.getFont(font), color: color };
+            return { font: this.getFont(font, scale), color: color };
         } else {
             return {};
         }
@@ -439,6 +444,9 @@ export class CanvasHelper {
     }
 
     static isCustomElement(ele: BaseObject) {
-        return ele.Type === ElementEnum.AiPrompt || ele.Type === ElementEnum.Chart;
+        return (
+            ele.Type === ElementEnum.AiPrompt || ele.Type === ElementEnum.Chart
+            // || (ele.Type === ElementEnum.Text && ele.IsSelected)
+        );
     }
 }
