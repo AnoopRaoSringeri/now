@@ -159,6 +159,31 @@ export class BaseObject {
     move(ctx: CanvasRenderingContext2D, position: Position, action: MouseAction, clearCanvas = true) {
         runInAction(() => {
             switch (this.object.type) {
+                case ElementEnum.Text: {
+                    const { x, y } = position;
+                    this.Board.Helper.applyStyles(ctx, this.style);
+                    if (clearCanvas) {
+                        this.Board.Helper.clearCanvasArea(ctx);
+                    }
+                    if (action === "down") {
+                        this.tmpX = this.object.value.x;
+                        this.tmpY = this.object.value.y;
+                        this.IsSelected = true;
+                    }
+                    this.IsDragging = true;
+                    const offsetX = x + this.tmpX;
+                    const offsetY = y + this.tmpY;
+                    this.object.value.x = offsetX;
+                    this.object.value.y = offsetY;
+                    this.draw(ctx);
+                    ctx.restore();
+                    if (action === "up") {
+                        this.tmpX = 0;
+                        this.tmpY = 0;
+                        this.IsDragging = false;
+                    }
+                    break;
+                }
                 case ElementEnum.AiPrompt:
                 case ElementEnum.Chart:
                 case ElementEnum.Rectangle: {
@@ -219,7 +244,7 @@ export class BaseObject {
     resize(ctx: CanvasRenderingContext2D, delta: Delta, cPos: CursorPosition, action: MouseAction, clearCanvas = true) {
         return runInAction(() => {
             if (!this.Board.PointerOrigin) {
-                return;
+                return { x: 0, y: 0, w: 0, h: 0 };
             }
             const { dx, dy } = delta;
             this.Board.Helper.applyStyles(ctx, this.style);
@@ -474,12 +499,14 @@ export class BaseObject {
         clearCanvas = true
     ) {
         this.style[key] = value;
-        this.Board.Helper.applyStyles(ctx, this.style);
         if (clearCanvas) {
             this.Board.Helper.clearCanvasArea(ctx);
         }
+        const { x, y, h, w } = this.Cords;
         this.Board.Helper.applyStyles(ctx, this.style);
-        this.Board.Helper.clearCanvasArea(ctx);
+        ctx.strokeRect(x, y, w, h);
+        ctx.fillRect(x, y, w, h);
+        this.select({});
     }
 
     select(cords: Partial<XYHW>) {
@@ -496,6 +523,16 @@ export class BaseObject {
                             width: metrics.width,
                             x,
                             y
+                        });
+                        break;
+                    }
+                    case ElementEnum.Text: {
+                        const metrics = copyCtx.measureText(this.object.value.value);
+                        CanvasHelper.applySelection(copyCtx, {
+                            height: h,
+                            width: w,
+                            x,
+                            y: y - metrics.fontBoundingBoxAscent / 2
                         });
                         break;
                     }

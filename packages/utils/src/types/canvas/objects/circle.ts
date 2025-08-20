@@ -222,6 +222,7 @@ export class Circle extends BaseObject {
         ctx.stroke();
         ctx.fill();
         ctx.restore();
+        this.select({});
     }
 
     getValues(): CircleObject {

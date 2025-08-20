@@ -52,12 +52,9 @@ export class EventManager {
                         (e) => CanvasHelper.isCustomElement(e) || e.id !== this.Board.HoveredObject!.id
                     );
                     this.Board.redrawBoard();
-                    if (this.Board.HoveredObject instanceof Text) {
-                        this.Board.Text = this.Board.HoveredObject;
-                    } else {
-                        this.Board.ActiveObjects = [this.Board.HoveredObject];
-                        this.Board.SelectedElements = [this.Board.HoveredObject];
-                    }
+                    this.Board.ActiveObjects = [this.Board.HoveredObject];
+                    this.Board.SelectedElements = [this.Board.HoveredObject];
+
                     if (this.Board._currentCanvasAction === CanvasActionEnum.Resize && this.Board.CursorPosition) {
                         this.Board.ActiveObjects.forEach((ao) => {
                             ao.resize(context, { dx: 0, dy: 0 }, this.Board.CursorPosition!, "down");
@@ -126,6 +123,12 @@ export class EventManager {
                         );
                         this.Board.TempSelectionArea.Style = SelectionStyle;
                         this.Board.TempSelectionArea?.create(context);
+                    }
+                }
+            } else if (e.detail === 2) {
+                if (this.Board.HoveredObject) {
+                    if (this.Board.HoveredObject instanceof Text) {
+                        this.Board.Text = this.Board.HoveredObject;
                     }
                 }
             }
