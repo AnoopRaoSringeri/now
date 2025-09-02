@@ -56,10 +56,10 @@ class UploadStore {
         }
     }
 
-    async GetData(request: ChartDataRequest): Promise<ChartData> {
+    async GetData(request: ChartDataRequest, page: number | null): Promise<ChartData> {
         try {
             const { data }: AxiosResponse<ChartData> = await axios.post(
-                `${BaseUrl}data`,
+                `${BaseUrl}data${page ? `?page=${page}` : ""}`,
                 request,
                 getRequestConfig(true)
             );

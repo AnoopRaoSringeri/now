@@ -124,6 +124,7 @@ export function useCanvas(canvasId: string) {
     }
 
     function onWheelAction(e: WheelEvent) {
+        // e.preventDefault();
         canvasBoard?.onWheelAction(e);
     }
     return { canvasBoard, removeCanvasCache, onResize };

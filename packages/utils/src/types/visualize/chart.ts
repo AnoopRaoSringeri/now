@@ -31,6 +31,7 @@ export class Chart implements IChart {
     options: ChartNowConfig = {};
     source: ChartSource | null = null;
     config: ConfigType;
+    page: number | null = null;
     constructor(config: ChartConfigMetadata, public type: ChartType) {
         this.config = {
             measures:
@@ -52,7 +53,9 @@ export class Chart implements IChart {
             DataVersion: computed,
             MeasureColumns: computed,
             DimensionColumns: computed,
-            Config: computed
+            Config: computed,
+            page: observable,
+            Page: computed
         });
     }
     onChange(key: string, value: ValueType) {
@@ -173,6 +176,14 @@ export class Chart implements IChart {
     }
     get IsConfigured() {
         return this.DimensionColumns.length > 0 && this.MeasureColumns.length > 0;
+    }
+    get Page() {
+        return this.page;
+    }
+    set Page(value: number | null) {
+        runInAction(() => {
+            this.page = value;
+        });
     }
     resetConfig() {
         runInAction(() => {

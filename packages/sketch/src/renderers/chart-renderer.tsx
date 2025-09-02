@@ -2,10 +2,29 @@ import { AppLoader } from "@now/ui";
 import { Chart, useDataLoader, ChartNow, ChartFactory } from "@now/utils";
 import { BarChartNow, PieChartNow, CutomTable, LineChartNow, AreaChartNow, RadarChartNow } from "@now/visualize";
 import { observer } from "mobx-react";
-
+import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
 export const ChartsRenderer = observer(function ChartsRenderer({ component }: { component: ChartNow }) {
     const { chart } = component;
     const { loading } = useDataLoader(chart!, component.id);
+    const [ready, setReady] = useState(false);
+    const { ref, inView } = useInView({
+        /* Optional options */
+        threshold: 0.2
+        // triggerOnce: true
+    });
+
+    useEffect(() => {
+        if (inView) {
+            // Use requestIdleCallback if supported, otherwise fallback to setTimeout
+            const schedule = window.requestIdleCallback || ((cb) => setTimeout(cb, 100));
+            const id = schedule(() => setReady(true));
+            return () => {
+                if (window.cancelIdleCallback) window.cancelIdleCallback(id);
+                else clearTimeout(id);
+            };
+        }
+    }, [inView]);
 
     if (chart == null) {
         return null;
@@ -14,11 +33,15 @@ export const ChartsRenderer = observer(function ChartsRenderer({ component }: { 
     return (
         <>
             <AppLoader loading={loading} />
-            {chart.IsConfigured ? (
-                <ChartRenderer chart={chart} />
-            ) : (
-                <div className="size-full flex justify-center items-center">Not Configured</div>
-            )}
+            <div className="size-full flex justify-center items-center" ref={ref}>
+                {chart.IsConfigured ? (
+                    <ChartRenderer chart={chart} />
+                ) : (
+                    <div className="size-full flex justify-center items-center">
+                        {!ready ? "Loading..." : "Not Configured"}
+                    </div>
+                )}
+            </div>
         </>
     );
 });

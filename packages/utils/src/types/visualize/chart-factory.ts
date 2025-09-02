@@ -102,6 +102,9 @@ export class ChartFactory {
     static restoreChart(chart: ChartMetadata) {
         const chartObj = new Chart(chart.config, chart.type);
         chartObj.Source = chart.source;
+        if (chartObj.type === "Table") {
+            chartObj.Page = 1;
+        }
         return chartObj;
     }
 

@@ -10,14 +10,17 @@ export function useDataLoader(chart: Chart, chartId: string) {
         isLoading: dataLoading,
         refetch
     } = useQueryNow({
-        queryFn: async () => {
+        queryFn: async ({ pageParam }) => {
             if (chart.Source && chart.MeasureColumns.length > 0 && chart.DimensionColumns.length > 0) {
-                return await uploadStore.GetData({
-                    id: chart.Source.id,
-                    measures: chart.MeasureColumns,
-                    dimensions: chart.DimensionColumns,
-                    columns: [...chart.DimensionColumns, ...chart.MeasureColumns]
-                });
+                return await uploadStore.GetData(
+                    {
+                        id: chart.Source.id,
+                        measures: chart.MeasureColumns,
+                        dimensions: chart.DimensionColumns,
+                        columns: [...chart.DimensionColumns, ...chart.MeasureColumns]
+                    },
+                    chart.Page
+                );
             } else {
                 return { data: [], columns: [] };
             }
@@ -34,7 +37,7 @@ export function useDataLoader(chart: Chart, chartId: string) {
 
     useEffect(() => {
         refetch();
-    }, [chart.DataVersion, refetch, chart.MeasureColumns, chart.DimensionColumns]);
+    }, [chart.DataVersion, refetch, chart.MeasureColumns, chart.DimensionColumns, chart.Page]);
 
     return { loading: dataLoading };
 }

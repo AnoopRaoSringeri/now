@@ -554,43 +554,86 @@ export class CanvasBoard implements ICanvas {
         });
     }
 
-    redrawBoard() {
-        const fId = window.requestAnimationFrame((timestamp) => {
-            if (timestamp - this._lastTimestamp >= MIN_INTERVAL) {
-                if (this.CanvasCopy) {
-                    const contextCopy = this.CanvasCopy.getContext("2d");
-                    if (contextCopy) {
-                        this.Helper.clearCanvasArea(contextCopy);
-                        contextCopy.resetTransform();
-                        const { scaleX: a, b, c, scaleY: d, transformX: e, transformY: f } = this.Transform;
-                        contextCopy.transform(a, b, c, d, e, f);
-                        this.ActiveObjects.forEach((ele) => {
-                            ele.draw(contextCopy);
-                        });
-                        if (this.SelectionElement) {
-                            this.SelectionElement.draw(contextCopy);
-                        }
-                        contextCopy.restore();
-                    }
-                }
-                const context = this.Canvas.getContext("2d");
-                if (context) {
-                    this.Helper.clearCanvasArea(context);
-                    context.resetTransform();
-                    const { scaleX: a, b, c, scaleY: d, transformX: e, transformY: f } = this.Transform;
-                    context.transform(a, b, c, d, e, f);
-                    this.Elements.forEach((ele) => {
-                        ele.draw(context);
-                    });
-                    context.restore();
-                }
-                this._lastTimestamp = timestamp;
-            }
-        });
+    private redrawScheduled = false;
 
-        setTimeout(() => {
-            window.cancelAnimationFrame(fId);
-        }, 100);
+    redrawBoard() {
+        if (this.redrawScheduled) return;
+        this.redrawScheduled = true;
+
+        requestAnimationFrame(() => {
+            this.redrawBoardInternal();
+            this.redrawScheduled = false;
+        });
+    }
+    redrawBoardInternal() {
+        // const fId = window.requestAnimationFrame((timestamp) => {
+        //     if (timestamp - this._lastTimestamp >= MIN_INTERVAL) {
+        //         if (this.CanvasCopy) {
+        //             const contextCopy = this.CanvasCopy.getContext("2d");
+        //             if (contextCopy) {
+        //                 this.Helper.clearCanvasArea(contextCopy);
+        //                 contextCopy.resetTransform();
+        //                 contextCopy.save();
+        //                 const { scaleX: a, b, c, scaleY: d, transformX: e, transformY: f } = this.Transform;
+        //                 contextCopy.transform(a, b, c, d, e, f);
+        //                 this.ActiveObjects.forEach((ele) => {
+        //                     ele.draw(contextCopy);
+        //                 });
+        //                 if (this.SelectionElement) {
+        //                     this.SelectionElement.draw(contextCopy);
+        //                 }
+        //                 contextCopy.restore();
+        //             }
+        //         }
+        //         const context = this.Canvas.getContext("2d");
+        //         if (context) {
+        //             this.Helper.clearCanvasArea(context);
+        //             context.resetTransform();
+        //             context.save();
+        //             const { scaleX: a, b, c, scaleY: d, transformX: e, transformY: f } = this.Transform;
+        //             context.transform(a, b, c, d, e, f);
+        //             this.Elements.forEach((ele) => {
+        //                 ele.draw(context);
+        //             });
+        //             context.restore();
+        //         }
+        //         this._lastTimestamp = timestamp;
+        //     }
+        // });
+
+        // setTimeout(() => {
+        //     window.cancelAnimationFrame(fId);
+        // }, 100);
+        if (this.CanvasCopy) {
+            const contextCopy = this.CanvasCopy.getContext("2d");
+            if (contextCopy) {
+                this.Helper.clearCanvasArea(contextCopy);
+                contextCopy.resetTransform();
+                // contextCopy.save();
+                const { scaleX: a, b, c, scaleY: d, transformX: e, transformY: f } = this.Transform;
+                contextCopy.transform(a, b, c, d, e, f);
+                this.ActiveObjects.forEach((ele) => {
+                    ele.draw(contextCopy);
+                });
+                if (this.SelectionElement) {
+                    this.SelectionElement.draw(contextCopy);
+                }
+                contextCopy.restore();
+            }
+        }
+        const context = this.Canvas.getContext("2d");
+        if (context) {
+            this.Helper.clearCanvasArea(context);
+            context.resetTransform();
+            // context.save();
+            const { scaleX: a, b, c, scaleY: d, transformX: e, transformY: f } = this.Transform;
+            context.transform(a, b, c, d, e, f);
+            this.Elements.forEach((ele) => {
+                ele.draw(context);
+            });
+            context.restore();
+        }
+        //  this._lastTimestamp = timestamp;
     }
 
     dispose() {

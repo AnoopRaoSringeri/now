@@ -1,10 +1,13 @@
-import { BoardViewer, CanvasBoard, SketchNow } from "@now/sketch";
 import NxWelcome from "./nx-welcome";
 import { HashRouter, Route, Routes } from "react-router";
 import { AppContainer } from "./app-container";
-import { Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { AppLoader } from "@now/ui";
 import { Auth, ForgotPasswordPage, LogInPage, RegisterPage } from "@now/auth";
+
+const BoardViewer = lazy(() => import("@now/sketch").then((module) => ({ default: module.BoardViewer })));
+const CanvasBoard = lazy(() => import("@now/sketch").then((module) => ({ default: module.CanvasBoard })));
+const SketchNow = lazy(() => import("@now/sketch").then((module) => ({ default: module.SketchNow })));
 
 export function App() {
     return (
