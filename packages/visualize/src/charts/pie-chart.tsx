@@ -7,7 +7,7 @@ import { ChartRowData, formatText, PieChart, PieChartConfig } from "@now/utils";
 import { observer } from "mobx-react";
 
 export const PieChartNow = observer(function PieChartNow({ chart }: { chart: PieChart }) {
-    const chartData: ChartRowData[] = chart.ChartData;
+    const chartData: ChartRowData[] = chart.ChartData.data;
     const config = chart.Config as PieChartConfig;
     const measure = config.measures.v.v;
 

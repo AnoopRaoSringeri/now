@@ -1,8 +1,8 @@
 import { Chart } from "../chart";
-import { MultiColumnSelectValue } from "../value-types";
+import { MultiColumnSelectValue, MultiMeasureSelectValue } from "../value-types";
 
 export type TableChartConfig = {
-    measures: { t: "m"; v: MultiColumnSelectValue };
+    measures: { t: "m"; v: MultiMeasureSelectValue };
     dimensions: { t: "m"; v: MultiColumnSelectValue };
 };
 

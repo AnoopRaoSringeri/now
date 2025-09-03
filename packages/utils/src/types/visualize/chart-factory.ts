@@ -23,7 +23,7 @@ export class ChartFactory {
                     measures: {
                         t: "m",
                         v: {
-                            t: "mcs",
+                            t: "mms",
                             v: []
                         }
                     }
@@ -40,7 +40,7 @@ export class ChartFactory {
                     measures: {
                         t: "m",
                         v: {
-                            t: "mcs",
+                            t: "mms",
                             v: []
                         }
                     }
@@ -57,7 +57,7 @@ export class ChartFactory {
                     measures: {
                         t: "m",
                         v: {
-                            t: "mcs",
+                            t: "mms",
                             v: []
                         }
                     }
@@ -74,7 +74,7 @@ export class ChartFactory {
                     measures: {
                         t: "s",
                         v: {
-                            t: "scs",
+                            t: "sms",
                             v: null
                         }
                     }
@@ -91,7 +91,7 @@ export class ChartFactory {
                     measures: {
                         t: "m",
                         v: {
-                            t: "mcs",
+                            t: "mms",
                             v: []
                         }
                     }
@@ -128,9 +128,9 @@ export class ChartFactory {
                     measures: {
                         t: "m",
                         v: {
-                            t: "mcs",
+                            t: "mms",
                             v:
-                                metadata.measures.v.t === "scs"
+                                metadata.measures.v.t === "sms"
                                     ? metadata.measures.v.v
                                         ? [metadata.measures.v.v]
                                         : []
@@ -152,8 +152,8 @@ export class ChartFactory {
                     measures: {
                         t: "s",
                         v: {
-                            t: "scs",
-                            v: metadata.measures.v.t === "scs" ? metadata.measures.v.v : metadata.measures.v.v[0]
+                            t: "sms",
+                            v: metadata.measures.v.t === "sms" ? metadata.measures.v.v : metadata.measures.v.v[0]
                         }
                     }
                 };
@@ -171,9 +171,9 @@ export class ChartFactory {
                     measures: {
                         t: "m",
                         v: {
-                            t: "mcs",
+                            t: "mms",
                             v:
-                                metadata.measures.v.t === "scs"
+                                metadata.measures.v.t === "sms"
                                     ? metadata.measures.v.v
                                         ? [metadata.measures.v.v]
                                         : []

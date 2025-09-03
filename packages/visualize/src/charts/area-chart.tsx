@@ -6,7 +6,7 @@ import { observer } from "mobx-react";
 import { Area, AreaChart as AreaChartComponent, CartesianGrid, XAxis } from "recharts";
 
 export const AreaChartNow = observer(function AreaChartNow({ chart }: { chart: AreaChart }) {
-    const chartData: ChartRowData[] = chart.ChartData;
+    const chartData: ChartRowData[] = chart.ChartData.data;
     const config = chart.Config as AreaChartConfig;
     const xAxis = config.dimensions.v.v;
 

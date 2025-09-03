@@ -1,9 +1,9 @@
 import { Chart } from "../chart";
 import { ChartType } from "../types";
-import { MultiColumnSelectValue, SingleColumnSelectValue } from "../value-types";
+import { MultiMeasureSelectValue, SingleColumnSelectValue } from "../value-types";
 
 export type LineChartConfig = {
-    measures: { t: "m"; v: MultiColumnSelectValue };
+    measures: { t: "m"; v: MultiMeasureSelectValue };
     dimensions: { t: "s"; v: SingleColumnSelectValue };
 };
 

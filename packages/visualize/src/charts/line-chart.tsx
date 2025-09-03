@@ -4,7 +4,7 @@ import { ChartRowData, LineChart, LineChartConfig } from "@now/utils";
 import { observer } from "mobx-react";
 
 export const LineChartNow = observer(function LineChartNow({ chart }: { chart: LineChart }) {
-    const chartData: ChartRowData[] = chart.ChartData;
+    const chartData: ChartRowData[] = chart.ChartData.data;
     const config = chart.Config as LineChartConfig;
     const xAxis = config.dimensions.v.v;
 

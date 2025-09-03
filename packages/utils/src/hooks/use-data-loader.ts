@@ -17,22 +17,23 @@ export function useDataLoader(chart: Chart, chartId: string) {
                         id: chart.Source.id,
                         measures: chart.MeasureColumns,
                         dimensions: chart.DimensionColumns,
-                        columns: [...chart.DimensionColumns, ...chart.MeasureColumns]
+                        columns: [...chart.DimensionColumns, ...chart.MeasureColumns],
+                        sort: []
                     },
                     chart.Page
                 );
             } else {
-                return { data: [], columns: [] };
+                return { paginatedData: { data: [], totalRowCount: 0 }, columns: [] };
             }
         },
         queryKey: [QueryKeys.ChartData, chartId]
     });
 
     useEffect(() => {
-        if (data == null || data.data?.length === 0) {
+        if (data == null || data.paginatedData.data?.length === 0) {
             return;
         }
-        chart.ChartData = data.data;
+        chart.ChartData = data.paginatedData;
     }, [chart, data]);
 
     useEffect(() => {

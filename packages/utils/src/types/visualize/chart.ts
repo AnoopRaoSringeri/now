@@ -3,11 +3,13 @@ import {
     ConfigType,
     ColumnSelectEditorValue,
     ChartNowConfig,
-    MultiColumnSelectEditorValue
+    MultiColumnSelectEditorValue,
+    MultiMeasureSelectEditorValue,
+    MeasureSelectEditorValue
 } from "./editor-value-types";
 import { ChartConfigMetadata, ChartType } from "./types";
 import { ValueType } from "./value-types";
-import { ChartRowData } from "./chart-data";
+import { PaginatedData } from "./chart-data";
 import { ChartSource } from "./source";
 import { ChartFactory } from "./chart-factory";
 
@@ -27,7 +29,7 @@ export type ChartMetadata = {
 
 export class Chart implements IChart {
     dataVersion = 0;
-    chartData: ChartRowData[] = [];
+    chartData: PaginatedData = { totalRowCount: 0, data: [] };
     options: ChartNowConfig = {};
     source: ChartSource | null = null;
     config: ConfigType;
@@ -36,8 +38,8 @@ export class Chart implements IChart {
         this.config = {
             measures:
                 config.measures.t === "s"
-                    ? { t: "s", v: new ColumnSelectEditorValue(config.measures.v) }
-                    : { t: "m", v: new MultiColumnSelectEditorValue(config.measures.v) },
+                    ? { t: "s", v: new MeasureSelectEditorValue(config.measures.v) }
+                    : { t: "m", v: new MultiMeasureSelectEditorValue(config.measures.v) },
             dimensions:
                 config.dimensions.t === "s"
                     ? { t: "s", v: new ColumnSelectEditorValue(config.dimensions.v) }
@@ -83,7 +85,7 @@ export class Chart implements IChart {
     get ChartData() {
         return toJS(this.chartData);
     }
-    set ChartData(chartData: ChartRowData[]) {
+    set ChartData(chartData: PaginatedData) {
         runInAction(() => {
             this.chartData = chartData;
         });
@@ -136,7 +138,7 @@ export class Chart implements IChart {
             measures: {
                 t: "s",
                 v: {
-                    t: "scs",
+                    t: "sms",
                     v: null
                 }
             },
@@ -163,9 +165,9 @@ export class Chart implements IChart {
     set Config(config: ChartConfigMetadata) {
         runInAction(() => {
             if (config.measures.t === "s") {
-                this.config.measures = { t: "s", v: new ColumnSelectEditorValue(config.measures.v) };
+                this.config.measures = { t: "s", v: new MeasureSelectEditorValue(config.measures.v) };
             } else {
-                this.config.measures = { t: "m", v: new MultiColumnSelectEditorValue(config.measures.v) };
+                this.config.measures = { t: "m", v: new MultiMeasureSelectEditorValue(config.measures.v) };
             }
             if (config.dimensions.t === "s") {
                 this.config.dimensions = { t: "s", v: new ColumnSelectEditorValue(config.dimensions.v) };
@@ -188,9 +190,9 @@ export class Chart implements IChart {
     resetConfig() {
         runInAction(() => {
             if (this.config.measures.t === "s") {
-                this.config.measures = { t: "s", v: new ColumnSelectEditorValue({ t: "scs", v: null }) };
+                this.config.measures = { t: "s", v: new MeasureSelectEditorValue({ t: "sms", v: null }) };
             } else {
-                this.config.measures = { t: "m", v: new MultiColumnSelectEditorValue({ t: "mcs", v: [] }) };
+                this.config.measures = { t: "m", v: new MultiMeasureSelectEditorValue({ t: "mms", v: [] }) };
             }
             if (this.config.dimensions.t === "s") {
                 this.config.dimensions = { t: "s", v: new ColumnSelectEditorValue({ t: "scs", v: null }) };

@@ -1,9 +1,9 @@
 import { Chart } from "../chart";
 import { ChartType } from "../types";
-import { SingleColumnSelectValue } from "../value-types";
+import { SingleMeasureSelectValue, SingleColumnSelectValue } from "../value-types";
 
 export type PieChartConfig = {
-    measures: { t: "s"; v: SingleColumnSelectValue };
+    measures: { t: "s"; v: SingleMeasureSelectValue };
     dimensions: { t: "s"; v: SingleColumnSelectValue };
 };
 

@@ -4,12 +4,16 @@ import {
     EditorValue,
     formatText,
     MultiColumnSelectValue,
-    SingleColumnSelectValue
+    MultiMeasureSelectValue,
+    SingleColumnSelectValue,
+    SingleMeasureSelectValue
 } from "@now/utils";
 import { MultiColumnSelectEditor } from "../editors/multi-column-select-editor";
 import { ColumnSelectEditor } from "../editors/column-select-editor";
 import { observer } from "mobx-react";
 import { Label } from "@now/ui";
+import { MeasureSelectEditor } from "../editors/measure-select-editor";
+import { MultiMeasureSelectEditor } from "../editors/multi-measure-select-editor";
 
 export const ChartOptionsRendererWrapper = observer(function ChartOptionsRendererWrapper({ chart }: { chart: Chart }) {
     const { config, options } = chart;
@@ -61,6 +65,24 @@ const ChartOptionsRenderer = observer(function ChartOptionsRenderer({
                     editorValue={editorValue}
                     option={option}
                     value={editorValue.Value as SingleColumnSelectValue}
+                    columns={columns}
+                />
+            );
+        case "sms":
+            return (
+                <MeasureSelectEditor
+                    editorValue={editorValue}
+                    option={option}
+                    value={editorValue.Value as SingleMeasureSelectValue}
+                    columns={columns}
+                />
+            );
+        case "mms":
+            return (
+                <MultiMeasureSelectEditor
+                    editorValue={editorValue}
+                    option={option}
+                    value={editorValue.Value as MultiMeasureSelectValue}
                     columns={columns}
                 />
             );

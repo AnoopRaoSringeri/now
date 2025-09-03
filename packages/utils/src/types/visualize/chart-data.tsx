@@ -2,7 +2,9 @@ import { ColumnConfig } from "./types";
 
 export type ChartRowData = Record<string, string>;
 
-export type ChartData = { data: ChartRowData[]; columns: ColumnConfig[] };
+export type PaginatedData = { totalRowCount: number; data: ChartRowData[] };
+
+export type ChartData = { paginatedData: PaginatedData; columns: ColumnConfig[] };
 
 export type ChartDataUpdateRequest = {
     id: string;

@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart as RadarChartComponent } from "recharts";
 
 export const RadarChartNow = observer(function RadarChartNow({ chart }: { chart: RadarChart }) {
-    const chartData: ChartRowData[] = chart.ChartData;
+    const chartData: ChartRowData[] = chart.ChartData.data;
     const config = chart.Config as RadarChartConfig;
     const xAxis = config.dimensions.v.v;
 

@@ -4,7 +4,9 @@ import {
     MultiSelectValue,
     SingleSelectValue,
     SingleColumnSelectValue,
-    MultiColumnSelectValue
+    MultiColumnSelectValue,
+    SingleMeasureSelectValue,
+    MultiMeasureSelectValue
 } from "./value-types";
 
 export class EditorValue {
@@ -111,17 +113,51 @@ export class MultiColumnSelectEditorValue extends EditorValue {
     }
 }
 
+export class MeasureSelectEditorValue extends EditorValue {
+    value: SingleMeasureSelectValue;
+    constructor(value: SingleMeasureSelectValue) {
+        super(value);
+        this.value = value;
+    }
+    onChange(value: SingleMeasureSelectValue) {
+        this.value = value;
+    }
+    get Value(): SingleMeasureSelectValue {
+        return toJS(this.value);
+    }
+    getValue(): SingleMeasureSelectValue["v"] {
+        return toJS(this.value["v"]);
+    }
+}
+
+export class MultiMeasureSelectEditorValue extends EditorValue {
+    value: MultiMeasureSelectValue;
+    constructor(value: MultiMeasureSelectValue) {
+        super(value);
+        this.value = value;
+    }
+    onChange(value: MultiMeasureSelectValue) {
+        this.value = value;
+    }
+    get Value(): MultiMeasureSelectValue {
+        return toJS(this.value);
+    }
+    getValue(): MultiMeasureSelectValue["v"] {
+        return toJS(this.value["v"]);
+    }
+}
+
 export type ChartNowConfig = Record<string, EditorValueExtended<ValueType>>;
 
 export type ConfigType = {
     measures:
         | {
               t: "s";
-              v: ColumnSelectEditorValue;
+              v: MeasureSelectEditorValue;
           }
         | {
               t: "m";
-              v: MultiColumnSelectEditorValue;
+              v: MultiMeasureSelectEditorValue;
           };
     dimensions:
         | {

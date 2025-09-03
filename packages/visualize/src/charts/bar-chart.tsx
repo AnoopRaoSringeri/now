@@ -14,7 +14,7 @@ import React from "react";
 import { Bar, BarChart as BarChartComponent, CartesianGrid, XAxis } from "recharts";
 
 export const BarChartNow = observer(function BarChartNow({ chart }: { chart: BarChart }) {
-    const chartData: ChartRowData[] = chart.ChartData;
+    const chartData: ChartRowData[] = chart.ChartData.data;
     const config = chart.Config as BarChartConfig;
     const xAxis = config.dimensions.v.v;
 
