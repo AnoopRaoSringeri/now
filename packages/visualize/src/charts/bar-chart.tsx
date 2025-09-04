@@ -84,7 +84,7 @@ export const BarChartNow = observer(function BarChartNow({ chart }: { chart: Bar
             <div
                 ref={scrollRef}
                 style={{
-                    overflowX: "scroll"
+                    overflowX: "auto"
                 }}
             >
                 {pages > 1 && <div style={{ width: `${chartData.length * 10}px`, height: 20 }} />}
