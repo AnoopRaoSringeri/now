@@ -1,22 +1,6 @@
-import {
-    Button,
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@now/ui";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@now/ui";
 import { ColumnConfig, EditorValue, MeasureAggregateFun, SingleMeasureSelectValue } from "@now/utils";
-import { useState } from "react";
+import { MeasureAggregateIcon } from "../components/measure-aggregate-icon";
 
 export const MeasureSelectEditor = function MeasureSelectEditor({
     editorValue,
@@ -39,7 +23,7 @@ export const MeasureSelectEditor = function MeasureSelectEditor({
     };
 
     return (
-        <div className="flex flex-row">
+        <div className="flex flex-row items-center">
             <MeasureAggregateIcon value={value.v ? value.v.fun : MeasureAggregateFun.Sum} onChange={handleFunChange} />
             <Select onValueChange={handleChange} value={value.v?.name}>
                 <SelectTrigger className="w-full">
@@ -56,50 +40,3 @@ export const MeasureSelectEditor = function MeasureSelectEditor({
         </div>
     );
 };
-
-function MeasureAggregateIcon({
-    value,
-    onChange
-}: {
-    value: MeasureAggregateFun;
-    onChange: (val: MeasureAggregateFun) => unknown;
-}) {
-    const [open, setOpen] = useState(false);
-
-    return (
-        <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-                <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open}
-                    // className="w-[200px] justify-between"
-                >
-                    {value}
-                </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
-                <Command>
-                    <CommandInput placeholder="Search framework..." className="h-9" />
-                    <CommandList>
-                        <CommandEmpty>No framework found.</CommandEmpty>
-                        <CommandGroup>
-                            {Object.values(MeasureAggregateFun).map((fun) => (
-                                <CommandItem
-                                    key={fun}
-                                    value={fun.toString()}
-                                    onSelect={(currentValue) => {
-                                        onChange(currentValue as MeasureAggregateFun);
-                                        setOpen(false);
-                                    }}
-                                >
-                                    {fun}
-                                </CommandItem>
-                            ))}
-                        </CommandGroup>
-                    </CommandList>
-                </Command>
-            </PopoverContent>
-        </Popover>
-    );
-}

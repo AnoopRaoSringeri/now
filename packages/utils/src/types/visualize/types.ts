@@ -1,3 +1,4 @@
+import { Sigma, Divide, ArrowUpToLine, ArrowDownToLine, Hash } from "lucide-react";
 import {
     MultiColumnSelectValue,
     MultiMeasureSelectValue,
@@ -22,6 +23,14 @@ export enum MeasureAggregateFun {
     Min = "Min",
     Count = "Count"
 }
+
+export const AggregationIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+    Sum: Sigma,
+    Average: Divide,
+    Max: ArrowUpToLine,
+    Min: ArrowDownToLine,
+    Count: Hash
+};
 
 export type MeasureConfig = {
     fun: MeasureAggregateFun;

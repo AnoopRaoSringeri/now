@@ -12,7 +12,7 @@ class UploadStore {
             });
             return data;
         } catch (e) {
-            return { paginatedData: { data: [], totalRowCount: 0 }, columns: [], id: "" };
+            return { paginatedData: { data: [], totalRowCount: 0 }, columns: [], id: "", page: null };
         }
     }
 
@@ -35,7 +35,7 @@ class UploadStore {
             });
             return data;
         } catch (e) {
-            return { paginatedData: { data: [], totalRowCount: 0 }, columns: [] };
+            return { paginatedData: { data: [], totalRowCount: 0 }, columns: [], page: null };
         }
     }
 
@@ -65,7 +65,7 @@ class UploadStore {
             );
             return data;
         } catch (e) {
-            return { paginatedData: { data: [], totalRowCount: 0 }, columns: [] };
+            return { paginatedData: { data: [], totalRowCount: 0 }, columns: [], page: null };
         }
     }
 }

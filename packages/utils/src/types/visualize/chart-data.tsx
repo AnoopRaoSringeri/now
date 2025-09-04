@@ -4,7 +4,7 @@ export type ChartRowData = Record<string, string>;
 
 export type PaginatedData = { totalRowCount: number; data: ChartRowData[] };
 
-export type ChartData = { paginatedData: PaginatedData; columns: ColumnConfig[] };
+export type ChartData = { paginatedData: PaginatedData; columns: ColumnConfig[]; page: number | null };
 
 export type ChartDataUpdateRequest = {
     id: string;
