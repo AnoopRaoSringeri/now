@@ -1,104 +1,15 @@
 import { ChartMetadata, Chart } from "./chart";
-import { BarChart, BarChartConfig } from "./charts/bar-class";
+import { BarChartConfig } from "./charts/bar-class";
 import { ChartTypes } from "./chart-types";
-import { LineChart, LineChartConfig } from "./charts/line-class";
-import { PieChart, PieChartConfig } from "./charts/pie-class";
-import { TableChart, TableChartConfig } from "./charts/table-class";
-import { ChartConfigMetadata, ChartType, ColumnConfig } from "./types";
-import { AreaChart, AreaChartConfig } from "./charts/area-class";
+import { LineChartConfig } from "./charts/line-class";
+import { PieChartConfig } from "./charts/pie-class";
+import { TableChartConfig } from "./charts/table-class";
+import { ChartConfigMetadata, ChartType } from "./types";
+import { AreaChartConfig } from "./charts/area-class";
 import { RadarChartConfig } from "./charts/radar-class";
+import { RadialBarChartConfig } from "./charts/radial-bar-class";
 
 export class ChartFactory {
-    static createChart(type: ChartType, columnConfig: ColumnConfig[]) {
-        switch (type) {
-            case "Bar":
-                return new BarChart({
-                    dimensions: {
-                        t: "s",
-                        v: {
-                            t: "scs",
-                            v: null
-                        }
-                    },
-                    measures: {
-                        t: "m",
-                        v: {
-                            t: "mms",
-                            v: []
-                        }
-                    }
-                });
-            case "Line":
-                return new LineChart({
-                    dimensions: {
-                        t: "s",
-                        v: {
-                            t: "scs",
-                            v: null
-                        }
-                    },
-                    measures: {
-                        t: "m",
-                        v: {
-                            t: "mms",
-                            v: []
-                        }
-                    }
-                });
-            case "Area":
-                return new AreaChart({
-                    dimensions: {
-                        t: "s",
-                        v: {
-                            t: "scs",
-                            v: null
-                        }
-                    },
-                    measures: {
-                        t: "m",
-                        v: {
-                            t: "mms",
-                            v: []
-                        }
-                    }
-                });
-            case "Pie":
-                return new PieChart({
-                    dimensions: {
-                        t: "s",
-                        v: {
-                            t: "scs",
-                            v: null
-                        }
-                    },
-                    measures: {
-                        t: "s",
-                        v: {
-                            t: "sms",
-                            v: null
-                        }
-                    }
-                });
-            default:
-                return new TableChart({
-                    dimensions: {
-                        t: "m",
-                        v: {
-                            t: "mcs",
-                            v: []
-                        }
-                    },
-                    measures: {
-                        t: "m",
-                        v: {
-                            t: "mms",
-                            v: []
-                        }
-                    }
-                });
-        }
-    }
-
     static restoreChart(chart: ChartMetadata) {
         const chartObj = new Chart(chart.config, chart.type);
         chartObj.Source = chart.source;
@@ -140,6 +51,7 @@ export class ChartFactory {
                 };
                 break;
             }
+            case "RadialBar":
             case "Pie": {
                 transformedMetadata = {
                     dimensions: {
@@ -199,6 +111,8 @@ export class ChartFactory {
                 return { type: "Pie", config: chart.Config as PieChartConfig };
             case "Radar":
                 return { type: "Radar", config: chart.Config as RadarChartConfig };
+            case "RadialBar":
+                return { type: "RadialBar", config: chart.Config as RadialBarChartConfig };
             default:
                 return { type: "Table", config: chart.Config as TableChartConfig };
         }

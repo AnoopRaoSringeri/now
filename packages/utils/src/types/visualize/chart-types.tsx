@@ -3,6 +3,7 @@ import { BarChartConfig } from "./charts/bar-class";
 import { LineChartConfig } from "./charts/line-class";
 import { PieChartConfig } from "./charts/pie-class";
 import { RadarChartConfig } from "./charts/radar-class";
+import { RadialBarChartConfig } from "./charts/radial-bar-class";
 import { TableChartConfig } from "./charts/table-class";
 
 export type ChartTypes =
@@ -25,6 +26,10 @@ export type ChartTypes =
     | {
           type: "Radar";
           config: RadarChartConfig;
+      }
+    | {
+          type: "RadialBar";
+          config: RadialBarChartConfig;
       }
     | {
           type: "Table";

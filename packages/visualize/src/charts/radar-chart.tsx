@@ -29,7 +29,13 @@ export const RadarChartNow = observer(function RadarChartNow({ chart }: { chart:
                 <PolarAngleAxis dataKey={xAxis.name} />
                 <PolarGrid />
                 {config.measures.v.v.map((m) => (
-                    <Radar key={m.name} dataKey={m.name} fill={`var(--color-${m.name})`} fillOpacity={0.6} />
+                    <Radar
+                        key={m.name}
+                        dataKey={m.name}
+                        stroke={chartConfig[m.name].color}
+                        fill={chartConfig[m.name].color}
+                        fillOpacity={0.6}
+                    />
                 ))}
             </RadarChartComponent>
         </ChartContainer>

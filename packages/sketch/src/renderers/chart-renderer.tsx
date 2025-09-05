@@ -1,22 +1,29 @@
 import { AppLoader } from "@now/ui";
 import { Chart, useDataLoader, ChartNow, ChartFactory } from "@now/utils";
-import { BarChartNow, PieChartNow, CutomTable, LineChartNow, AreaChartNow, RadarChartNow } from "@now/visualize";
+import {
+    BarChartNow,
+    PieChartNow,
+    CutomTable,
+    LineChartNow,
+    AreaChartNow,
+    RadarChartNow,
+    RadialBarChartNow
+} from "@now/visualize";
 import { observer } from "mobx-react";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
+
 export const ChartsRenderer = observer(function ChartsRenderer({ component }: { component: ChartNow }) {
     const { chart } = component;
     const { loading } = useDataLoader(chart!, component.id);
     const [ready, setReady] = useState(false);
     const { ref, inView } = useInView({
-        /* Optional options */
         threshold: 0.2
         // triggerOnce: true
     });
 
     useEffect(() => {
         if (inView) {
-            // Use requestIdleCallback if supported, otherwise fallback to setTimeout
             const schedule = window.requestIdleCallback || ((cb) => setTimeout(cb, 100));
             const id = schedule(() => setReady(true));
             return () => {
@@ -59,6 +66,8 @@ const ChartRenderer = observer(function ChartRenderer({ chart }: { chart: Chart 
             return <PieChartNow chart={chart} />;
         case "Radar":
             return <RadarChartNow chart={chart} />;
+        case "RadialBar":
+            return <RadialBarChartNow chart={chart} />;
         default:
             return <CutomTable chart={chart} />;
     }

@@ -1,7 +1,7 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@now/ui";
 import { ChartType } from "@now/utils";
 
-const CHARTS_OPTIONS: ChartType[] = ["Area", "Bar", "Line", "Pie", "Radar", "Table"];
+const CHARTS_OPTIONS: ChartType[] = ["Area", "Bar", "Line", "Pie", "Radar", "RadialBar", "Table"];
 
 export const ChartSelect = function ChartSelect({
     onChange,

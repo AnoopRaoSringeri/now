@@ -12,5 +12,7 @@ export * from "./charts/area-chart";
 
 export * from "./charts/radar-chart";
 
+export * from "./charts/radial-bar-chart";
+
 export * from "./components/options-renderer";
 export * from "./components/chart-select-editor";

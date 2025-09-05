@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Label, Pie, PieChart as PieChartComponent } from "recharts";
+import { Cell, Label, Pie, PieChart as PieChartComponent } from "recharts";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@now/ui";
 import { ChartRowData, formatText, PieChart, PieChartConfig } from "@now/utils";
 import { observer } from "mobx-react";
@@ -21,6 +21,17 @@ export const PieChartNow = observer(function PieChartNow({ chart }: { chart: Pie
         return chartData.reduce((acc, curr) => acc + Number(curr[measure.name]), 0);
     }, [chartData, measure]);
 
+    const reducedData = React.useMemo(() => {
+        if (dimension == null) {
+            return [];
+        }
+        return chartData.map((d) => ({
+            ...d,
+            fill: `#${Math.random().toString(16).substr(-6)}`,
+            name: d[dimension.name]
+        }));
+    }, [chartData, dimension]);
+
     const items = React.useMemo(() => {
         if (dimension == null) {
             return [];
@@ -34,13 +45,9 @@ export const PieChartNow = observer(function PieChartNow({ chart }: { chart: Pie
         }, [] as string[]);
     }, [chartData, dimension]);
 
-    const reducedData = React.useMemo(() => {
-        if (dimension == null) {
-            return [];
-        }
-        return chartData.map((d) => ({ ...d, fill: `var(--color-${d[dimension.name]})` }));
-    }, [chartData, dimension]);
-
+    if (measure == null || dimension == null) {
+        return null;
+    }
     const chartConfig: ChartConfig = {};
     items.forEach((item) => {
         chartConfig[item] = {
@@ -49,15 +56,19 @@ export const PieChartNow = observer(function PieChartNow({ chart }: { chart: Pie
         };
     });
 
-    if (measure == null || dimension == null) {
-        return null;
-    }
+    chartConfig[measure.name] = {
+        label: measure.name,
+        color: `#${Math.random().toString(16).substr(-6)}`
+    };
 
     return (
         <ChartContainer config={chartConfig} className="mx-auto size-full">
-            <PieChartComponent>
-                <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                <Pie data={reducedData} dataKey={measure.name} nameKey={dimension.name}>
+            <PieChartComponent data={reducedData}>
+                <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent labelKey={dimension.name} nameKey={measure.name} />}
+                />
+                <Pie dataKey={measure.name} nameKey={dimension.name}>
                     <Label
                         content={({ viewBox }) => {
                             if (viewBox && "cx" in viewBox && "cy" in viewBox) {
@@ -82,6 +93,9 @@ export const PieChartNow = observer(function PieChartNow({ chart }: { chart: Pie
                             }
                         }}
                     />
+                    {items.map((item) => (
+                        <Cell key={`cell-${item}`} fill={chartConfig[item].color} />
+                    ))}
                 </Pie>
             </PieChartComponent>
         </ChartContainer>
