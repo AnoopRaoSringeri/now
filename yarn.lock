@@ -15940,11 +15940,6 @@ use-callback-ref@^1.3.3:
   dependencies:
     tslib "^2.0.0"
 
-use-react-screenshot@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/use-react-screenshot/-/use-react-screenshot-4.0.0.tgz#8be533e0790e75c8fd72174ed523c2ed86c967fc"
-  integrity sha512-4UZIORp7iCklfNOS/dPJab9SPeGdS0nFyIi3qA1rfMyYf/em/KfodYhrOlSHAHWvfdeCrS67Jjk6H4M4oLYSWg==
-
 use-sidecar@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/use-sidecar/-/use-sidecar-1.1.3.tgz#10e7fd897d130b896e2c546c63a5e8233d00efdb"

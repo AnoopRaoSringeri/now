@@ -59,7 +59,6 @@
         "tailwind": "^4.0.0",
         "tailwind-merge": "^2.5.5",
         "tailwindcss-animate": "^1.0.7",
-        "use-react-screenshot": "^4.0.0",
         "uuid": "^11.0.3",
         "vaul": "^1.1.2",
         "vite-plugin-mkcert": "^1.17.8",
