@@ -59,12 +59,12 @@ RUN yarn install --frozen-lockfile
 COPY . .
 
 # Build the React app (replace `dashboard` with your app name)
-RUN yarn nx build dashboard
+RUN yarn nx build now
 
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
 # Copy build output
-COPY --from=build /app/dist/apps/dashboard /usr/share/nginx/html
+COPY --from=build /app/dist/apps/now /usr/share/nginx/html
 # Expose default HTTP port
 EXPOSE 80
 # Start Nginx
