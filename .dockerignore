@@ -4,3 +4,9 @@ Dockerfile
 .git
 .gitignore
 .env
+dist
+.nx
+tmp
+.cache
+coverage
+.DS_Store

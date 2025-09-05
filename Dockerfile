@@ -1,49 +1,71 @@
-# Use the latest LTS version of Node.js
-FROM node:24-alpine AS build
+# # Use the latest LTS version of Node.js
+# FROM node:24-alpine AS build
 
-# Set the working directory inside the container
-WORKDIR /app
+# # Set the working directory inside the container
+# WORKDIR /app
  
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# # Copy package.json and package-lock.json
+# COPY package*.json ./
 
-COPY yarn.lock ./
+# COPY yarn.lock ./
  
-# Install dependencies
-RUN yarn install
+# # Install dependencies
+# RUN yarn install
  
-# Copy the rest of your application files
-COPY . .
+# # Copy the rest of your application files
+# COPY . .
  
-# # Expose the port your app runs on
-# EXPOSE 4200
- 
-# # Define the command to run your app
-# CMD ["yarn", "now"]
-
-# Build the React app for production
-RUN yarn run now-build
-
-# # Use Nginx as the production server
-# FROM nginx:alpine
-
-# # Copy the built React app to Nginx's web server directory
-# COPY --from=build /app/dist /usr/share/nginx/html
-# ----------------------------------------------------------
-# # Expose port 80 for the Nginx server
-# EXPOSE 4200
-
-# # # Start Nginx when the container runs
-# # CMD ["nginx", "-g", "daemon off;"]
-
+# # # Expose the port your app runs on
+# # EXPOSE 4200
  
 # # # Define the command to run your app
+# # CMD ["yarn", "now"]
+
+# # Build the React app for production
+# RUN yarn run now-build
+
+# # # Use Nginx as the production server
+# # FROM nginx:alpine
+
+# # # Copy the built React app to Nginx's web server directory
+# # COPY --from=build /app/dist /usr/share/nginx/html
+# # ----------------------------------------------------------
+# # # Expose port 80 for the Nginx server
+# # EXPOSE 4200
+
+# # # # Start Nginx when the container runs
+# # # CMD ["nginx", "-g", "daemon off;"]
+
+ 
+# # # # Define the command to run your app
+# # CMD ["yarn", "now"]
+# # ----------------------------------------------------------
+# # Stage 2: Deploy
+# FROM node:alpine
+# WORKDIR /app
+# COPY --from=build /app .
+# EXPOSE 4200
 # CMD ["yarn", "now"]
-# ----------------------------------------------------------
-# Stage 2: Deploy
-FROM node:alpine
+# # ----------------------------------------------------------
+# Stage 1: Build React app
+FROM node:24-alpine AS build
 WORKDIR /app
-COPY --from=build /app .
-EXPOSE 4200
-CMD ["yarn", "now"]
-# ----------------------------------------------------------
+
+# Install deps
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+
+# Copy everything
+COPY . .
+
+# Build the React app (replace `dashboard` with your app name)
+RUN yarn nx build dashboard
+
+# Stage 2: Serve with Nginx
+FROM nginx:alpine
+# Copy build output
+COPY --from=build /app/dist/apps/dashboard /usr/share/nginx/html
+# Expose default HTTP port
+EXPOSE 80
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
