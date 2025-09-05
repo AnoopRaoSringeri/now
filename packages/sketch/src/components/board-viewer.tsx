@@ -62,7 +62,7 @@ export const BoardViewer = observer(function BoardViewer() {
     };
 
     return (
-        <div ref={canvasBoard.UiStateManager.BoardContainerRef} className="size-full">
+        <div className="size-full">
             <div className="absolute left-5 top-5 z-[10] gap-1 flex ">
                 <Button size="sm" onClick={goToHome}>
                     <House size="20px" />

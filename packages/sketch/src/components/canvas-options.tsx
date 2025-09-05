@@ -21,13 +21,10 @@ import { QueryKeys, useStore } from "@now/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataUploader, DataUploaderHandle } from "../mini-components/data-uploader";
 import { SourceViewer, SourceViewerHandle } from "../mini-components/source-viewer";
-import { useScreenshot } from "use-react-screenshot";
+import { toPng } from "html-to-image";
 import { toast } from "sonner";
 
 const CanvasOptions = observer(function CanvasOptions() {
-    const [, takeScreenshot] = useScreenshot({
-        quality: 1.0
-    });
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { canvasBoard } = useCanvas(id ?? "new");
@@ -76,12 +73,10 @@ const CanvasOptions = observer(function CanvasOptions() {
         canvasBoard.UiStateManager.toggleFullScreen();
     };
 
-    const saveImage = (): Promise<string> => {
-        return new Promise((resolve) => {
-            takeScreenshot(canvasBoard.UiStateManager.BoardContainerRef.current).then((image: string) => {
-                resolve(image);
-            });
-        });
+    const saveImage = async () => {
+        if (!canvasBoard.UiStateManager.BoardContainerRef.current) return "";
+        const dataUrl = await toPng(canvasBoard.UiStateManager.BoardContainerRef.current);
+        return dataUrl;
     };
 
     return (

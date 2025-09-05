@@ -32,14 +32,14 @@ export const CanvasBoard = observer(function CanvasBoard() {
 
     useEffect(() => {
         onResize();
-    }, [rect]);
+    }, [onResize, rect]);
 
     useEffect(() => {
         setOpen(false);
         return () => {
             setOpen(true);
         };
-    }, []);
+    }, [setOpen]);
 
     useEffect(() => {
         if (id && id !== "new" && data) {
@@ -56,19 +56,25 @@ export const CanvasBoard = observer(function CanvasBoard() {
     }, [canvas, canvasBoard, data, id]);
 
     return (
-        <div ref={canvasBoard.UiStateManager.BoardContainerRef} className="size-full">
+        <div className="size-full">
             <div className="size-full absolute z-0" ref={resizer} />
             <AppLoader loading={sketchLoading} />
             <CanvasOptions />
             <TextEditorWrapper />
             <ImageInput />
-            <CustomComponentsRenderer />
-            <canvas id="canvas-board" className="absolute z-[1] overscroll-none" ref={canvasBoard.CanvasRef}></canvas>
-            <canvas
-                id="canvas-board-copy"
-                className="absolute z-[2] overscroll-none"
-                ref={canvasBoard.CanvasCopyRef}
-            ></canvas>
+            <div ref={canvasBoard.UiStateManager.BoardContainerRef} className="size-full">
+                <CustomComponentsRenderer />
+                <canvas
+                    id="canvas-board"
+                    className="absolute z-[1] overscroll-none"
+                    ref={canvasBoard.CanvasRef}
+                ></canvas>
+                <canvas
+                    id="canvas-board-copy"
+                    className="absolute z-[2] overscroll-none"
+                    ref={canvasBoard.CanvasCopyRef}
+                ></canvas>
+            </div>
         </div>
     );
 });
