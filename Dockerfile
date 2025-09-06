@@ -57,7 +57,7 @@ RUN yarn install --frozen-lockfile
 
 # Copy everything
 COPY . .
-ARG VITE_SKETCH_NOW_URL
+ARG VITE_SKETCH_NOW_URL="/api/"
 ENV VITE_SKETCH_NOW_URL=$VITE_SKETCH_NOW_URL
 # Build the React app (replace `dashboard` with your app name)
 RUN yarn nx build now
