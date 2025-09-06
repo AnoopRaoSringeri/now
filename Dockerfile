@@ -62,9 +62,10 @@ COPY . .
 RUN yarn nx build now
 
 # Stage 2: Serve with Nginx
-FROM alpine
+# Production image for React
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-WORKDIR /dist
-
-# Copy build output
-COPY --from=build /app/dist/apps/now ./
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
