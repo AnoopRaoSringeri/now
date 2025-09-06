@@ -62,13 +62,9 @@ COPY . .
 RUN yarn nx build now
 
 # Stage 2: Serve with Nginx
-FROM nginx:alpine
-# Copy build output
-COPY --from=build /app/dist/apps/now /usr/share/nginx/html
+FROM alpine
 
-# Copy custom Nginx config (optional, for SPA routing)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-# Expose default HTTP port
-EXPOSE 80
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+WORKDIR /dist
+
+# Copy build output
+COPY --from=build /app/dist/apps/now ./
