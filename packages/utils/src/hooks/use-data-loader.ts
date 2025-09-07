@@ -18,7 +18,7 @@ export function useDataLoader(chart: Chart, chartId: string) {
                         measures: chart.MeasureColumns,
                         dimensions: chart.DimensionColumns,
                         columns: [...chart.DimensionColumns, ...chart.MeasureColumns],
-                        sort: []
+                        sort: chart.SortConfig
                     },
                     chart.Page
                 );
@@ -37,6 +37,9 @@ export function useDataLoader(chart: Chart, chartId: string) {
     }, [chart, data]);
 
     useEffect(() => {
+        chart.SortConfig = chart.SortConfig.filter(
+            (sc) => chart.UsedColumns.find((uc) => uc.name === sc.column) != null
+        );
         refetch();
     }, [chart.DataVersion, refetch, chart.MeasureColumns, chart.DimensionColumns, chart.Page]);
 

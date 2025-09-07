@@ -62,6 +62,9 @@ const CanvasOptions = observer(function CanvasOptions() {
             queryClient.invalidateQueries({
                 queryKey: [QueryKeys.Sketch, id]
             });
+            queryClient.invalidateQueries({
+                queryKey: [QueryKeys.SketchImageData, id]
+            });
         }
     });
 
@@ -75,6 +78,23 @@ const CanvasOptions = observer(function CanvasOptions() {
 
     const saveImage = async () => {
         if (!canvasBoard.UiStateManager.BoardContainerRef.current) return "";
+        // const node = canvasBoard.UiStateManager.BoardContainerRef.current;
+        // const originalWidth = node.offsetWidth;
+        // const originalHeight = node.offsetHeight;
+
+        // const scaleX = 300 / originalWidth;
+        // const scaleY = 200 / originalHeight;
+        // const dataUrl = await toPng(canvasBoard.UiStateManager.BoardContainerRef.current, {
+        //     cacheBust: true,
+        //     width: originalWidth * scaleX,
+        //     height: originalHeight * scaleY,
+        //     style: {
+        //         transform: `scale(${scaleX}, ${scaleY})`,
+        //         transformOrigin: "top left",
+        //         width: `${originalWidth}px`,
+        //         height: `${originalHeight}px`
+        //     }
+        // });
         const dataUrl = await toPng(canvasBoard.UiStateManager.BoardContainerRef.current);
         return dataUrl;
     };

@@ -6,7 +6,8 @@ import {
     MultiColumnSelectValue,
     MultiMeasureSelectValue,
     SingleColumnSelectValue,
-    SingleMeasureSelectValue
+    SingleMeasureSelectValue,
+    SortConfig
 } from "@now/utils";
 import { MultiColumnSelectEditor } from "../editors/multi-column-select-editor";
 import { ColumnSelectEditor } from "../editors/column-select-editor";
@@ -14,6 +15,7 @@ import { observer } from "mobx-react";
 import { Label } from "@now/ui";
 import { MeasureSelectEditor } from "../editors/measure-select-editor";
 import { MultiMeasureSelectEditor } from "../editors/multi-measure-select-editor";
+import { SortIcon } from "./sort-icon";
 
 export const ChartOptionsRendererWrapper = observer(function ChartOptionsRendererWrapper({ chart }: { chart: Chart }) {
     const { config, options } = chart;
@@ -36,6 +38,10 @@ export const ChartOptionsRendererWrapper = observer(function ChartOptionsRendere
                     <ChartOptionsRenderer option={key} editorValue={options[key]} columns={columnConfig} />
                 </div>
             ))}
+            <div className="w-full">
+                <Label>{formatText("sort")}</Label>
+                <SortConfigRenderer sortConfig={chart.SortConfig} chart={chart} />
+            </div>
         </div>
     );
 });
@@ -89,4 +95,28 @@ const ChartOptionsRenderer = observer(function ChartOptionsRenderer({
         default:
             return null;
     }
+});
+
+const SortConfigRenderer = observer(function SortConfigRenderer({
+    sortConfig,
+    chart
+}: {
+    sortConfig: SortConfig[];
+    chart: Chart;
+}) {
+    return (
+        <div className="max-h-[200px] flex flex-col overflow-auto gap-1">
+            {chart.UsedColumns.map((c) => (
+                <div
+                    className="cursor-pointer flex flex-row h-8 gap-2 items-center bg-background px-4 py-1 rounded"
+                    onClick={() => {
+                        chart.toggleSort(c.name);
+                    }}
+                >
+                    <SortIcon sort={sortConfig.find((sc) => sc.column === c.name) ?? null} />
+                    <Label varient="small">{c.name}</Label>
+                </div>
+            ))}
+        </div>
+    );
 });

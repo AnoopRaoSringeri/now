@@ -7,7 +7,7 @@ import {
     MultiMeasureSelectEditorValue,
     MeasureSelectEditorValue
 } from "./editor-value-types";
-import { ChartConfigMetadata, ChartType } from "./types";
+import { ChartConfigMetadata, ChartType, SortConfig } from "./types";
 import { ValueType } from "./value-types";
 import { PaginatedData } from "./chart-data";
 import { ChartSource } from "./source";
@@ -34,6 +34,7 @@ export class Chart implements IChart {
     source: ChartSource | null = null;
     config: ConfigType;
     page: number | null = null;
+    sortConfig: SortConfig[] = [];
     constructor(config: ChartConfigMetadata, public type: ChartType) {
         this.config = {
             measures:
@@ -57,7 +58,9 @@ export class Chart implements IChart {
             DimensionColumns: computed,
             Config: computed,
             page: observable,
-            Page: computed
+            Page: computed,
+            sortConfig: observable,
+            SortConfig: computed
         });
     }
     onChange(key: string, value: ValueType) {
@@ -133,6 +136,9 @@ export class Chart implements IChart {
                 : []
             : this.config.dimensions.v.Value.v;
     }
+    get UsedColumns() {
+        return [...this.DimensionColumns, ...this.MeasureColumns];
+    }
     get Config() {
         const config: ChartConfigMetadata = {
             measures: {
@@ -187,6 +193,35 @@ export class Chart implements IChart {
             this.page = value;
         });
     }
+    get SortConfig() {
+        return this.sortConfig;
+    }
+    set SortConfig(value: SortConfig[]) {
+        runInAction(() => {
+            this.sortConfig = value;
+        });
+    }
+
+    toggleSort(column: string) {
+        runInAction(() => {
+            const ix = this.SortConfig.findIndex((c) => c.column === column);
+            if (ix < 0) {
+                this.sortConfig.push({
+                    column: column,
+                    sort: "ASC"
+                });
+            } else {
+                if (this.sortConfig[ix].sort === "DESC") {
+                    this.sortConfig = this.SortConfig.filter((sc) => sc.column !== column);
+                } else {
+                    this.sortConfig[ix] =
+                        this.SortConfig[ix].sort === "ASC" ? { column, sort: "DESC" } : { column, sort: "ASC" };
+                }
+            }
+            this.DataVersion++;
+        });
+    }
+
     resetConfig() {
         runInAction(() => {
             if (this.config.measures.t === "s") {

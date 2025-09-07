@@ -38,6 +38,7 @@ export const MultiMeasureSelectEditor = observer(function MultiMeasureSelectEdit
     return (
         <MultiSelect
             className="w-full"
+            responsive={false}
             options={columns.map((c) => ({
                 label: c.name,
                 value: c.name,
