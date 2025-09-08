@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useCallback, useRef, useState } from "react";
 import { Brush } from "recharts";
 
 export const ROWS_PER_PAGE = 20;
@@ -13,22 +13,16 @@ export function ChartPaginator({
     const [currentPage, setCurrentPage] = useState(0);
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
+    const onScrollEvent = useCallback(() => {
         const el = scrollRef.current;
         if (!el) return;
+        const maxScroll = el.scrollWidth - el.clientWidth;
+        const ratio = el.scrollLeft / maxScroll;
 
-        const onScrollEvent = () => {
-            const maxScroll = el.scrollWidth - el.clientWidth;
-            const ratio = el.scrollLeft / maxScroll;
-
-            const newStart = Math.round(ratio * (rowCount - ROWS_PER_PAGE));
-            if (newStart > 0) {
-                setCurrentPage(newStart);
-            }
-        };
-
-        el.addEventListener("scroll", onScrollEvent);
-        return () => el.removeEventListener("scroll", onScrollEvent);
+        const newStart = Math.round(ratio * (rowCount - ROWS_PER_PAGE));
+        if (newStart > 0) {
+            setCurrentPage(newStart);
+        }
     }, [rowCount]);
 
     const visible = Math.ceil(rowCount / ROWS_PER_PAGE) > 1;
@@ -42,8 +36,9 @@ export function ChartPaginator({
                 style={{
                     overflowX: "auto"
                 }}
+                onScroll={onScrollEvent}
             >
-                {visible && <div style={{ width: `${rowCount * 10}px`, height: 20 }} />}
+                {visible && <div style={{ width: `${rowCount}px`, height: 20 }} />}
             </div>
         </div>
     );

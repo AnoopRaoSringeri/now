@@ -4,6 +4,8 @@ import react from "@vitejs/plugin-react";
 import { nxViteTsPaths } from "@nx/vite/plugins/nx-tsconfig-paths.plugin";
 import { nxCopyAssetsPlugin } from "@nx/vite/plugins/nx-copy-assets.plugin";
 import mkcert from "vite-plugin-mkcert";
+import eslint from "vite-plugin-eslint";
+import checker from "vite-plugin-checker";
 
 export default defineConfig({
     root: __dirname,
@@ -11,7 +13,7 @@ export default defineConfig({
     server: {
         port: 4200,
         host: "0.0.0.0",
-         allowedHosts: true
+        allowedHosts: true
     },
     preview: {
         port: 4300,
@@ -19,8 +21,15 @@ export default defineConfig({
     },
     plugins: [
         react(),
+        eslint(),
         nxViteTsPaths(),
-        nxCopyAssetsPlugin(["*.md"])
+        nxCopyAssetsPlugin(["*.md"]),
+        checker({
+            typescript: true
+            // eslint: {
+            //     lintCommand: 'eslint "./src/**/*.{ts,tsx,js,jsx}"'
+            // }
+        })
         // mkcert({
         //     savePath: "../../certs", // save the generated certificate into certs directory
         //     force: true // force generation of certs even without setting https property in the vite config

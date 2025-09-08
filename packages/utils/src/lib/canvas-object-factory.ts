@@ -4,6 +4,7 @@ import { ChartNow } from "../types/canvas/objects/chart";
 import { Circle } from "../types/canvas/objects/circle";
 import { CanvasImage } from "../types/canvas/objects/image";
 import { Line } from "../types/canvas/objects/line";
+import { Link } from "../types/canvas/objects/link";
 import { Pencil } from "../types/canvas/objects/pencil";
 import { Rectangle } from "../types/canvas/objects/rectangle";
 import { Square } from "../types/canvas/objects/square";
@@ -36,6 +37,8 @@ export class CanvasObjectFactory {
                 return new AiPrompt(id, object, board, style);
             case ElementEnum.Chart:
                 return new ChartNow(id, object, board, style);
+            case ElementEnum.Link:
+                return new Link(id, object, board, style);
             default:
                 return new BaseObject(id, object, board, style);
         }
@@ -105,7 +108,7 @@ export class CanvasObjectFactory {
                                     measures: {
                                         t: "m",
                                         v: {
-                                            t: "mcs",
+                                            t: "mms",
                                             v: []
                                         }
                                     }
@@ -114,6 +117,20 @@ export class CanvasObjectFactory {
                                 source: null,
                                 options: {}
                             }
+                        }
+                    },
+                    board,
+                    board.Style
+                );
+
+            case ElementEnum.Link:
+                return new Link(
+                    uuid(),
+                    {
+                        type: type,
+                        value: {
+                            start: null,
+                            end: null
                         }
                     },
                     board,

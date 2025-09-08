@@ -16,6 +16,7 @@ export enum ElementEnum {
     Image = "image",
     Chart = "chart",
     AiPrompt = "aiPrompt",
+    Link = "link",
     Move = "move",
     Pan = "pan"
 }

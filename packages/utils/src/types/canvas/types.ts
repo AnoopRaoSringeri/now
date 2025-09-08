@@ -28,6 +28,19 @@ export type XY = {
 
 export type TextValue = XYHW & { value: string };
 
+export type LinkValue = {
+    start:
+        | (CanvasObject & {
+              id: string;
+          })
+        | null;
+    end:
+        | (CanvasObject & {
+              id: string;
+          })
+        | null;
+};
+
 export type PointsArray = {
     points: [number, number][];
 };
@@ -77,6 +90,11 @@ export type AiPromptObject = {
     value: XYHW & { prompt: string };
 };
 
+export type LinkObject = {
+    type: ElementEnum.Link;
+    value: LinkValue;
+};
+
 export type CanvasObject =
     | RectangleObject
     | SquareObject
@@ -86,4 +104,5 @@ export type CanvasObject =
     | PencilObject
     | ImageObject
     | ChartObject
-    | AiPromptObject;
+    | AiPromptObject
+    | LinkObject;

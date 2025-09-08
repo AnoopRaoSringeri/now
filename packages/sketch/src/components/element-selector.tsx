@@ -64,6 +64,11 @@ const LeftOptionLists: Option[] = [
         icon: "Sparkles",
         value: ElementEnum.AiPrompt,
         description: "Click and drag to draw a textarea, type your prompt"
+    },
+    {
+        icon: "Link",
+        value: ElementEnum.Link,
+        description: "Select 2 elements to link"
     }
 ];
 

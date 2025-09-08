@@ -27,7 +27,7 @@ export const BarChartNow = observer(function BarChartNow({ chart }: { chart: Bar
         <ChartPaginator rowCount={chart.ChartData.data.length}>
             {(paginator) => (
                 <ChartContainer config={chartConfig} className="flex-1 overflow-hidden">
-                    <BarChartComponent accessibilityLayer data={chartData}>
+                    <BarChartComponent accessibilityLayer data={chartData} throttleDelay={200}>
                         <CartesianGrid vertical={false} />
                         <XAxis dataKey={xAxis.name} tickLine={false} tickMargin={10} axisLine={false} />
                         <ChartTooltip content={<ChartTooltipContent />} />

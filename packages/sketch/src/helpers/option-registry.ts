@@ -70,5 +70,6 @@ export const OptionRegistry: OptionRegistryType = {
     [ElementEnum.Pan]: [],
     [ElementEnum.Image]: [],
     [ElementEnum.Chart]: [],
-    [ElementEnum.AiPrompt]: []
+    [ElementEnum.AiPrompt]: [],
+    [ElementEnum.Link]: []
 };

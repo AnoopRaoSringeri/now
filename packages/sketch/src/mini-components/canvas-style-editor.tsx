@@ -35,7 +35,7 @@ const CanvasStyleEditor = observer(function CanvasStyleEditor() {
     const { canvasBoard } = useCanvas(id ?? "new");
     const canvasStyle = canvasBoard.Style;
 
-    const options = OptionRegistry[canvasBoard.ElementType];
+    const options = OptionRegistry[canvasBoard.ElementType] ?? [];
     return options.length > 0 ? (
         <>
             {options.map((o, i) => (
