@@ -39,7 +39,7 @@ export class EventManager {
         if (
             this.Board._selectedElements.length !== 0 &&
             (this.Board.HoveredObject == null || this.Board.HoveredObject.id !== this.Board._selectedElements[0].id) &&
-            (this.Board.SelectionElement == null || this.Board._currentCanvasAction === CanvasActionEnum.Select)
+            (this.Board.SelectionElement == null || this.Board._currentCanvasAction === null)
         ) {
             this.Board.unSelectElements();
         }
@@ -67,7 +67,7 @@ export class EventManager {
                             ao.move(context, { x: 0, y: 0 }, "down");
                             ao.ShowSelection = true;
                         });
-                        this.Board._currentCanvasAction = CanvasActionEnum.Select;
+                        this.Board._currentCanvasAction = null;
                     }
                 } else {
                     this.Board.Helper.clearCanvasArea(context);
@@ -109,7 +109,7 @@ export class EventManager {
                             );
                         }
                     } else {
-                        this.Board._currentCanvasAction = CanvasActionEnum.Select;
+                        this.Board._currentCanvasAction = null;
                         this.Board.TempSelectionArea = new Rectangle(
                             `tem-selection-area-${SELECTION_ELEMENT_ID}`,
                             {
@@ -253,7 +253,7 @@ export class EventManager {
                         console.log(offsetX, offsetY);
                         // this.Board.CurrentPointer = { x: offsetX, y: offsetY };
                         if (this.Board.TempSelectionArea) {
-                            if (this.Board._currentCanvasAction === CanvasActionEnum.Select) {
+                            if (this.Board._currentCanvasAction === null) {
                                 this.Board.TempSelectionArea.updateValue(
                                     context,
                                     {
@@ -375,7 +375,7 @@ export class EventManager {
                     }, 16);
                 }
                 if (this.Board.TempSelectionArea) {
-                    if (this.Board._currentCanvasAction === CanvasActionEnum.Select) {
+                    if (this.Board._currentCanvasAction === null) {
                         this.Board.TempSelectionArea.updateValue(
                             context,
                             {
@@ -521,7 +521,7 @@ export class EventManager {
                     this.Board.TempSelectionArea = this.Board.SelectionElement;
                 } else {
                     this.Board.CursorPosition = null;
-                    this.Board._currentCanvasAction = CanvasActionEnum.Select;
+                    this.Board._currentCanvasAction = null;
                     this.Board.CanvasCopy.style.cursor = "default";
                     this.Board.TempSelectionArea = null;
                 }
@@ -541,7 +541,7 @@ export class EventManager {
                     this.Board.HoveredObject = ele;
                 } else {
                     this.Board.CursorPosition = null;
-                    this.Board._currentCanvasAction = CanvasActionEnum.Select;
+                    this.Board._currentCanvasAction = null;
                     this.Board.CanvasCopy.style.cursor = "default";
                     this.Board.HoveredObject = null;
                 }
@@ -588,7 +588,7 @@ export class EventManager {
                         this.Board.TempSelectionArea = this.Board.SelectionElement;
                     } else {
                         this.Board.CursorPosition = null;
-                        this.Board._currentCanvasAction = CanvasActionEnum.Select;
+                        this.Board._currentCanvasAction = null;
                         this.Board.CanvasCopy.style.cursor = "default";
                         this.Board.TempSelectionArea = null;
                     }
@@ -609,7 +609,7 @@ export class EventManager {
                         console.log({ ...ele });
                     } else {
                         this.Board.CursorPosition = null;
-                        this.Board._currentCanvasAction = CanvasActionEnum.Select;
+                        this.Board._currentCanvasAction = null;
                         this.Board.CanvasCopy.style.cursor = "default";
                         this.Board.HoveredObject = null;
                     }
@@ -740,7 +740,7 @@ export class EventManager {
                     this.Board.ActiveObjects.forEach((ao) => {
                         ao.resize(context, { dx: offsetX - x, dy: offsetY - y }, this.Board.CursorPosition!, "up");
                     });
-                } else if (this.Board._currentCanvasAction === CanvasActionEnum.Select) {
+                } else if (this.Board._currentCanvasAction === null) {
                     this.Board.ActiveObjects.forEach((ao) => {
                         ao.select({});
                         ao.ShowSelection = true;
@@ -784,7 +784,7 @@ export class EventManager {
             this.Board.PointerOrigin = null;
             context.closePath();
             this.Board.redrawBoard();
-            this.Board._currentCanvasAction = CanvasActionEnum.Select;
+            this.Board._currentCanvasAction = null;
             this.Board.TempSelectionArea = null;
             // this.Board.Text = null;
         }

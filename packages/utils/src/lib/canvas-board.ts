@@ -6,6 +6,7 @@ import { ElementEnum, CanvasActionEnum } from "../types/sketch-now/enums";
 import { IObjectStyle } from "../types/sketch-now/object-styles";
 import { DefaultStyle, CanvasHelper, CANVAS_SCALING_MULTIPLIER, MIN_INTERVAL } from "./canvas-helpers";
 import { EventManager } from "./event-handler";
+import { EventManager as EM } from "../types/canvas/events/event-manager";
 import { BaseObject } from "../types/canvas/base-object";
 import { Rectangle } from "../types/canvas/objects/rectangle";
 import { Text } from "../types/canvas/objects/text";
@@ -30,12 +31,13 @@ export class CanvasBoard implements ICanvas {
     private _hoveredObject: BaseObject | null = null;
 
     private EventManager: EventManager;
+    private EM: EM;
     SourceManager: SourceManager;
     UiStateManager: UiStateManager;
 
     _elementType: ElementEnum = ElementEnum.Move;
     _isElementSelectorLocked = true;
-    _currentCanvasAction: CanvasActionEnum = CanvasActionEnum.Select;
+    _currentCanvasAction: CanvasActionEnum | null = null;
     _zoom = 100;
     _style: IObjectStyle = DefaultStyle();
     _selectedElements: BaseObject[] = [];
@@ -55,6 +57,7 @@ export class CanvasBoard implements ICanvas {
 
     constructor() {
         this.EventManager = new EventManager(this);
+        this.EM = new EM(this);
         this._canvas = createRef();
         this._canvasCopy = createRef();
         this.Helper = new CanvasHelper(this);
@@ -642,7 +645,7 @@ export class CanvasBoard implements ICanvas {
         this.ElementType = ElementEnum.Move;
         this.ReadOnly = false;
         this._hoveredObject = null;
-        this._currentCanvasAction = CanvasActionEnum.Select;
+        this._currentCanvasAction = null;
         this.Transform = CanvasHelper.GetDefaultTransForm();
     }
 
@@ -674,15 +677,30 @@ export class CanvasBoard implements ICanvas {
     }
 
     onMouseDown(e: MouseEvent) {
-        this.EventManager.onMouseDown(e);
+        const v2 = localStorage.getItem("V2");
+        if (v2) {
+            this.EventManager.onMouseDown(e);
+        } else {
+            this.EM.onMouseDown(e);
+        }
     }
 
     onMouseMove(e: MouseEvent) {
-        this.EventManager.onMouseMove(e);
+        const v2 = localStorage.getItem("V2");
+        if (v2) {
+            this.EventManager.onMouseMove(e);
+        } else {
+            this.EM.onMouseMove(e);
+        }
     }
 
     onMouseUp(e: MouseEvent) {
-        this.EventManager.onMouseUp(e);
+        const v2 = localStorage.getItem("V2");
+        if (v2) {
+            this.EventManager.onMouseUp(e);
+        } else {
+            this.EM.onMouseUp(e);
+        }
     }
 
     onWheelAction(e: WheelEvent) {

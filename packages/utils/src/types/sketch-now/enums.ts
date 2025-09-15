@@ -3,6 +3,9 @@ export enum CanvasActionEnum {
     Zoom = "zoom",
     Select = "select",
     Resize = "resize",
+    SelectionArea = "selection-area",
+    SelectionMove = "selection-move",
+    SelectionResize = "selection-resize",
     Move = "move"
 }
 
