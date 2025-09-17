@@ -24,26 +24,22 @@ export class ImageEventHandler implements IElementEventHandler {
 
         // board.ActiveObjects = [image];
         board.Image = image; // stored for async upload usage
-        board.PointerOrigin = { x: offsetX, y: offsetY };
     }
 
     onMouseMove(e: MouseEvent, board: CanvasBoard, ctx: CanvasRenderingContext2D) {
-        if (!board.PointerOrigin || board.ActiveObjects.length === 0) return;
-        const { offsetX, offsetY } = CanvasHelper.getCurrentMousePosition(e, board.Transform);
-        const { x, y } = board.PointerOrigin;
-
-        const img = board.ActiveObjects[0] as CanvasImage;
-        img.updateValue(ctx, { ...img.Value, w: offsetX - x, h: offsetY - y }, "move");
+        // if (!board.PointerOrigin || board.ActiveObjects.length === 0) return;
+        // const { offsetX, offsetY } = CanvasHelper.getCurrentMousePosition(e, board.Transform);
+        // const { x, y } = board.PointerOrigin;
+        // const img = board.ActiveObjects[0] as CanvasImage;
+        // img.updateValue(ctx, { ...img.Value, w: offsetX - x, h: offsetY - y }, "move");
     }
 
     onMouseUp(e: MouseEvent, board: CanvasBoard, ctx: CanvasRenderingContext2D) {
-        if (!board.PointerOrigin || board.ActiveObjects.length === 0) return;
-        const { offsetX, offsetY } = CanvasHelper.getCurrentMousePosition(e, board.Transform);
-        const { x, y } = board.PointerOrigin;
-
-        const img = board.ActiveObjects[0] as CanvasImage;
-        img.updateValue(ctx, { ...img.Value, w: offsetX - x, h: offsetY - y }, "up");
-
-        board.saveBoard();
+        // if (!board.PointerOrigin || board.ActiveObjects.length === 0) return;
+        // const { offsetX, offsetY } = CanvasHelper.getCurrentMousePosition(e, board.Transform);
+        // const { x, y } = board.PointerOrigin;
+        // const img = board.ActiveObjects[0] as CanvasImage;
+        // img.updateValue(ctx, { ...img.Value, w: offsetX - x, h: offsetY - y }, "up");
+        // board.saveBoard();
     }
 }

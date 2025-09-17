@@ -9,9 +9,14 @@ import {
     DialogTrigger,
     Icon,
     Label,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
     Switch
 } from "@now/ui";
-import ollama from "ollama/browser";
+import ollama, { ModelResponse } from "ollama/browser";
 
 import { observer } from "mobx-react";
 import { useEffect, useState } from "react";
@@ -25,26 +30,39 @@ export const AiPromptRenderer = observer(function AiPromptRenderer({ component }
     const [loading, setLoading] = useState<boolean>(false);
     const [aiResult, setAiResult] = useState<string>("");
     const [useJson, setUseJson] = useState(false);
+    const [models, setModels] = useState<ModelResponse[]>([]);
+    const [selectedModel, setSelectedModel] = useState<ModelResponse | null>(null);
     const [json, setJson] = useState("");
+
+    useEffect(() => {
+        loadModels();
+    }, []);
+
+    const loadModels = async () => {
+        const list = (await ollama.list()).models;
+        setModels(list);
+        setSelectedModel(list[0]);
+    };
 
     const onChange = (value: string) => {
         component.Prompt = value;
     };
 
     async function generate() {
+        if (!selectedModel) return;
         updateResult("");
         setLoading(true);
         try {
-            if (json != null && json !== "") {
+            if (useJson && json != null && json !== "") {
                 const response = await ollama.generate({
-                    model: "gemma2:2b",
+                    model: selectedModel.name,
                     prompt: component.Prompt ?? "",
                     format: JSON.parse(json)
                 });
                 updateResult(response.response);
             } else {
                 const response = await ollama.chat({
-                    model: "gemma2:2b",
+                    model: selectedModel.name,
                     messages: [{ role: "user", content: component.Prompt ?? "" }],
                     stream: true
                 });
@@ -69,9 +87,27 @@ export const AiPromptRenderer = observer(function AiPromptRenderer({ component }
             <p className="flex-1 overflow-auto w-full whitespace-break-spaces ">{aiResult}</p>
             <div className="h-[88px] w-full  flex items-end z-[3] gap-1">
                 <div className="flex flex-col items-end flex-1 h-full">
-                    <div className="flex flex-row items-center gap-2 ">
-                        <Label htmlFor="use-json">Use JSON</Label>
-                        <Switch id="use-json" checked={useJson} onCheckedChange={(value) => setUseJson(value)} />
+                    <div className="flex w-full justify-between gap-5 h-[26px]">
+                        <Select
+                            value={selectedModel?.name}
+                            onValueChange={(v) => {
+                                setSelectedModel(models.find((m) => m.name === v) ?? null);
+                            }}
+                        >
+                            <SelectTrigger className="w-40 h-full">
+                                <SelectValue placeholder="Select model..." />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {models.map((m) => (
+                                    <SelectItem value={m.name}>{m.name}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <div className="flex flex-row items-center gap-2 ">
+                            <Label htmlFor="use-json">Use JSON</Label>
+
+                            <Switch id="use-json" checked={useJson} onCheckedChange={(value) => setUseJson(value)} />
+                        </div>
                     </div>
 
                     <AiGenerator value={component.Prompt ?? ""} onChange={onChange} />

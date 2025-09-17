@@ -30,10 +30,10 @@ export class BaseObject {
             isSelected: observable
         });
     }
-    private tmpX = 0;
-    private tmpY = 0;
-    private tmpH = 0;
-    private tmpW = 0;
+    protected tmpX = 0;
+    protected tmpY = 0;
+    protected tmpH = 0;
+    protected tmpW = 0;
     id = uuid();
     style = DefaultStyle();
     order = 0;

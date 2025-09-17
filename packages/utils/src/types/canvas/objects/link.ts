@@ -19,8 +19,12 @@ export class Link extends BaseObject {
         if (!this.Value.start || !this.Value.end) {
             return;
         }
-        const { x: sx, y: sy } = this.Value.start.value;
-        const { x: ex, y: ey } = this.Value.end.value;
+        let { x: sx, y: sy, h: sh, w: sw } = this.Value.start.value;
+        sx += sw / 2;
+        sy += sh / 2;
+        let { x: ex, y: ey, h: eh, w: ew } = this.Value.end.value;
+        ex += ew / 2;
+        ey += eh / 2;
         this.Board.Helper.applyStyles(ctx, this.style);
         ctx.beginPath();
         ctx.moveTo(sx, sy);

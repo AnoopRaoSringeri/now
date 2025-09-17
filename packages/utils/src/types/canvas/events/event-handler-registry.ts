@@ -4,6 +4,7 @@ import { ImageEventHandler } from "./image-handler";
 import { CanvasActionHandler } from "./canvas-action-handler";
 import { TextEventHandler } from "./text-handler";
 import { CanvasElementHandler } from "./canvas-element-handler";
+import { LinkEventHandler } from "./link-handler";
 
 export class EventHandlerRegistry {
     private handlers: Map<ElementEnum, IElementEventHandler> = new Map();
@@ -13,6 +14,7 @@ export class EventHandlerRegistry {
         this.handlers.set(ElementEnum.Move, new CanvasActionHandler());
         this.handlers.set(ElementEnum.Image, new ImageEventHandler());
         this.handlers.set(ElementEnum.Text, new TextEventHandler());
+        this.handlers.set(ElementEnum.Link, new LinkEventHandler());
         this.handlers.set(ElementEnum.Rectangle, new CanvasElementHandler());
         this.handlers.set(ElementEnum.Square, new CanvasElementHandler());
         this.handlers.set(ElementEnum.Circle, new CanvasElementHandler());

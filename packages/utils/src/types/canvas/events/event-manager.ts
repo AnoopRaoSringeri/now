@@ -1,3 +1,4 @@
+import { CANVAS_SCALING_FACTOR, CANVAS_SCALING_LIMIT, CANVAS_SCALING_MULTIPLIER } from "./../../../lib/canvas-helpers";
 import { CanvasBoard } from "../../../lib/canvas-board";
 import { EventHandlerRegistry } from "./event-handler-registry";
 
@@ -39,7 +40,42 @@ export class EventManager {
 
     // keep wheel/touch handling here
     onWheelAction(e: WheelEvent) {
-        // implement pan/zoom
+        const oldX = this.board.Transform.transformX;
+        const oldY = this.board.Transform.transformY;
+
+        const localX = e.clientX;
+        const localY = e.clientY;
+
+        const previousScale = this.board.Transform.scaleX;
+        const newScale = Number(Math.abs(this.board.Transform.scaleX + e.deltaY * CANVAS_SCALING_FACTOR).toFixed(4));
+        const newX = localX - (localX - oldX) * (newScale / previousScale);
+        const newY = localY - (localY - oldY) * (newScale / previousScale);
+        if (newScale <= CANVAS_SCALING_LIMIT) {
+            const newScale = CANVAS_SCALING_LIMIT;
+            const newX = localX - (localX - oldX) * (newScale / previousScale);
+            const newY = localY - (localY - oldY) * (newScale / previousScale);
+            this.board.Transform = {
+                ...this.board.Transform,
+                transformX: newX,
+                transformY: newY,
+                scaleX: newScale,
+                scaleY: newScale
+            };
+            this.board.Zoom = newScale * CANVAS_SCALING_MULTIPLIER;
+            return;
+        }
+        if (isNaN(newX) || isNaN(newY) || !isFinite(newX) || !isFinite(newY)) {
+            return;
+        }
+        this.board.Transform = {
+            ...this.board.Transform,
+            transformX: newX,
+            transformY: newY,
+            scaleX: newScale,
+            scaleY: newScale
+        };
+        this.board.Zoom = newScale * CANVAS_SCALING_MULTIPLIER;
+        this.board.redrawBoard();
     }
 
     onTouchStart(e: TouchEvent) {

@@ -16,12 +16,14 @@ import { ChartNow } from "../types/canvas/objects/chart";
 import { v4 as uuid } from "uuid";
 import { SourceManager } from "./source-manager";
 import { UiStateManager } from "./ui-state-manager";
+import { Link } from "../types/canvas/objects/link";
 export class CanvasBoard implements ICanvas {
     private _lastTimestamp = 0;
     private _clicked = false;
     private _canvas: React.RefObject<HTMLCanvasElement>;
     private _canvasCopy: React.RefObject<HTMLCanvasElement>;
     _elements: BaseObject[] = [];
+    _links: Link[] = [];
     private _pointerOrigin: Position | null = null;
     private _currentPointer: Position = { x: 0, y: 0 };
     private _readOnly = false;
@@ -88,7 +90,8 @@ export class CanvasBoard implements ICanvas {
             Image: computed,
             CustomComponentIds: computed,
             getComponent: action,
-            _activeObjects: observable
+            _activeObjects: observable,
+            _links: observable
         });
     }
 
@@ -704,7 +707,12 @@ export class CanvasBoard implements ICanvas {
     }
 
     onWheelAction(e: WheelEvent) {
-        this.EventManager.onWheelAction(e);
+        const v2 = localStorage.getItem("V2");
+        if (v2) {
+            this.EventManager.onWheelAction(e);
+        } else {
+            this.EM.onWheelAction(e);
+        }
     }
 
     onTouchStart(e: TouchEvent) {

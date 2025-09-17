@@ -5,6 +5,7 @@ import { CanvasActionEnum } from "../../sketch-now/enums";
 export class PanEventHandler implements IElementEventHandler {
     onMouseDown(e: MouseEvent, board: CanvasBoard, ctx: CanvasRenderingContext2D) {
         board._currentCanvasAction = CanvasActionEnum.Pan;
+        board.PointerOrigin = { x: e.offsetX, y: e.offsetY };
     }
 
     onMouseMove(e: MouseEvent, board: CanvasBoard, ctx: CanvasRenderingContext2D) {
