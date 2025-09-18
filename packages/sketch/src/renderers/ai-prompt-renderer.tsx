@@ -25,11 +25,11 @@ import { AiPrompt, isValidJson } from "@now/utils";
 import { useDisclosure } from "@mantine/hooks";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 
-import { ModelResponse, Ollama } from 'ollama';
+import { ModelResponse, Ollama } from "ollama/browser";
 
 const ollama = new Ollama({
-  host: import.meta.env.VITE_OLLAMA_URL // Replace with your custom URL
-});   
+    host: import.meta.env.VITE_OLLAMA_URL // Replace with your custom URL
+});
 
 export const AiPromptRenderer = observer(function AiPromptRenderer({ component }: { component: AiPrompt }) {
     const [loading, setLoading] = useState<boolean>(false);
