@@ -60,7 +60,7 @@ COPY . .
 ARG VITE_SKETCH_NOW_URL="/api/"
 ENV VITE_SKETCH_NOW_URL=$VITE_SKETCH_NOW_URL
 
-ARG VITE_OLLAMA_URL="/ollama/"
+ARG VITE_OLLAMA_URL="http://localhost:3000/ollama/"
 ENV VITE_OLLAMA_URL=$VITE_OLLAMA_URL
 # Build the React app (replace `dashboard` with your app name)
 RUN yarn nx build now
