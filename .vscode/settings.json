@@ -1,19 +1,15 @@
 {
     "prettier.configPath": "C:\\My-Projects\\Apps\\now\\.prettierrc",
-    "vs-code-prettier-eslint.prettierLast": true,
-    "prettier.insertPragma": true,
-    "prettier.resolveGlobalModules": true,
-    "editor.codeActions.triggerOnFocusChange": false,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "always"
+    },
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "always"
     },
     "files.associations": {
         "*.css": "tailwindcss"

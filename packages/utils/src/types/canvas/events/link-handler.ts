@@ -1,9 +1,8 @@
 import { v4 as uuid } from "uuid";
-import { IElementEventHandler } from "../element-event-handler";
 import { CanvasBoard } from "../../../lib/canvas-board";
 import { CanvasHelper } from "../../../lib/canvas-helpers";
-import { CanvasImage } from "../objects/image";
 import { CanvasActionEnum, ElementEnum } from "../../sketch-now/enums";
+import { IElementEventHandler } from "../element-event-handler";
 import { Link } from "../objects/link";
 
 export class LinkEventHandler implements IElementEventHandler {
@@ -41,7 +40,6 @@ export class LinkEventHandler implements IElementEventHandler {
                 }
                 board.CanvasCopy.style.cursor = CanvasHelper.getCursor(board.CursorPosition);
                 board.HoveredObject = ele;
-                console.log("nnn", { ...ele });
             }
         } else {
             if (board.SelectionElement) {
@@ -78,7 +76,6 @@ export class LinkEventHandler implements IElementEventHandler {
                     }
                     board.CanvasCopy.style.cursor = CanvasHelper.getCursor(board.CursorPosition);
                     board.HoveredObject = ele;
-                    console.log({ ...ele });
                 } else {
                     board.CursorPosition = null;
                     board._currentCanvasAction = null;

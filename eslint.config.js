@@ -1,38 +1,41 @@
-const nx = require("@nx/eslint-plugin");
+// eslint.config.js (repo root)
+import js from "@eslint/js";
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
-module.exports = [
-    ...nx.configs["flat/base"],
-    ...nx.configs["flat/typescript"],
-    ...nx.configs["flat/javascript"],
+export default [
+    js.configs.recommended,
+
+    ...tseslint.configs.recommended,
+
     {
-        ignores: ["**/dist"]
-    },
-    {
-        files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
-        rules: {
-            "@nx/enforce-module-boundaries": [
-                "error",
-                {
-                    enforceBuildableLibDependency: true,
-                    allow: ["^.*/eslint(\\.base)?\\.config\\.[cm]?js$"],
-                    depConstraints: [
-                        {
-                            sourceTag: "*",
-                            onlyDependOnLibsWithTags: ["*"]
-                        }
-                    ]
+        files: ["**/*.{ts,tsx}"],
+        languageOptions: {
+            parser: tseslint.parser,
+            parserOptions: {
+                ecmaVersion: "latest",
+                sourceType: "module",
+                ecmaFeatures: {
+                    jsx: true
                 }
-            ]
-        }
-    },
-    {
-        files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
-        // Override or add rules here
+            },
+            globals: {
+                ...globals.browser
+            }
+        },
+        plugins: {
+            react,
+            "react-hooks": reactHooks
+        },
+        settings: {
+            react: {
+                version: "detect"
+            }
+        },
         rules: {
-            "@typescript-eslint/adjacent-overload-signatures": 0,
-            "@typescript-eslint/no-non-null-assertion": 0,
-            eqeqeq: 0,
-            "react-hooks/exhaustive-deps": 0
+            "react/react-in-jsx-scope": "off"
         }
     }
 ];

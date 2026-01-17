@@ -1,12 +1,9 @@
 {
-  "$schema": "https://json.schemastore.org/prettierrc",
-  "trailingComma": "none",
-  "tabWidth": 4,
-  "semi": true,
-  "singleQuote": false,
-  "printWidth": 120,
-  "endOfLine": "auto",
-  "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true,
-  "overrides": []
+    "$schema": "https://json.schemastore.org/prettierrc",
+    "trailingComma": "none",
+    "tabWidth": 4,
+    "semi": true,
+    "singleQuote": false,
+    "printWidth": 120,
+    "endOfLine": "auto"
 }

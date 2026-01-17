@@ -1,7 +1,8 @@
+import { useStore } from "./store-provider";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { LogInRequet } from "../types/auth/auth";
-import { useStore } from "./store-provider";
+
 import { toast } from "sonner";
 
 export function useAuth() {

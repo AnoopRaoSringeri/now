@@ -1,20 +1,20 @@
 import { v4 as uuid } from "uuid";
 
-import { CanvasBoard } from "./canvas-board";
+import { CanvasImage } from "../types/canvas/objects/image";
+import { Link } from "../types/canvas/objects/link";
+import { Rectangle } from "../types/canvas/objects/rectangle";
+import { Text } from "../types/canvas/objects/text";
 import { CanvasActionEnum, ElementEnum } from "../types/sketch-now/enums";
+import { CanvasBoard } from "./canvas-board";
 import {
-    CanvasHelper,
     CANVAS_SCALING_FACTOR,
     CANVAS_SCALING_LIMIT,
     CANVAS_SCALING_MULTIPLIER,
+    CanvasHelper,
     SELECTION_ELEMENT_ID,
     SelectionStyle
 } from "./canvas-helpers";
 import { CanvasObjectFactory } from "./canvas-object-factory";
-import { CanvasImage } from "../types/canvas/objects/image";
-import { Text } from "../types/canvas/objects/text";
-import { Rectangle } from "../types/canvas/objects/rectangle";
-import { Link } from "../types/canvas/objects/link";
 const EDGE_THRESHOLD = 50; // px
 const PAN_SPEED = 3; // px per frame
 export class EventManager {
@@ -213,7 +213,6 @@ export class EventManager {
             y: offsetY
         };
         if (this.Board.PointerOrigin && this.Board.ElementType !== ElementEnum.Link) {
-            console.log("ppp");
             const { x, y } = this.Board.PointerOrigin;
             if (this.Board._currentCanvasAction === CanvasActionEnum.Pan) {
                 const { offsetX, offsetY } = e;
@@ -250,7 +249,6 @@ export class EventManager {
                             transformY: pf + dy
                         };
                         const { offsetX, offsetY } = CanvasHelper.getCurrentMousePosition(e, this.Board.Transform);
-                        console.log(offsetX, offsetY);
                         // this.Board.CurrentPointer = { x: offsetX, y: offsetY };
                         if (this.Board.TempSelectionArea) {
                             if (this.Board._currentCanvasAction === null) {
@@ -561,7 +559,6 @@ export class EventManager {
                     }
                     this.Board.CanvasCopy.style.cursor = CanvasHelper.getCursor(this.Board.CursorPosition);
                     this.Board.HoveredObject = ele;
-                    console.log("nnn", { ...ele });
                 }
             } else {
                 if (this.Board.SelectionElement) {
@@ -606,7 +603,6 @@ export class EventManager {
                         }
                         this.Board.CanvasCopy.style.cursor = CanvasHelper.getCursor(this.Board.CursorPosition);
                         this.Board.HoveredObject = ele;
-                        console.log({ ...ele });
                     } else {
                         this.Board.CursorPosition = null;
                         this.Board._currentCanvasAction = null;

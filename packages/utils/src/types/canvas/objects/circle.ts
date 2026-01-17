@@ -1,11 +1,11 @@
-import { BaseObject } from "../base-object";
-import { CircleObject, XYHW } from "../types";
 import { CanvasBoard } from "../../../lib/canvas-board";
 import { CanvasHelper } from "../../../lib/canvas-helpers";
-import { CursorPosition, MouseAction } from "../../sketch-now/custom-canvas";
-import { IObjectStyle } from "../../sketch-now/object-styles";
 import { Delta, Position } from "../../sketch-now/canvas";
+import { CursorPosition, MouseAction } from "../../sketch-now/custom-canvas";
 import { ElementEnum } from "../../sketch-now/enums";
+import { IObjectStyle } from "../../sketch-now/object-styles";
+import { BaseObject } from "../base-object";
+import { CircleObject, XYHW } from "../types";
 
 export class Circle extends BaseObject {
     object: CircleObject;
@@ -59,7 +59,6 @@ export class Circle extends BaseObject {
             h: rY,
             w: rX
         } = CanvasHelper.getBoundingArea({ type: ElementEnum.Circle, value: { x, y, h, w } });
-        console.log({ x, y, h, w }, { ax, ay, rX, rY });
         ctx.ellipse(ax, ay, rX, rY, this.ro, this.sa, this.ea);
         // ctx.ellipse(x, y, w, h, this.ro, this.sa, this.ea);
         ctx.stroke();

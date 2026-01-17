@@ -1,11 +1,14 @@
-/// <reference types='vitest' />
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { nxViteTsPaths } from "@nx/vite/plugins/nx-tsconfig-paths.plugin";
+/// <reference types="vitest" />
 import { nxCopyAssetsPlugin } from "@nx/vite/plugins/nx-copy-assets.plugin";
-import mkcert from "vite-plugin-mkcert";
-import eslint from "vite-plugin-eslint";
+import { nxViteTsPaths } from "@nx/vite/plugins/nx-tsconfig-paths.plugin";
+import react from "@vitejs/plugin-react";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { defineConfig } from "vite";
 import checker from "vite-plugin-checker";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export default defineConfig({
     root: __dirname,
@@ -21,24 +24,12 @@ export default defineConfig({
     },
     plugins: [
         react(),
-        eslint(),
         nxViteTsPaths(),
         nxCopyAssetsPlugin(["*.md"]),
         checker({
             typescript: true
-            // eslint: {
-            //     lintCommand: 'eslint "./src/**/*.{ts,tsx,js,jsx}"'
-            // }
         })
-        // mkcert({
-        //     savePath: "../../certs", // save the generated certificate into certs directory
-        //     force: true // force generation of certs even without setting https property in the vite config
-        // })
     ],
-    // Uncomment this if you are using workers.
-    // worker: {
-    //  plugins: [ nxViteTsPaths() ],
-    // },
     build: {
         outDir: "../../dist/apps/now",
         emptyOutDir: true,
