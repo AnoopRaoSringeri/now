@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
 import { User } from "../types/auth/auth";
 
-export const BaseUrl = import.meta.env.VITE_SKETCH_NOW_URL ;
+export const BaseUrl = import.meta.env.VITE_SKETCH_NOW_URL;
 
 export const getRequestConfig = (withCredentials?: boolean) => {
     return {

@@ -1,8 +1,13 @@
-const { createGlobPatternsForDependencies } = require("@nx/react/tailwind");
-const { join } = require("path");
+import { createGlobPatternsForDependencies } from "@nx/react/tailwind";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import tailwindAnimate from "tailwindcss-animate";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
     darkMode: ["class"],
     content: [...createGlobPatternsForDependencies(join(__dirname, "apps/now/src"))],
     theme: {
@@ -59,5 +64,5 @@ module.exports = {
             }
         }
     },
-    plugins: [require("tailwindcss-animate")]
+    plugins: [tailwindAnimate]
 };
