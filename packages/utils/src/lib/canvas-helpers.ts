@@ -1,8 +1,8 @@
 import { CSSProperties } from "react";
 import { BaseObject } from "../types/canvas/base-object";
 import { CanvasObject } from "../types/canvas/types";
-import { Size, Position } from "../types/sketch-now/canvas";
-import { ICanvasTransform, ICanvas, CursorPosition } from "../types/sketch-now/custom-canvas";
+import { Position, Size } from "../types/sketch-now/canvas";
+import { CursorPosition, ICanvas, ICanvasTransform } from "../types/sketch-now/custom-canvas";
 import { ElementEnum } from "../types/sketch-now/enums";
 import { Font, IObjectStyle } from "../types/sketch-now/object-styles";
 
@@ -33,7 +33,7 @@ export const SelectionStyle: IObjectStyle = {
 
 const HOVER_OFFSET = 10;
 
-export const GUTTER = 2;
+export const GUTTER = 5;
 
 export const SELECTOR_POINT_RADIUS = 5;
 
@@ -402,36 +402,40 @@ export class CanvasHelper {
 
     static applySelection(
         ctx: CanvasRenderingContext2D,
-        { height: h, width: w, x, y }: Position & Size,
-        withGutter = false
+        { height: h, width: w, x: x, y: y }: Position & Size,
+        withGutter = true
     ) {
         const { a } = ctx.getTransform();
         const radius = SELECTOR_POINT_RADIUS / a;
         const gutter = (withGutter ? GUTTER : 0) / a;
         CanvasHelper.applySelectedStyle(ctx);
-        ctx.strokeRect(x - gutter, y - gutter, w + gutter * 2, h + gutter * 2);
+        const ux = x - gutter;
+        const uy = y - gutter;
+        const uw = w + gutter * 2;
+        const uh = h + gutter * 2;
+        ctx.strokeRect(ux, uy, uw, uh);
 
         ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.arc(x, y, radius, 0, 2 * Math.PI);
+        ctx.moveTo(ux, uy);
+        ctx.arc(ux, uy, radius, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.fill();
 
         ctx.beginPath();
-        ctx.moveTo(x, y + h);
-        ctx.arc(x, y + h, radius, 0, 2 * Math.PI);
+        ctx.moveTo(ux, uy + uh);
+        ctx.arc(ux, uy + uh, radius, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.fill();
 
         ctx.beginPath();
-        ctx.moveTo(x + w, y);
-        ctx.arc(x + w, y, radius, 0, 2 * Math.PI);
+        ctx.moveTo(ux + uw, uy);
+        ctx.arc(ux + uw, uy, radius, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.fill();
 
         ctx.beginPath();
-        ctx.moveTo(x + w, y + h);
-        ctx.arc(x + w, y + h, radius, 0, 2 * Math.PI);
+        ctx.moveTo(ux + uw, uy + uh);
+        ctx.arc(ux + uw, uy + uh, radius, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.fill();
 

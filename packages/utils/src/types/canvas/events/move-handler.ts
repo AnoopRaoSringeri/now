@@ -1,5 +1,4 @@
 import { CanvasBoard } from "../../../lib/canvas-board";
-import { IElementEventHandler } from "../element-event-handler";
 import {
     CANVAS_SCALING_FACTOR,
     CANVAS_SCALING_LIMIT,
@@ -7,10 +6,12 @@ import {
     CanvasHelper
 } from "../../../lib/canvas-helpers";
 import { CanvasActionEnum } from "../../sketch-now/enums";
+import { IElementEventHandler } from "../element-event-handler";
 
 export class MoveEventHandler implements IElementEventHandler {
     onMouseDown(e: MouseEvent, board: CanvasBoard, ctx: CanvasRenderingContext2D) {
         board._currentCanvasAction = CanvasActionEnum.Move;
+        board.unSelectElements();
         if (board.HoveredObject) {
             board.ActiveObjects = [board.HoveredObject];
             board.SelectedElements = [board.HoveredObject];

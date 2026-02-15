@@ -1,12 +1,12 @@
-import { v4 as uuid } from "uuid";
 import { computed, makeObservable, observable, runInAction, toJS } from "mobx";
+import { v4 as uuid } from "uuid";
 import { CanvasBoard } from "../../lib/canvas-board";
 import { CanvasHelper, DefaultStyle } from "../../lib/canvas-helpers";
-import { Position, Delta, AbsPosition, Size, CanvasElement } from "../sketch-now/canvas";
-import { MouseAction, CursorPosition } from "../sketch-now/custom-canvas";
+import { AbsPosition, CanvasElement, Delta, Position, Size } from "../sketch-now/canvas";
+import { CursorPosition, MouseAction } from "../sketch-now/custom-canvas";
+import { ElementEnum } from "../sketch-now/enums";
 import { IObjectStyle } from "../sketch-now/object-styles";
 import { CanvasObject, XYHW } from "./types";
-import { ElementEnum } from "../sketch-now/enums";
 
 export class BaseObject {
     toSVG(sRatio: Size) {
@@ -544,6 +544,7 @@ export class BaseObject {
     }
 
     unSelect() {
+        console.log("Unselect :", this.id);
         this.IsSelected = false;
         this.ShowSelection = false;
     }
