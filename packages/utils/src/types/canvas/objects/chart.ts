@@ -1,11 +1,11 @@
-import { BaseObject } from "../base-object";
-import { ChartObject } from "../types";
-import { CanvasBoard } from "../../../lib/canvas-board";
-import { Chart } from "../../visualize/chart";
-import { ChartFactory } from "../../visualize/chart-factory";
 import { makeObservable, observable } from "mobx";
+import { CanvasBoard } from "../../../lib/canvas-board";
 import { CanvasElement } from "../../sketch-now/canvas";
 import { IObjectStyle } from "../../sketch-now/object-styles";
+import { Chart } from "../../visualize/chart";
+import { ChartFactory } from "../../visualize/chart-factory";
+import { BaseObject } from "../base-object";
+import { ChartObject } from "../types";
 
 export class ChartNow extends BaseObject {
     object: ChartObject;

@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction, toJS } from "mobx";
+import { ChartNow } from "../types/canvas/objects/chart";
 import { ChartSource } from "../types/visualize/source";
 import { CanvasBoard } from "./canvas-board";
-import { ChartNow } from "../types/canvas/objects/chart";
 
 export class SourceManager {
     sources: ChartSource[] = [];

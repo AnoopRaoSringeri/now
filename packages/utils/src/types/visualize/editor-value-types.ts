@@ -1,12 +1,12 @@
 import { action, computed, makeObservable, observable, runInAction, toJS } from "mobx";
 import {
-    ValueType,
-    MultiSelectValue,
-    SingleSelectValue,
-    SingleColumnSelectValue,
     MultiColumnSelectValue,
+    MultiMeasureSelectValue,
+    MultiSelectValue,
+    SingleColumnSelectValue,
     SingleMeasureSelectValue,
-    MultiMeasureSelectValue
+    SingleSelectValue,
+    ValueType
 } from "./value-types";
 
 export class EditorValue {

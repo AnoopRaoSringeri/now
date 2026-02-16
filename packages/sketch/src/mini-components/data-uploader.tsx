@@ -1,12 +1,12 @@
 import { useDisclosure } from "@mantine/hooks";
 import {
+    Button,
     Dialog,
     DialogContent,
-    DialogHeader,
-    DialogTitle,
     DialogDescription,
     DialogFooter,
-    Button,
+    DialogHeader,
+    DialogTitle,
     Input,
     Label,
     RadioGroup,
@@ -15,8 +15,7 @@ import {
 } from "@now/ui";
 import { ChartDataUpdateMode, ChartSource, SourceManager, useStore } from "@now/utils";
 import { observer } from "mobx-react";
-import React, { useImperativeHandle } from "react";
-import { useState } from "react";
+import React, { useImperativeHandle, useState } from "react";
 
 export type DataUploaderHandle = {
     uploadNew: () => void;

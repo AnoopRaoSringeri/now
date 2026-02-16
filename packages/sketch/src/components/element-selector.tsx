@@ -1,4 +1,4 @@
-import { Button, LucideIcons, Icon, Label, PopoverTrigger, Popover, PopoverContent, PopoverArrow } from "@now/ui";
+import { Button, Icon, Label, LucideIcons, Popover, PopoverArrow, PopoverContent, PopoverTrigger } from "@now/ui";
 import { ElementEnum } from "@now/utils";
 import { observer } from "mobx-react";
 import { useParams } from "react-router";

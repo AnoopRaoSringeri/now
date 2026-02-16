@@ -2,17 +2,16 @@ import { observer } from "mobx-react";
 import { useEffect } from "react";
 import { useParams } from "react-router";
 
+import { useResizeObserver } from "@mantine/hooks";
+import { AppLoader } from "@now/ui";
+import { QueryKeys, useQueryNow, useStore } from "@now/utils";
+import { useCanvas } from "../hooks/use-canvas";
 import { ImageInput } from "../mini-components/image-input";
 import { TextEditorWrapper } from "../mini-components/text-editor";
-import CanvasOptions from "./canvas-options";
-import { useCanvas } from "../hooks/use-canvas";
-import { AppLoader, useSidebar } from "@now/ui";
-import { QueryKeys, useQueryNow, useStore } from "@now/utils";
-import { useResizeObserver } from "@mantine/hooks";
 import { CustomComponentsRenderer } from "../renderers/custom-component-renderer";
+import CanvasOptions from "./canvas-options";
 
 export const CanvasBoard = observer(function CanvasBoard() {
-    const { setOpen } = useSidebar();
     const [resizer, rect] = useResizeObserver();
     const { id } = useParams<{ id: string }>();
     const { canvasBoard, onResize } = useCanvas(id ?? "new");
@@ -33,13 +32,6 @@ export const CanvasBoard = observer(function CanvasBoard() {
     useEffect(() => {
         onResize();
     }, [onResize, rect]);
-
-    useEffect(() => {
-        setOpen(false);
-        return () => {
-            setOpen(true);
-        };
-    }, [setOpen]);
 
     useEffect(() => {
         if (id && id !== "new" && data) {
@@ -63,7 +55,6 @@ export const CanvasBoard = observer(function CanvasBoard() {
             <TextEditorWrapper />
             <ImageInput />
             <div ref={canvasBoard.UiStateManager.BoardContainerRef} className="size-full">
-                <CustomComponentsRenderer />
                 <canvas
                     id="canvas-board"
                     className="absolute z-[1] overscroll-none"
@@ -74,6 +65,7 @@ export const CanvasBoard = observer(function CanvasBoard() {
                     className="absolute z-[2] overscroll-none"
                     ref={canvasBoard.CanvasCopyRef}
                 ></canvas>
+                <CustomComponentsRenderer />
             </div>
         </div>
     );

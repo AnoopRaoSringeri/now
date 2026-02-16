@@ -23,7 +23,11 @@ export default defineConfig({
         host: "localhost"
     },
     plugins: [
-        react(),
+        react({
+            babel: {
+                plugins: ["babel-plugin-react-compiler"]
+            }
+        }),
         nxViteTsPaths(),
         nxCopyAssetsPlugin(["*.md"]),
         checker({

@@ -1,27 +1,27 @@
-import { action, computed, makeObservable, observable, runInAction, toJS } from "mobx";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { createRef } from "react";
-import { Position, Size, CanvasMetadata, AdditionalCanvasOptions } from "../types/sketch-now/canvas";
-import { ICanvas, CursorPosition, ICanvasTransform } from "../types/sketch-now/custom-canvas";
-import { ElementEnum, CanvasActionEnum } from "../types/sketch-now/enums";
-import { IObjectStyle } from "../types/sketch-now/object-styles";
-import { DefaultStyle, CanvasHelper, CANVAS_SCALING_MULTIPLIER, MIN_INTERVAL } from "./canvas-helpers";
-import { EventManager } from "./event-handler";
-import { EventManager as EM } from "../types/canvas/events/event-manager";
+import { v4 as uuid } from "uuid";
 import { BaseObject } from "../types/canvas/base-object";
+import { EventManager as EM } from "../types/canvas/events/event-manager";
+import { ChartNow } from "../types/canvas/objects/chart";
+import { CanvasImage } from "../types/canvas/objects/image";
+import { Link } from "../types/canvas/objects/link";
 import { Rectangle } from "../types/canvas/objects/rectangle";
 import { Text } from "../types/canvas/objects/text";
-import { CanvasImage } from "../types/canvas/objects/image";
+import { AdditionalCanvasOptions, CanvasMetadata, Position, Size } from "../types/sketch-now/canvas";
+import { CursorPosition, ICanvas, ICanvasTransform } from "../types/sketch-now/custom-canvas";
+import { CanvasActionEnum, ElementEnum } from "../types/sketch-now/enums";
+import { IObjectStyle } from "../types/sketch-now/object-styles";
+import { CANVAS_SCALING_MULTIPLIER, CanvasHelper, DefaultStyle } from "./canvas-helpers";
 import { CanvasObjectFactory } from "./canvas-object-factory";
-import { ChartNow } from "../types/canvas/objects/chart";
-import { v4 as uuid } from "uuid";
+import { EventManager } from "./event-handler";
 import { SourceManager } from "./source-manager";
 import { UiStateManager } from "./ui-state-manager";
-import { Link } from "../types/canvas/objects/link";
 export class CanvasBoard implements ICanvas {
     private _lastTimestamp = 0;
     private _clicked = false;
-    private _canvas: React.RefObject<HTMLCanvasElement>;
-    private _canvasCopy: React.RefObject<HTMLCanvasElement>;
+    private _canvas: React.RefObject<HTMLCanvasElement | null>;
+    private _canvasCopy: React.RefObject<HTMLCanvasElement | null>;
     _elements: BaseObject[] = [];
     _links: Link[] = [];
     private _pointerOrigin: Position | null = null;
@@ -65,34 +65,39 @@ export class CanvasBoard implements ICanvas {
         this.Helper = new CanvasHelper(this);
         this.SourceManager = new SourceManager(this);
         this.UiStateManager = new UiStateManager(this);
-        makeObservable(this, {
-            _elementType: observable,
-            ElementType: computed,
-            _isElementSelectorLocked: observable,
-            IsElementSelectorLocked: computed,
-            _style: observable,
-            Style: computed,
-            setStyle: action,
-            _selectedElements: observable,
-            SelectedElements: computed,
-            _zoom: observable,
-            Zoom: computed,
-            _canvasTransform: observable,
-            Transform: computed,
-            _selectionArea: observable,
-            SelectionElement: computed,
-            NewOrder: computed,
-            _elements: observable,
-            Elements: computed,
-            text: observable,
-            Text: computed,
-            image: observable,
-            Image: computed,
-            CustomComponentIds: computed,
-            getComponent: action,
-            _activeObjects: observable,
-            _links: observable
-        });
+        // makeObservable(this, {
+        //     _elementType: observable,
+        //     ElementType: computed,
+        //     _isElementSelectorLocked: observable,
+        //     IsElementSelectorLocked: computed,
+        //     _style: observable,
+        //     Style: computed,
+        //     setStyle: action,
+        //     _selectedElements: observable,
+        //     SelectedElements: computed,
+        //     _zoom: observable,
+        //     Zoom: computed,
+        //     _canvasTransform: observable,
+        //     Transform: computed,
+        //     _selectionArea: observable,
+        //     SelectionElement: computed,
+        //     NewOrder: computed,
+        //     _elements: observable,
+        //     Elements: computed,
+        //     text: observable,
+        //     Text: computed,
+        //     image: observable,
+        //     Image: computed,
+        //     CustomComponentIds: computed,
+        //     getComponent: action,
+        //     _activeObjects: observable,
+        //     _links: observable
+        // });
+        makeAutoObservable(this);
+    }
+
+    get IsCavasInitialized() {
+        return !!this._canvas.current;
     }
 
     get Canvas() {
@@ -139,6 +144,9 @@ export class CanvasBoard implements ICanvas {
     }
 
     get Height() {
+        if (!this.IsCavasInitialized) {
+            return 0;
+        }
         return this.Canvas.height;
     }
 
@@ -150,6 +158,9 @@ export class CanvasBoard implements ICanvas {
     }
 
     get Width() {
+        if (!this.IsCavasInitialized) {
+            return 0;
+        }
         return this.Canvas.width;
     }
 

@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { useParams } from "react-router";
 import { useCanvas } from "../hooks/use-canvas";
 
-export const ZoomController = observer(function ZoomController() {
+export const ZoomController = function ZoomController() {
     const { id } = useParams<{ id: string }>();
     const { canvasBoard } = useCanvas(id ?? "new");
 
@@ -23,7 +23,7 @@ export const ZoomController = observer(function ZoomController() {
     return (
         <div className="absolute bottom-5 right-5 z-[10]  flex  flex-row items-center gap-1">
             <Search size={40} />
-            <Label className="p-1 text-lg">{canvasBoard.Zoom.toFixed(2)}%</Label>
+            <ZoomLabel canvasBoard={canvasBoard} />
             <Button size="xs" variant="simple" onClick={zoomIn}>
                 <Plus size={20} />
             </Button>
@@ -35,4 +35,8 @@ export const ZoomController = observer(function ZoomController() {
             </Button>
         </div>
     );
+};
+
+const ZoomLabel = observer(({ canvasBoard }) => {
+    return <Label className="p-1 text-lg">{canvasBoard.Zoom.toFixed(2)}%</Label>;
 });

@@ -1,7 +1,3 @@
-import { observer } from "mobx-react";
-import { useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router";
-import ElementSelector from "./element-selector";
 import {
     Badge,
     Button,
@@ -13,16 +9,20 @@ import {
     Label
     // useToast
 } from "@now/ui";
-import { Expand, House, Save } from "lucide-react";
-import { useCanvas } from "../hooks/use-canvas";
-import { CustomizationPanelWrapper } from "../mini-components/canvas-style-editor";
-import { ZoomController } from "../mini-components/zoom-controller";
 import { QueryKeys, useStore } from "@now/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toPng } from "html-to-image";
+import { Expand, House, Save } from "lucide-react";
+import { observer } from "mobx-react";
+import { useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import { toast } from "sonner";
+import { useCanvas } from "../hooks/use-canvas";
+import { CustomizationPanelWrapper } from "../mini-components/canvas-style-editor";
 import { DataUploader, DataUploaderHandle } from "../mini-components/data-uploader";
 import { SourceViewer, SourceViewerHandle } from "../mini-components/source-viewer";
-import { toPng } from "html-to-image";
-import { toast } from "sonner";
+import { ZoomController } from "../mini-components/zoom-controller";
+import ElementSelector from "./element-selector";
 
 const CanvasOptions = observer(function CanvasOptions() {
     const { id } = useParams<{ id: string }>();
@@ -78,23 +78,6 @@ const CanvasOptions = observer(function CanvasOptions() {
 
     const saveImage = async () => {
         if (!canvasBoard.UiStateManager.BoardContainerRef.current) return "";
-        // const node = canvasBoard.UiStateManager.BoardContainerRef.current;
-        // const originalWidth = node.offsetWidth;
-        // const originalHeight = node.offsetHeight;
-
-        // const scaleX = 300 / originalWidth;
-        // const scaleY = 200 / originalHeight;
-        // const dataUrl = await toPng(canvasBoard.UiStateManager.BoardContainerRef.current, {
-        //     cacheBust: true,
-        //     width: originalWidth * scaleX,
-        //     height: originalHeight * scaleY,
-        //     style: {
-        //         transform: `scale(${scaleX}, ${scaleY})`,
-        //         transformOrigin: "top left",
-        //         width: `${originalWidth}px`,
-        //         height: `${originalHeight}px`
-        //     }
-        // });
         const dataUrl = await toPng(canvasBoard.UiStateManager.BoardContainerRef.current);
         return dataUrl;
     };

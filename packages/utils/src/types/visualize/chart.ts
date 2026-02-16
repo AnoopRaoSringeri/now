@@ -1,17 +1,17 @@
-import { computed, makeObservable, observable, runInAction, toJS } from "mobx";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
+import { PaginatedData } from "./chart-data";
+import { ChartFactory } from "./chart-factory";
 import {
-    ConfigType,
-    ColumnSelectEditorValue,
     ChartNowConfig,
+    ColumnSelectEditorValue,
+    ConfigType,
+    MeasureSelectEditorValue,
     MultiColumnSelectEditorValue,
-    MultiMeasureSelectEditorValue,
-    MeasureSelectEditorValue
+    MultiMeasureSelectEditorValue
 } from "./editor-value-types";
+import { ChartSource } from "./source";
 import { ChartConfigMetadata, ChartType, SortConfig } from "./types";
 import { ValueType } from "./value-types";
-import { PaginatedData } from "./chart-data";
-import { ChartSource } from "./source";
-import { ChartFactory } from "./chart-factory";
 
 interface IChart {
     type: ChartType;
@@ -46,22 +46,23 @@ export class Chart implements IChart {
                     ? { t: "s", v: new ColumnSelectEditorValue(config.dimensions.v) }
                     : { t: "m", v: new MultiColumnSelectEditorValue(config.dimensions.v) }
         };
-        makeObservable(this, {
-            type: observable,
-            config: observable,
-            dataVersion: observable,
-            chartData: observable,
-            source: observable,
-            Source: computed,
-            DataVersion: computed,
-            MeasureColumns: computed,
-            DimensionColumns: computed,
-            Config: computed,
-            page: observable,
-            Page: computed,
-            sortConfig: observable,
-            SortConfig: computed
-        });
+        // makeObservable(this, {
+        //     type: observable,
+        //     config: observable,
+        //     dataVersion: observable,
+        //     chartData: observable,
+        //     source: observable,
+        //     Source: computed,
+        //     DataVersion: computed,
+        //     MeasureColumns: computed,
+        //     DimensionColumns: computed,
+        //     Config: computed,
+        //     page: observable,
+        //     Page: computed,
+        //     sortConfig: observable,
+        //     SortConfig: computed
+        // });
+        makeAutoObservable(this);
     }
     onChange(key: string, value: ValueType) {
         runInAction(() => {

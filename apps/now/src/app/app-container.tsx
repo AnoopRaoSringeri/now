@@ -1,10 +1,9 @@
 import { AppSidebar, SidebarInset, SidebarProvider } from "@now/ui";
 import { useAuth } from "@now/utils";
 import { observer } from "mobx-react";
-import { useEffect } from "react";
-import { Outlet } from "react-router";
+import { ReactNode, useEffect } from "react";
 
-export const AppContainer = observer(function AppContainer() {
+export const AppContainer = observer(function AppContainer({ children }: { children: ReactNode }) {
     const { refreshToken } = useAuth();
     useEffect(() => {
         refreshToken();
@@ -13,9 +12,7 @@ export const AppContainer = observer(function AppContainer() {
     return (
         <SidebarProvider>
             <AppSidebar />
-            <SidebarInset>
-                <Outlet />
-            </SidebarInset>
+            <SidebarInset>{children}</SidebarInset>
         </SidebarProvider>
     );
 });

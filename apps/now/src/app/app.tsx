@@ -1,9 +1,10 @@
-import NxWelcome from "./nx-welcome";
+import { Auth, ForgotPasswordPage, LogInPage, RegisterPage } from "@now/auth";
+import { AppLoader } from "@now/ui";
+import { useAuth } from "@now/utils";
+import { lazy, ReactNode, Suspense, useEffect } from "react";
 import { HashRouter, Route, Routes } from "react-router";
 import { AppContainer } from "./app-container";
-import { lazy, Suspense } from "react";
-import { AppLoader } from "@now/ui";
-import { Auth, ForgotPasswordPage, LogInPage, RegisterPage } from "@now/auth";
+import NxWelcome from "./nx-welcome";
 
 const BoardViewer = lazy(() => import("@now/sketch").then((module) => ({ default: module.BoardViewer })));
 const CanvasBoard = lazy(() => import("@now/sketch").then((module) => ({ default: module.CanvasBoard })));
@@ -12,88 +13,43 @@ const SketchNow = lazy(() => import("@now/sketch").then((module) => ({ default: 
 export function App() {
     return (
         <HashRouter>
-            <Routes>
-                <Route
-                    path="/"
-                    element={
-                        <Suspense fallback={<AppLoader />}>
-                            <Auth />
-                        </Suspense>
-                    }
-                >
-                    <Route
-                        path="auth"
-                        element={
-                            <Suspense fallback={<AppLoader />}>
-                                <LogInPage />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="register"
-                        element={
-                            <Suspense fallback={<AppLoader />}>
-                                <RegisterPage />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="forgot-password"
-                        element={
-                            <Suspense fallback={<AppLoader />}>
-                                <ForgotPasswordPage />
-                            </Suspense>
-                        }
-                    />
-                </Route>
-                <Route
-                    element={
-                        <Suspense fallback={<AppLoader />}>
-                            <AppContainer />
-                        </Suspense>
-                    }
-                >
+            <Suspense fallback={<AppLoader />}>
+                <Routes>
+                    <Route path="/" element={<Auth />}>
+                        <Route path="auth" element={<LogInPage />} />
+                        <Route path="register" element={<RegisterPage />} />
+                        <Route path="forgot-password" element={<ForgotPasswordPage />} />
+                    </Route>
                     <Route path="sketch-now">
                         <Route
                             path=""
                             element={
-                                <Suspense fallback={<AppLoader />}>
+                                <AppContainer>
                                     <SketchNow />
-                                </Suspense>
+                                </AppContainer>
                             }
                         />
-                        <Route
-                            path="sketch/:id"
-                            element={
-                                <Suspense fallback={<AppLoader />}>
-                                    <CanvasBoard />
-                                </Suspense>
-                            }
-                        />
+                        <Route path="sketch/:id" element={<SuspenseComponentLoader children={<CanvasBoard />} />} />
                         <Route
                             path="sketch-viewer/:id"
-                            element={
-                                <Suspense fallback={<AppLoader />}>
-                                    <BoardViewer />
-                                </Suspense>
-                            }
+                            element={<SuspenseComponentLoader children={<BoardViewer />} />}
                         />
                     </Route>
-                    <Route path="/visualize-now" />
-                    <Route path="/chat-now" />
-                </Route>
-                <Route path="/commands" element={<NxWelcome title="now" />} />
-                <Route
-                    path="/canvas/playground"
-                    element={
-                        <Suspense fallback={<AppLoader />}>
-                            <CanvasBoard />
-                        </Suspense>
-                    }
-                />
-            </Routes>
+                    <Route path="/commands" element={<NxWelcome title="now" />} />
+                    <Route path="/canvas/playground" element={<CanvasBoard />} />
+                </Routes>
+            </Suspense>
         </HashRouter>
     );
 }
+const SuspenseComponentLoader = ({ children }: { children: ReactNode }) => {
+    const { refreshToken } = useAuth();
+
+    useEffect(() => {
+        refreshToken();
+    }, [refreshToken]);
+
+    return <>{children}</>;
+};
 
 export default App;
