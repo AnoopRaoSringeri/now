@@ -79,7 +79,7 @@ export function useCanvas(canvasId: string) {
     }, [onTouchEnd]);
 
     useEffect(() => {
-        copy?.addEventListener("wheel", onWheelAction, { passive: true });
+        copy?.addEventListener("wheel", onWheelAction);
         return () => {
             copy?.removeEventListener("wheel", onWheelAction);
         };

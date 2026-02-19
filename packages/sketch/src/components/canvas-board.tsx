@@ -55,6 +55,7 @@ export const CanvasBoard = observer(function CanvasBoard() {
             <TextEditorWrapper />
             <ImageInput />
             <div ref={canvasBoard.UiStateManager.BoardContainerRef} className="size-full">
+                <CustomComponentsRenderer />
                 <canvas
                     id="canvas-board"
                     className="absolute z-[1] overscroll-none"
@@ -65,7 +66,6 @@ export const CanvasBoard = observer(function CanvasBoard() {
                     className="absolute z-[2] overscroll-none"
                     ref={canvasBoard.CanvasCopyRef}
                 ></canvas>
-                <CustomComponentsRenderer />
             </div>
         </div>
     );

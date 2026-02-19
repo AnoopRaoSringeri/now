@@ -2,15 +2,14 @@ import { observer } from "mobx-react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 
-import { useCanvas } from "../hooks/use-canvas";
-import { AppLoader, Button, useSidebar } from "@now/ui";
-import { QueryKeys, useQueryNow, useStore } from "@now/utils";
 import { useResizeObserver } from "@mantine/hooks";
+import { AppLoader, Button } from "@now/ui";
+import { QueryKeys, useQueryNow, useStore } from "@now/utils";
+import { Expand, House } from "lucide-react";
+import { useCanvas } from "../hooks/use-canvas";
 import { CustomComponentsRenderer } from "../renderers/custom-component-renderer";
-import { House, Expand } from "lucide-react";
 
 export const BoardViewer = observer(function BoardViewer() {
-    const { setOpen } = useSidebar();
     const [resizer, rect] = useResizeObserver();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
@@ -32,13 +31,6 @@ export const BoardViewer = observer(function BoardViewer() {
     useEffect(() => {
         onResize();
     }, [rect]);
-
-    useEffect(() => {
-        setOpen(false);
-        return () => {
-            setOpen(true);
-        };
-    }, []);
 
     useEffect(() => {
         if (id && id !== "new" && data) {

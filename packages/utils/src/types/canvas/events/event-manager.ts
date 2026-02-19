@@ -1,5 +1,5 @@
-import { CANVAS_SCALING_FACTOR, CANVAS_SCALING_LIMIT, CANVAS_SCALING_MULTIPLIER } from "./../../../lib/canvas-helpers";
 import { CanvasBoard } from "../../../lib/canvas-board";
+import { CANVAS_SCALING_FACTOR, CANVAS_SCALING_LIMIT, CANVAS_SCALING_MULTIPLIER } from "./../../../lib/canvas-helpers";
 import { EventHandlerRegistry } from "./event-handler-registry";
 
 export class EventManager {
@@ -40,6 +40,9 @@ export class EventManager {
 
     // keep wheel/touch handling here
     onWheelAction(e: WheelEvent) {
+        if (this.board.HoveredObject) {
+            return;
+        }
         const oldX = this.board.Transform.transformX;
         const oldY = this.board.Transform.transformY;
 
