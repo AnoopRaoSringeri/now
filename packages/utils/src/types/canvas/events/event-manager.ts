@@ -40,9 +40,6 @@ export class EventManager {
 
     // keep wheel/touch handling here
     onWheelAction(e: WheelEvent) {
-        if (this.board.HoveredObject) {
-            return;
-        }
         const oldX = this.board.Transform.transformX;
         const oldY = this.board.Transform.transformY;
 
