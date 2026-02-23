@@ -32,31 +32,8 @@
             "options": {
                 "targetName": "lint"
             }
-        },
-        {
-            "plugin": "@nx/playwright/plugin",
-            "options": {
-                "targetName": "e2e"
-            }
-        },
-        {
-            "plugin": "@nx/jest/plugin",
-            "options": {
-                "targetName": "test"
-            }
-        },
-        {
-            "plugin": "@nx/vitest",
-            "options": {
-                "testTargetName": "test"
-            }
         }
     ],
-    "targetDefaults": {
-        "e2e-ci--**/*": {
-            "dependsOn": ["^build"]
-        }
-    },
     "generators": {
         "@nx/react": {
             "application": {

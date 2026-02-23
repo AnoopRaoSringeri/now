@@ -94,6 +94,9 @@
         background-color: #333232;
         border-radius: 8px;
     }
+    .border-border {
+        border-color: hsl(var(--border));
+    }
 }
 
 @layer base {

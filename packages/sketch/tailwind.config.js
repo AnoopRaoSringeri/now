@@ -1,6 +1,3 @@
-const TailwindConfig = require("../../packages/ui/tailwind.config");
+import TailwindConfig from "../../tailwind.config";
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-    ...TailwindConfig
-};
+export { TailwindConfig };
