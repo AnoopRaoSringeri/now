@@ -6,6 +6,7 @@ import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import checker from "vite-plugin-checker";
+import tailwindcss from "@tailwindcss/vite";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -32,7 +33,8 @@ export default defineConfig({
         nxCopyAssetsPlugin(["*.md"]),
         checker({
             typescript: true
-        })
+        }),
+        tailwindcss()
     ],
     build: {
         outDir: "../../dist/apps/now",
