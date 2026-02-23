@@ -49,7 +49,7 @@ export const TextEditorWrapper = observer(function TextEditorWrapper() {
     const dFont = font ?? DefaultFont();
 
     return (
-        <div className="absolute z-[5] flex size-full overflow-hidden bg-transparent">
+        <div className="absolute z-5 flex size-full overflow-hidden bg-transparent">
             <textarea
                 ref={inputRef}
                 id="canvas-text"

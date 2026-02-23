@@ -76,7 +76,7 @@ export const Renderer = observer(function Renderer({
                         <TwitterPicker
                             colors={SWATCHES}
                             styles={twitterStyle}
-                            className="!w-full !border-none !shadow-none"
+                            className="w-full! border-none! shadow-none!"
                             triangle="hide"
                             color={value as string}
                             onChange={(col) => {
@@ -86,7 +86,7 @@ export const Renderer = observer(function Renderer({
                         <Icon name="Minus" className="rotate-90" size="30px" />
                         <TwitterPicker
                             width="40px"
-                            className="!border-none !shadow-none"
+                            className="border-none! shadow-none!"
                             styles={twitterStyleSingle}
                             triangle="hide"
                             colors={[value as string]}
@@ -162,7 +162,7 @@ const FontEditor = function FontEditor({ font, onChange }: { font: Font | null; 
                     <TwitterPicker
                         colors={SWATCHES}
                         styles={twitterStyle}
-                        className="!w-full !border-none !shadow-none"
+                        className="w-full! border-none! shadow-none!"
                         triangle="hide"
                         color={color}
                         onChange={(col) => {
@@ -172,7 +172,7 @@ const FontEditor = function FontEditor({ font, onChange }: { font: Font | null; 
                     <Icon name="Minus" className="rotate-90" size="30px" />
                     <TwitterPicker
                         width="40px"
-                        className="!border-none !shadow-none"
+                        className="border-none! shadow-none!"
                         styles={twitterStyleSingle}
                         triangle="hide"
                         colors={[color]}

@@ -81,7 +81,7 @@ const ElementSelector = observer(function ElementSelector({ onChange }: { onChan
     const selectedOption = LeftOptionLists.find((o) => o.value === canvasBoard.ElementType);
 
     return (
-        <div className="absolute top-5 z-[10] flex flex-col items-center gap-1">
+        <div className="absolute top-5 z-10 flex flex-col items-center gap-1">
             <div className="-mt-[20px] h-4 flex items-center justify-center">
                 {selectedOption ? <Label className="text-xs">{selectedOption.description}</Label> : null}
             </div>

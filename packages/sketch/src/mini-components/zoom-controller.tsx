@@ -21,7 +21,7 @@ export const ZoomController = function ZoomController() {
     }
 
     return (
-        <div className="absolute bottom-5 right-5 z-[10]  flex  flex-row items-center gap-1">
+        <div className="absolute bottom-5 right-5 z-10  flex  flex-row items-center gap-1">
             <Search size={40} />
             <ZoomLabel canvasBoard={canvasBoard} />
             <Button size="xs" variant="simple" onClick={zoomIn}>

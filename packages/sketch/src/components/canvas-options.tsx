@@ -90,7 +90,7 @@ const CanvasOptions = observer(function CanvasOptions() {
                         canvasBoard.ElementType = eleType;
                     }}
                 />
-                <div className="absolute right-5 top-5 z-[10]">
+                <div className="absolute right-5 top-5 z-10">
                     <div className="flex w-full max-w-sm items-center space-x-2">
                         <Input
                             type="text"
@@ -106,7 +106,7 @@ const CanvasOptions = observer(function CanvasOptions() {
                     </div>
                 </div>
                 <SourceSelector />
-                <div className="absolute left-5 top-5 z-[10] gap-1 flex ">
+                <div className="absolute left-5 top-5 z-10 gap-1 flex ">
                     <Button size="sm" onClick={goToHome}>
                         <House size="20px" />
                     </Button>
@@ -132,7 +132,7 @@ const SourceSelector = observer(function SourceSelector() {
         <>
             <SourceViewer ref={sourceViewerRef} />
             <DataUploader ref={dataUploaderRef} sourceManager={canvasBoard.SourceManager} />
-            <div className="absolute right-5 top-20 max-h-[400px] z-[10]">
+            <div className="absolute right-5 top-20 max-h-[400px] z-10">
                 <Collapsible open={opened} onOpenChange={setOpened} className="flex flex-row align-top">
                     <div>
                         <CollapsibleTrigger className="h-7">

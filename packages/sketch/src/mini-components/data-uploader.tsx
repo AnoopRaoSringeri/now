@@ -126,14 +126,14 @@ export const DataUploader = observer(
                         <div className="h-40 relative flex items-center justify-center">
                             <label
                                 htmlFor="source"
-                                className="absolute z-[5] flex items-center justify-center opacity-30"
+                                className="absolute z-5 flex items-center justify-center opacity-30"
                             >
                                 {file ? file.name : "Upload file"}
                             </label>
                             <input
                                 name="source"
                                 id="source"
-                                className="absolute z-[5] size-full border-2 border-dashed border-gray-50/20 text-transparent  file:hidden"
+                                className="absolute z-5 size-full border-2 border-dashed border-gray-50/20 text-transparent  file:hidden"
                                 type="file"
                                 title=" "
                                 value={""}

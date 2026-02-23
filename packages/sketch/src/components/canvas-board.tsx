@@ -58,12 +58,12 @@ export const CanvasBoard = observer(function CanvasBoard() {
                 <CustomComponentsRenderer />
                 <canvas
                     id="canvas-board"
-                    className="absolute z-[1] overscroll-none"
+                    className="absolute z-1 overscroll-none"
                     ref={canvasBoard.CanvasRef}
                 ></canvas>
                 <canvas
                     id="canvas-board-copy"
-                    className="absolute z-[2] overscroll-none"
+                    className="absolute z-2 overscroll-none"
                     ref={canvasBoard.CanvasCopyRef}
                 ></canvas>
             </div>

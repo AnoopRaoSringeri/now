@@ -17,7 +17,7 @@ export const CustomizationPanelWrapper = observer(function StyleEditorWrapper() 
     }
 
     return (
-        <div className="absolute left-5 top-20 z-[10]  flex  flex-row items-center gap-1">
+        <div className="absolute left-5 top-20 z-10  flex  flex-row items-center gap-1">
             <ScrollArea>
                 <div className="flex h-full w-[300px] flex-col gap-4 rounded-sm bg-slate-500/40 p-4">
                     {canvasBoard.ElementType === ElementEnum.Move ? null : <CanvasStyleEditor />}

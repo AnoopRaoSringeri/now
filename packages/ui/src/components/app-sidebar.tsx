@@ -33,7 +33,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         return null;
     }
     return (
-        <Sidebar className="z-[20]" {...props}>
+        <Sidebar className="z-20" {...props}>
             <SidebarContent>
                 <NavProjects projects={data.projects} />
             </SidebarContent>

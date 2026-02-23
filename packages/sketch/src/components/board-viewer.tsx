@@ -55,7 +55,7 @@ export const BoardViewer = observer(function BoardViewer() {
 
     return (
         <div className="size-full">
-            <div className="absolute left-5 top-5 z-[10] gap-1 flex ">
+            <div className="absolute left-5 top-5 z-10 gap-1 flex ">
                 <Button size="sm" onClick={goToHome}>
                     <House size="20px" />
                 </Button>
@@ -66,10 +66,10 @@ export const BoardViewer = observer(function BoardViewer() {
             <div className="size-full absolute z-0" ref={resizer} />
             <AppLoader loading={sketchLoading} />
             <CustomComponentsRenderer />
-            <canvas id="canvas-board" className="absolute z-[1] overscroll-none" ref={canvasBoard.CanvasRef}></canvas>
+            <canvas id="canvas-board" className="absolute z-1 overscroll-none" ref={canvasBoard.CanvasRef}></canvas>
             <canvas
                 id="canvas-board-copy"
-                className="absolute z-[2] overscroll-none"
+                className="absolute z-2 overscroll-none"
                 ref={canvasBoard.CanvasCopyRef}
             ></canvas>
         </div>

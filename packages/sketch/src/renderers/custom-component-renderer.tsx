@@ -61,7 +61,7 @@ const CustomComponentRendererWrapper = observer(({ id, board }: { id: string; bo
 
             <div
                 style={{ zoom: scaleX }}
-                className={cn("size-full flex flex-col", (component.IsLocked || board.ReadOnly) && "z-[10]")}
+                className={cn("size-full flex flex-col", (component.IsLocked || board.ReadOnly) && "z-10")}
             >
                 <Renderer component={component} />
             </div>
@@ -88,7 +88,7 @@ const ComponentToolbar = observer(({ component, board }: { component: BaseObject
     const copy = () => board.copyElement(component.id);
 
     return (
-        <div style={{ zoom: board.Transform.scaleX }} className="absolute top-[-40px] right-0 z-[6] flex gap-1">
+        <div style={{ zoom: board.Transform.scaleX }} className="absolute top-[-40px] right-0 z-6 flex gap-1">
             {showFullToolbar && (
                 <Button onClick={copy} size="icon" variant="ghost">
                     <Icon name="Copy" />

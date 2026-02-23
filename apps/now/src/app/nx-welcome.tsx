@@ -201,7 +201,7 @@ export function NxWelcome({ title }: { title: string }) {
       width: 1.5rem;
     }
     .list-item-link > span {
-      flex-grow: 1;
+      grow: 1;
       font-weight: 400;
       transition-property: background-color, border-color, color, fill, stroke,
       opacity, box-shadow, transform, filter, backdrop-filter,
@@ -211,7 +211,7 @@ export function NxWelcome({ title }: { title: string }) {
     .list-item-link > span > span {
       color: rgba(107, 114, 128, 1);
       display: block;
-      flex-grow: 1;
+      grow: 1;
       font-size: 0.75rem;
       font-weight: 300;
       line-height: 1rem;
@@ -256,7 +256,7 @@ export function NxWelcome({ title }: { title: string }) {
       -webkit-backdrop-filter;
       transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
       transition-duration: 150ms;
-      flex-shrink: 0;
+      shrink: 0;
       width: 3rem;
     }
     .button-pill > span {
@@ -309,7 +309,7 @@ export function NxWelcome({ title }: { title: string }) {
     }
     #nx-cloud > div svg {
       border-radius: 0.375rem;
-      flex-shrink: 0;
+      shrink: 0;
       width: 3rem;
     }
     #nx-cloud > div h2 {

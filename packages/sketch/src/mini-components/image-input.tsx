@@ -30,7 +30,7 @@ export const ImageInput = observer(function ImageInput() {
         return null;
     }
     return (
-        <div className="absolute z-[5] flex size-full overflow-hidden bg-transparent">
+        <div className="absolute z-5 flex size-full overflow-hidden bg-transparent">
             <input
                 id="canvas-image"
                 ref={inputRef}
