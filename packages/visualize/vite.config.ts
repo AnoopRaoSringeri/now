@@ -5,15 +5,20 @@ import dts from "vite-plugin-dts";
 import * as path from "path";
 import { nxViteTsPaths } from "@nx/vite/plugins/nx-tsconfig-paths.plugin";
 import { nxCopyAssetsPlugin } from "@nx/vite/plugins/nx-copy-assets.plugin";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
     root: __dirname,
     cacheDir: "../../node_modules/.vite/packages/visualize",
     plugins: [
-        react(),
         nxViteTsPaths(),
+        react(),
+        tailwindcss(),
         nxCopyAssetsPlugin(["*.md"]),
-        dts({ entryRoot: "src", tsconfigPath: path.join(__dirname, "tsconfig.lib.json") })
+        dts({
+            entryRoot: "src",
+            tsconfigPath: path.join(__dirname, "tsconfig.lib.json")
+        })
     ],
     // Uncomment this if you are using workers.
     // worker: {
@@ -40,17 +45,6 @@ export default defineConfig({
         rollupOptions: {
             // External packages that should not be bundled into your library.
             external: ["react", "react-dom", "react/jsx-runtime"]
-        }
-    },
-    test: {
-        watch: false,
-        globals: true,
-        environment: "jsdom",
-        include: ["src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
-        reporters: ["default"],
-        coverage: {
-            reportsDirectory: "../../coverage/packages/visualize",
-            provider: "v8"
         }
     }
 });

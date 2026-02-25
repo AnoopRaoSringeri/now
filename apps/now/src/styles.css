@@ -1,0 +1,9 @@
+@import "../../../packages/ui/src/styles/global.css";
+
+/* nx-tailwind-sources:start */
+@source "../../../packages/auth";
+@source "../../../packages/sketch";
+@source "../../../packages/ui";
+@source "../../../packages/utils";
+@source "../../../packages/visualize";
+/* nx-tailwind-sources:end */

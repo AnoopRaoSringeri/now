@@ -29,12 +29,12 @@ export default defineConfig({
                 plugins: ["babel-plugin-react-compiler"]
             }
         }),
+        tailwindcss(),
         nxViteTsPaths(),
         nxCopyAssetsPlugin(["*.md"]),
         checker({
             typescript: true
-        }),
-        tailwindcss()
+        })
     ],
     build: {
         outDir: "../../dist/apps/now",

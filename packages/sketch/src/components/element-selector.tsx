@@ -1,4 +1,4 @@
-import { Button, Icon, Label, LucideIcons, Popover, PopoverArrow, PopoverContent, PopoverTrigger } from "@now/ui";
+import { Button, Icon, Label, LucideIcons, Popover, PopoverContent, PopoverTrigger } from "@now/ui";
 import { ElementEnum } from "@now/utils";
 import { observer } from "mobx-react";
 import { useParams } from "react-router";
@@ -137,7 +137,6 @@ const ElementSelector = observer(function ElementSelector({ onChange }: { onChan
                                 <Icon name={o.icon} size="20px" />
                             </Button>
                         ))}
-                        <PopoverArrow />
                     </PopoverContent>
                 </Popover>
             </div>

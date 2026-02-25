@@ -76,7 +76,7 @@ const Sketch = function Sketch({
     return (
         <div className="group relative flex flex-col items-center gap-0 rounded-sm">
             {isLoading ? (
-                <div className=" box-content aspect-square h-[200px] w-[300px] cursor-pointer rounded-sm border-2 border-gray-500/30 object-cover">
+                <div className=" box-content aspect-square h-50 w-75 cursor-pointer rounded-sm border-2 border-gray-500/30 object-cover">
                     {isLoading ? <AppLoader /> : null}
                 </div>
             ) : (
@@ -101,7 +101,7 @@ const Sketch = function Sketch({
                     </div>
                     <img
                         onClick={onClick}
-                        className=" box-content aspect-square h-[200px] w-[300px] cursor-pointer rounded-sm border-2 border-gray-500/30 object-contain"
+                        className=" box-content aspect-square h-50 w-75 cursor-pointer rounded-sm border-2 border-gray-500/30 object-contain"
                         src={data ?? ""}
                         alt=""
                     />

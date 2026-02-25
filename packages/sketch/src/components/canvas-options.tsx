@@ -132,7 +132,7 @@ const SourceSelector = observer(function SourceSelector() {
         <>
             <SourceViewer ref={sourceViewerRef} />
             <DataUploader ref={dataUploaderRef} sourceManager={canvasBoard.SourceManager} />
-            <div className="absolute right-5 top-20 max-h-[400px] z-10">
+            <div className="absolute right-5 top-20 max-h-100 z-10">
                 <Collapsible open={opened} onOpenChange={setOpened} className="flex flex-row align-top">
                     <div>
                         <CollapsibleTrigger className="h-7">
@@ -140,7 +140,7 @@ const SourceSelector = observer(function SourceSelector() {
                         </CollapsibleTrigger>
                     </div>
                     <CollapsibleContent className="CollapsibleContent">
-                        <div className="flex flex-col space-y-2  w-[250px]">
+                        <div className="flex flex-col space-y-2  w-62.5">
                             {canvasBoard.SourceManager.Sources.map((source) => (
                                 <Badge
                                     key={source.id}
@@ -149,12 +149,16 @@ const SourceSelector = observer(function SourceSelector() {
                                             ? "primary"
                                             : "secondary"
                                     }
-                                    className="h-7 cursor-pointer flex justify-between items-center gap-2"
-                                    onClick={() => {
-                                        canvasBoard.SourceManager.SelectedSource = source;
-                                    }}
+                                    className="h-7 cursor-pointer flex w-full justify-between items-center gap-2 pointer-events-auto"
                                 >
-                                    <Label className="flex-1 cursor-pointer"> {source.name}</Label>
+                                    <Label
+                                        className="flex-1 cursor-pointer"
+                                        onClick={() => {
+                                            canvasBoard.SourceManager.SelectedSource = source;
+                                        }}
+                                    >
+                                        {source.name}
+                                    </Label>
                                     <Icon
                                         name="Eye"
                                         size="18px"

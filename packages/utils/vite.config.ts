@@ -41,16 +41,5 @@ export default defineConfig({
             // External packages that should not be bundled into your library.
             external: ["react", "react-dom", "react/jsx-runtime"]
         }
-    },
-    test: {
-        watch: false,
-        globals: true,
-        environment: "jsdom",
-        include: ["src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
-        reporters: ["default"],
-        coverage: {
-            reportsDirectory: "../../coverage/packages/utils",
-            provider: "v8"
-        }
     }
 });
