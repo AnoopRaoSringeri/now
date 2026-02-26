@@ -8,7 +8,7 @@ import { Toaster as Sonner } from "sonner";
 import App from "./app/app";
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Toaster, ToastProvider } from "@now/ui";
+import { Toaster, ToastProvider, TooltipProvider } from "@now/ui";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
@@ -16,14 +16,20 @@ root.render(
         <QueryClientProvider client={queryClient}>
             <StoreProvider>
                 <ThemeProvider>
-                    <ToastProvider>
-                        <App />
-                        <Toaster />
-                        <Sonner />
-                        {import.meta.env.MODE === "development" ? (
-                            <ReactQueryDevtools buttonPosition="bottom-left" position="left" initialIsOpen={false} />
-                        ) : null}
-                    </ToastProvider>
+                    <TooltipProvider>
+                        <ToastProvider>
+                            <App />
+                            <Toaster />
+                            <Sonner />
+                            {import.meta.env.MODE === "development" ? (
+                                <ReactQueryDevtools
+                                    buttonPosition="bottom-left"
+                                    position="left"
+                                    initialIsOpen={false}
+                                />
+                            ) : null}
+                        </ToastProvider>
+                    </TooltipProvider>
                 </ThemeProvider>
             </StoreProvider>
         </QueryClientProvider>

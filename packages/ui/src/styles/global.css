@@ -119,6 +119,10 @@
         @apply bg-background text-foreground;
     }
 
+    #root {
+        @apply h-screen;
+    }
+
     ::-webkit-scrollbar {
         width: 6px;
         background-color: #333232;

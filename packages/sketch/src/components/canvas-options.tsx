@@ -159,31 +159,35 @@ const SourceSelector = observer(function SourceSelector() {
                                     >
                                         {source.name}
                                     </Label>
-                                    <Icon
-                                        name="Eye"
-                                        size="18px"
-                                        className="cursor-pointer"
+                                    <Button
+                                        size="icon-xs"
                                         onClick={() => {
                                             sourceViewerRef.current?.show(source);
                                         }}
-                                    />
-                                    <Icon
-                                        name="Upload"
-                                        size="18px"
-                                        className="cursor-pointer"
+                                    >
+                                        <Icon
+                                            name="Eye"
+                                            onClick={() => {
+                                                sourceViewerRef.current?.show(source);
+                                            }}
+                                        />
+                                    </Button>
+                                    <Button
+                                        size="icon-xs"
                                         onClick={() => {
                                             dataUploaderRef.current?.update(source);
                                         }}
-                                    />
-                                    <Icon
-                                        name="X"
-                                        size="18px"
-                                        color="red"
-                                        className="cursor-pointer"
+                                    >
+                                        <Icon name="Upload" />
+                                    </Button>
+                                    <Button
+                                        size="icon-xs"
                                         onClick={() => {
                                             canvasBoard.SourceManager.removeSource(source.id);
                                         }}
-                                    />
+                                    >
+                                        <Icon name="X" color="red" />
+                                    </Button>
                                 </Badge>
                             ))}
                             <Button

@@ -99,7 +99,7 @@ export const AiPromptRenderer = observer(function AiPromptRenderer({ component }
                                 setSelectedModel(models.find((m) => m.name === v) ?? null);
                             }}
                         >
-                            <SelectTrigger className="w-40 h-full">
+                            <SelectTrigger className="w-40 h-full" size="sm">
                                 <SelectValue placeholder="Select model..." />
                             </SelectTrigger>
                             <SelectContent>
