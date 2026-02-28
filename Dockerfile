@@ -52,18 +52,18 @@ FROM node:24-alpine AS build
 WORKDIR /app
 
 # Install deps
-COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 # Copy everything
 COPY . .
 ARG VITE_SKETCH_NOW_URL="/api/"
 ENV VITE_SKETCH_NOW_URL=$VITE_SKETCH_NOW_URL
 
-ARG VITE_OLLAMA_URL="http://3.110.181.151/ollama/"
+ARG VITE_OLLAMA_URL="https://sketch.nouera.in/ollama/"
 ENV VITE_OLLAMA_URL=$VITE_OLLAMA_URL
 # Build the React app (replace `dashboard` with your app name)
-RUN yarn nx build now
+RUN pnpm nx build now
 
 # Stage 2: Serve with Nginx
 # Production image for React
