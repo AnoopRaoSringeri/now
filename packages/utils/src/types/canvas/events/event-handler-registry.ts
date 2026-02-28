@@ -5,6 +5,7 @@ import { CanvasActionHandler } from "./canvas-action-handler";
 import { TextEventHandler } from "./text-handler";
 import { CanvasElementHandler } from "./canvas-element-handler";
 import { LinkEventHandler } from "./link-handler";
+import { PanEventHandler } from "./pan-handler";
 
 export class EventHandlerRegistry {
     private handlers: Map<ElementEnum, IElementEventHandler> = new Map();
@@ -12,6 +13,7 @@ export class EventHandlerRegistry {
 
     constructor() {
         this.handlers.set(ElementEnum.Move, new CanvasActionHandler());
+        this.handlers.set(ElementEnum.Pan, new PanEventHandler());
         this.handlers.set(ElementEnum.Image, new ImageEventHandler());
         this.handlers.set(ElementEnum.Text, new TextEventHandler());
         this.handlers.set(ElementEnum.Link, new LinkEventHandler());

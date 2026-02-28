@@ -140,3 +140,28 @@
         border-radius: 8px;
     }
 }
+
+@theme {
+    /* Define the animation */
+    --animate-aurora-rise: aurora-rise 2s ease-in-out infinite;
+
+    /* Define the keyframes */
+    @keyframes aurora-rise {
+        0% {
+            stroke-dashoffset: 200;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        30%,
+        60% {
+            opacity: 1;
+            stroke-dashoffset: 0;
+            transform: translateY(0);
+        }
+        100% {
+            opacity: 0;
+            stroke-dashoffset: -200;
+            transform: translateY(-10px);
+        }
+    }
+}

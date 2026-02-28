@@ -1,0 +1,23 @@
+<svg width="120" height="120" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <line x1="10" y1="70" x2="90" y2="70" stroke="white" stroke-width="0.5" opacity="0.2" />
+  <path class="aurora-path" d="M30 70V30L70 70V30" stroke="#818cf8" stroke-width="10" stroke-linecap="butt" fill="none" />
+  <defs>
+    <linearGradient id="auroraGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="transparent" />
+    </linearGradient>
+  </defs>
+  <rect x="10" y="70" width="80" height="20" fill="url(#auroraGrad)" opacity="0.3" />
+  <!-- <style>
+    .aurora-path {
+      stroke-dasharray: 200;
+      animation: aurora-rise 5s ease-in-out infinite;
+    }
+    @keyframes aurora-rise {
+      0% { stroke-dashoffset: 200; opacity: 0; transform: translateY(10px); }
+      30% { opacity: 1; stroke-dashoffset: 0; transform: translateY(0); }
+      70% { opacity: 1; stroke-dashoffset: 0; transform: translateY(0); }
+      100% { opacity: 0; stroke-dashoffset: -200; transform: translateY(-10px); }
+    }
+  </style> -->
+</svg>

@@ -41,7 +41,7 @@ export const LogInPage = observer(function LogInPage() {
     }
 
     return (
-        <Card className="mx-auto max-w-sm">
+        <Card className="w-[350px]">
             <CardHeader>
                 <CardTitle className="text-xl">Login</CardTitle>
                 <CardDescription>Enter your email below to login to your account</CardDescription>
@@ -85,7 +85,7 @@ export const LogInPage = observer(function LogInPage() {
                                             <FormLabel>Password</FormLabel>
                                             <NavLink
                                                 to="/forgot-password"
-                                                className="ml-auto inline-block text-sm underline"
+                                                className="inline-block text-sm underline w-full"
                                             >
                                                 Forgot your password?
                                             </NavLink>
