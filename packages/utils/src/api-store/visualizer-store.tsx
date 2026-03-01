@@ -13,8 +13,15 @@ class UploadStore {
                 withCredentials: true
             });
             return data;
-        } catch (e) {
-            return { data: [], columns: [] };
+        } catch {
+            return {
+                paginatedData: {
+                    data: [],
+                    totalRowCount: 0
+                },
+                page: 0,
+                columns: []
+            };
         }
     }
 
@@ -26,8 +33,15 @@ class UploadStore {
                 getRequestConfig(true)
             );
             return data;
-        } catch (e) {
-            return { data: [], columns: [] };
+        } catch {
+            return {
+                paginatedData: {
+                    data: [],
+                    totalRowCount: 0
+                },
+                page: 0,
+                columns: []
+            };
         }
     }
 }

@@ -1,4 +1,5 @@
-import { ReactNode, useCallback, useRef, useState } from "react";
+import { useResizeObserver } from "@mantine/hooks";
+import { ReactNode, useCallback, useState } from "react";
 import { Brush } from "recharts";
 
 export const ROWS_PER_PAGE = 20;
@@ -10,8 +11,8 @@ export function ChartPaginator({
     children: (component: ReactNode) => ReactNode;
     rowCount: number;
 }) {
+    const [scrollRef, { width }] = useResizeObserver();
     const [currentPage, setCurrentPage] = useState(0);
-    const scrollRef = useRef<HTMLDivElement>(null);
 
     const onScrollEvent = useCallback(() => {
         const el = scrollRef.current;
@@ -25,7 +26,9 @@ export function ChartPaginator({
         }
     }, [rowCount]);
 
-    const visible = Math.ceil(rowCount / ROWS_PER_PAGE) > 1;
+    const totalPages = Math.ceil(rowCount / ROWS_PER_PAGE);
+
+    const visible = totalPages > 1;
 
     return (
         <div className="size-full flex flex-col">
@@ -38,7 +41,7 @@ export function ChartPaginator({
                 }}
                 onScroll={onScrollEvent}
             >
-                {visible && <div style={{ width: `${rowCount}px`, height: 20 }} />}
+                {visible && <div style={{ width: `${totalPages * width}px`, height: 20 }} />}
             </div>
         </div>
     );
