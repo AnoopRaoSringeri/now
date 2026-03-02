@@ -220,6 +220,7 @@ export class CanvasHelper {
             case ElementEnum.Rectangle:
             case ElementEnum.Image:
             case ElementEnum.Chart:
+            case ElementEnum.Circle:
             case ElementEnum.AiPrompt: {
                 h = value.h;
                 w = value.w;
@@ -227,9 +228,13 @@ export class CanvasHelper {
                 y = value.y;
                 break;
             }
-            case ElementEnum.Circle:
-            case ElementEnum.Square:
+            case ElementEnum.Square: {
+                h = value.h;
+                w = value.h;
+                x = value.x;
+                y = value.y;
                 break;
+            }
             case ElementEnum.Pencil: {
                 const { points } = value;
                 let lx = Number.POSITIVE_INFINITY;
@@ -299,10 +304,16 @@ export class CanvasHelper {
         elements.forEach((ele) => {
             const { type, value } = ele.getValues();
             switch (type) {
-                case ElementEnum.Circle:
                 case ElementEnum.Square: {
+                    const { x: ex, y: ey, h: eh } = value;
+                    x = Math.min(x, ex);
+                    y = Math.min(y, ey);
+                    h = Math.max(h, eh + ey);
+                    w = Math.max(w, eh + ex);
+                    break;
                     break;
                 }
+                case ElementEnum.Circle:
                 case ElementEnum.Rectangle:
                 case ElementEnum.Image:
                 case ElementEnum.Chart:

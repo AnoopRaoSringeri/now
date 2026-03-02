@@ -44,6 +44,7 @@ export class Circle extends BaseObject {
         if (clearCanvas) {
             this.Board.Helper.clearCanvasArea(ctx);
         }
+        ctx.beginPath();
         if (h < 0) {
             y = y + h;
             h = Math.abs(h);
@@ -81,6 +82,7 @@ export class Circle extends BaseObject {
         this.IsDragging = true;
         const offsetX = x + this.tmpX;
         const offsetY = y + this.tmpY;
+        ctx.beginPath();
         const {
             x: ax,
             y: ay,
@@ -97,6 +99,8 @@ export class Circle extends BaseObject {
         this.object.value.x = offsetX;
         this.object.value.y = offsetY;
         if (action === "up") {
+            ctx.closePath();
+            ctx.restore();
             this.tmpX = 0;
             this.tmpY = 0;
             this.IsDragging = false;

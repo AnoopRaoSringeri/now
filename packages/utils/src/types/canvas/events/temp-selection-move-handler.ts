@@ -7,8 +7,9 @@ export class TemptSelectionMoveEventHandler implements IElementEventHandler {
 
     onMouseDown(e: MouseEvent, board: CanvasBoard, ctx: CanvasRenderingContext2D) {
         if (!board.TempSelectionArea) return;
-        board.ActiveObjects = board.SelectedElements;
-        board.Elements = board.Elements.filter((e) => CanvasHelper.isCustomElement(e) || !e.IsSelected);
+        board.ActiveObjects = [...board.SelectedElements];
+        const activeIds = board.ActiveObjects.map((a) => a.id);
+        board.Elements = board.Elements.filter((e) => CanvasHelper.isCustomElement(e) || !activeIds.includes(e.id));
         board.redrawBoard();
         board.TempSelectionArea.move(ctx, { x: 0, y: 0 }, "down", false);
         board.ActiveObjects.forEach((ele) => {

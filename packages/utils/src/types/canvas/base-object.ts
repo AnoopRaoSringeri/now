@@ -388,15 +388,15 @@ export class BaseObject {
                         x = x + side;
                         side = Math.abs(side);
                     }
-                    // Apply updates
-                    this.object.value.x = x;
-                    this.object.value.y = y;
-                    this.object.value.h = side;
 
                     ctx.strokeRect(x, y, side, side);
                     ctx.fillRect(x, y, side, side);
                     ctx.restore();
                     this.select({ h: side, w: side, x, y });
+                    // Apply updates
+                    this.object.value.x = x;
+                    this.object.value.y = y;
+                    this.object.value.h = side;
                     if (action === "up") {
                         this.IsDragging = false;
                         this.tmpX = 0;

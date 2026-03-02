@@ -34,7 +34,6 @@ export class MoveEventHandler implements IElementEventHandler {
         } else if (!board.HoveredObject) {
             board._currentCanvasAction = null;
         }
-        console.log(board.Elements.length);
     }
 
     onMouseUp(e: MouseEvent, board: CanvasBoard, ctx: CanvasRenderingContext2D) {
@@ -50,7 +49,6 @@ export class MoveEventHandler implements IElementEventHandler {
         });
         board.SelectedElements = board.ActiveObjects;
         board.saveBoard();
-        console.log(board.Elements.length);
     }
 
     onWheelAction(e: WheelEvent, board: CanvasBoard) {
