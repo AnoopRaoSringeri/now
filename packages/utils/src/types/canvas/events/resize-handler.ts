@@ -6,10 +6,6 @@ import { CanvasActionEnum } from "../../sketch-now/enums";
 export class ResizeEventHandler implements IElementEventHandler {
     onMouseDown(e: MouseEvent, board: CanvasBoard, ctx: CanvasRenderingContext2D) {
         board._currentCanvasAction = CanvasActionEnum.Resize;
-        if (board.HoveredObject) {
-            board.ActiveObjects = [board.HoveredObject];
-            board.SelectedElements = [board.HoveredObject];
-        }
         board.ActiveObjects.forEach((ao) => {
             ao.resize(ctx, { dx: 0, dy: 0 }, board.CursorPosition!, "down");
         });

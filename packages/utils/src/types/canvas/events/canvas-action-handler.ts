@@ -35,7 +35,6 @@ export class CanvasActionHandler implements IElementEventHandler {
         if (board.CursorPosition == null) {
             board.unSelectElements();
         }
-
         if (e.detail === 1 && e.ctrlKey) {
             board._currentCanvasAction = CanvasActionEnum.Pan;
         } else if (board.SelectionElement) {
@@ -45,10 +44,25 @@ export class CanvasActionHandler implements IElementEventHandler {
                 board._currentCanvasAction = CanvasActionEnum.SelectionResize;
             }
         } else if (board.HoveredObject) {
-            board.Elements = board.Elements.filter(
-                (e) => CanvasHelper.isCustomElement(e) || e.id !== board.HoveredObject!.id
-            );
-            board.redrawBoard();
+            board.unSelectElements();
+            if (board.HoveredObject) {
+                const linkedItms = board.Links.filter(
+                    (l) => board.HoveredObject && l.shouldUpdate(board.HoveredObject.id)
+                );
+                if (linkedItms.length > 0) {
+                    board.ActiveObjects = [board.HoveredObject, ...linkedItms];
+                    board.SelectedElements = [board.HoveredObject, ...linkedItms];
+                } else {
+                    board.ActiveObjects = [board.HoveredObject];
+                    board.SelectedElements = [board.HoveredObject];
+                }
+                const activeIds = board.ActiveObjects.map((a) => a.id);
+
+                board.Elements = board.Elements.filter(
+                    (e) => CanvasHelper.isCustomElement(e) || !activeIds.includes(e.id)
+                );
+                board.redrawBoard();
+            }
             if (board.CursorPosition === "m") {
                 board._currentCanvasAction = CanvasActionEnum.Move;
             } else {

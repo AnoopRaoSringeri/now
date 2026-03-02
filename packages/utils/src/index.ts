@@ -2,7 +2,6 @@ export * from "./lib/utils";
 export * from "./lib/canvas-board";
 export * from "./lib/canvas-helpers";
 export * from "./lib/canvas-object-factory";
-export * from "./lib/event-handler";
 
 export * from "./hooks/use-mobile";
 export * from "./hooks/use-theme";

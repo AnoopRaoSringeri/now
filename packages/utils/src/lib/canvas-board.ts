@@ -14,7 +14,6 @@ import { CanvasActionEnum, ElementEnum } from "../types/sketch-now/enums";
 import { IObjectStyle } from "../types/sketch-now/object-styles";
 import { CANVAS_SCALING_MULTIPLIER, CanvasHelper, DefaultStyle } from "./canvas-helpers";
 import { CanvasObjectFactory } from "./canvas-object-factory";
-import { EventManager } from "./event-handler";
 import { SourceManager } from "./source-manager";
 import { UiStateManager } from "./ui-state-manager";
 export class CanvasBoard implements ICanvas {
@@ -32,8 +31,7 @@ export class CanvasBoard implements ICanvas {
     _activeObjects: BaseObject[] = [];
     private _hoveredObject: BaseObject | null = null;
 
-    private EventManager: EventManager;
-    private EM: EM;
+    private EventManager: EM;
     SourceManager: SourceManager;
     UiStateManager: UiStateManager;
 
@@ -58,8 +56,7 @@ export class CanvasBoard implements ICanvas {
     _deletedElements: BaseObject[] = [];
 
     constructor() {
-        this.EventManager = new EventManager(this);
-        this.EM = new EM(this);
+        this.EventManager = new EM(this);
         this._canvas = createRef();
         this._canvasCopy = createRef();
         this.Helper = new CanvasHelper(this);
@@ -237,6 +234,10 @@ export class CanvasBoard implements ICanvas {
 
     set HoveredObject(object: BaseObject | null) {
         this._hoveredObject = object;
+    }
+
+    get Links(): Link[] {
+        return this.Elements.filter((e) => e.Type == ElementEnum.Link) as Link[];
     }
 
     get PointerOrigin() {
@@ -515,7 +516,7 @@ export class CanvasBoard implements ICanvas {
         const elementsToCopy = this.Elements.filter((e) => this.SelectedElements.find((se) => se.id === e.id) != null);
         this.Helper.clearCanvasArea(context);
         const copiedItems: BaseObject[] = [];
-        elementsToCopy.forEach((ele, i) => {
+        elementsToCopy.forEach((ele) => {
             const copyElement = CanvasObjectFactory.createObject(uuid(), ele.getValues(), this, this.Style);
             copyElement.move(context, { x: 0, y: 0 }, "down", false);
             copyElement.move(context, { x: 40, y: 40 }, "up", false);
@@ -691,39 +692,19 @@ export class CanvasBoard implements ICanvas {
     }
 
     onMouseDown(e: MouseEvent) {
-        const v2 = localStorage.getItem("V2");
-        if (v2) {
-            this.EventManager.onMouseDown(e);
-        } else {
-            this.EM.onMouseDown(e);
-        }
+        this.EventManager.onMouseDown(e);
     }
 
     onMouseMove(e: MouseEvent) {
-        const v2 = localStorage.getItem("V2");
-        if (v2) {
-            this.EventManager.onMouseMove(e);
-        } else {
-            this.EM.onMouseMove(e);
-        }
+        this.EventManager.onMouseMove(e);
     }
 
     onMouseUp(e: MouseEvent) {
-        const v2 = localStorage.getItem("V2");
-        if (v2) {
-            this.EventManager.onMouseUp(e);
-        } else {
-            this.EM.onMouseUp(e);
-        }
+        this.EventManager.onMouseUp(e);
     }
 
     onWheelAction(e: WheelEvent) {
-        const v2 = localStorage.getItem("V2");
-        if (v2) {
-            this.EventManager.onWheelAction(e);
-        } else {
-            this.EM.onWheelAction(e);
-        }
+        this.EventManager.onWheelAction(e);
     }
 
     onTouchStart(e: TouchEvent) {

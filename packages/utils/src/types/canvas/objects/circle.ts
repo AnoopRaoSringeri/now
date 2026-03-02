@@ -44,7 +44,6 @@ export class Circle extends BaseObject {
         if (clearCanvas) {
             this.Board.Helper.clearCanvasArea(ctx);
         }
-        ctx.beginPath();
         if (h < 0) {
             y = y + h;
             h = Math.abs(h);
@@ -60,7 +59,6 @@ export class Circle extends BaseObject {
             w: rX
         } = CanvasHelper.getBoundingArea({ type: ElementEnum.Circle, value: { x, y, h, w } });
         ctx.ellipse(ax, ay, rX, rY, this.ro, this.sa, this.ea);
-        // ctx.ellipse(x, y, w, h, this.ro, this.sa, this.ea);
         ctx.stroke();
         ctx.fill();
         ctx.closePath();
@@ -76,10 +74,13 @@ export class Circle extends BaseObject {
         if (clearCanvas) {
             this.Board.Helper.clearCanvasArea(ctx);
         }
+        if (action === "down") {
+            this.tmpX = this.object.value.x;
+            this.tmpY = this.object.value.y;
+        }
         this.IsDragging = true;
-        const offsetX = x + this.Value.x;
-        const offsetY = y + this.Value.y;
-        ctx.beginPath();
+        const offsetX = x + this.tmpX;
+        const offsetY = y + this.tmpY;
         const {
             x: ax,
             y: ay,
@@ -93,77 +94,88 @@ export class Circle extends BaseObject {
         ctx.stroke();
         ctx.fill();
         this.select({ x: offsetX, y: offsetY });
+        this.object.value.x = offsetX;
+        this.object.value.y = offsetY;
         if (action === "up") {
-            ctx.closePath();
-            ctx.restore();
-            this.Value.x = offsetX;
-            this.Value.y = offsetY;
+            this.tmpX = 0;
+            this.tmpY = 0;
             this.IsDragging = false;
         }
     }
 
     resize(ctx: CanvasRenderingContext2D, delta: Delta, cPos: CursorPosition, action: MouseAction, clearCanvas = true) {
+        if (!this.Board.PointerOrigin) {
+            return { x: 0, y: 0, w: 0, h: 0 };
+        }
         const { dx, dy } = delta;
         this.Board.Helper.applyStyles(ctx, this.style);
-
         if (clearCanvas) {
             this.Board.Helper.clearCanvasArea(ctx);
         }
+
+        this.IsDragging = true;
         let w = dx;
         let h = dy;
-        let y = this.Value.y;
-        let x = this.Value.x;
+
+        if (action === "down") {
+            this.tmpX = this.object.value.x;
+            this.tmpY = this.object.value.y;
+            this.tmpH = this.object.value.h;
+            this.tmpW = this.object.value.w;
+        }
+        let y = this.tmpY;
+        let x = this.tmpX;
         switch (cPos) {
             case "tl":
                 x = x + w;
                 y = y + h;
                 if (h < 0) {
-                    h = Math.abs(Math.abs(h) + this.Value.h);
+                    h = Math.abs(Math.abs(h) + this.tmpH);
                 } else {
-                    h = Math.abs(this.Value.h - Math.abs(h));
+                    h = Math.abs(this.tmpH - Math.abs(h));
                 }
                 if (w < 0) {
-                    w = Math.abs(Math.abs(w) + this.Value.w);
+                    w = Math.abs(Math.abs(w) + this.tmpW);
                 } else {
-                    w = Math.abs(this.Value.w - Math.abs(w));
+                    w = Math.abs(this.tmpW - Math.abs(w));
                 }
                 break;
             case "tr":
                 y = y + h;
                 if (h < 0) {
-                    h = Math.abs(this.Value.h + Math.abs(h));
+                    h = Math.abs(this.tmpH + Math.abs(h));
                 } else {
-                    h = Math.abs(Math.abs(h) - this.Value.h);
+                    h = Math.abs(Math.abs(h) - this.tmpH);
                 }
                 if (w < 0) {
-                    w = this.Value.w + w;
+                    w = this.tmpW + w;
                 } else {
-                    w = Math.abs(this.Value.w + Math.abs(w));
+                    w = Math.abs(this.tmpW + Math.abs(w));
                 }
                 break;
             case "bl":
                 x = x + w;
                 if (h < 0) {
-                    h = this.Value.h - Math.abs(h);
+                    h = this.tmpH - Math.abs(h);
                 } else {
-                    h = Math.abs(Math.abs(h) + this.Value.h);
+                    h = Math.abs(Math.abs(h) + this.tmpH);
                 }
                 if (w < 0) {
-                    w = Math.abs(this.Value.w + Math.abs(w));
+                    w = Math.abs(this.tmpW + Math.abs(w));
                 } else {
-                    w = Math.abs(this.Value.w - Math.abs(w));
+                    w = Math.abs(this.tmpW - Math.abs(w));
                 }
                 break;
             case "br":
                 if (h < 0) {
-                    h = h + this.Value.h;
+                    h = h + this.tmpH;
                 } else {
-                    h = Math.abs(this.Value.h + Math.abs(h));
+                    h = Math.abs(this.tmpH + Math.abs(h));
                 }
                 if (w < 0) {
-                    w = this.Value.w + w;
+                    w = this.tmpW + w;
                 } else {
-                    w = Math.abs(this.Value.w + Math.abs(w));
+                    w = Math.abs(this.tmpW + Math.abs(w));
                 }
                 break;
             case "t":
@@ -175,11 +187,11 @@ export class Circle extends BaseObject {
             case "r":
                 break;
         }
-        if (x >= this.Value.x + this.Value.w) {
-            x = this.Value.x + this.Value.w;
+        if (x >= this.tmpX + this.tmpW) {
+            x = this.tmpX + this.tmpW;
         }
-        if (y >= this.Value.y + this.Value.h) {
-            y = this.Value.y + this.Value.h;
+        if (y >= this.tmpY + this.tmpH) {
+            y = this.tmpY + this.tmpH;
         }
         if (h < 0) {
             y = y + h;
@@ -195,19 +207,23 @@ export class Circle extends BaseObject {
             h: rY,
             w: rX
         } = CanvasHelper.getBoundingArea({ type: ElementEnum.Circle, value: { x, y, h, w } });
-        ctx.beginPath();
+
         ctx.ellipse(ax, ay, rX, rY, this.ro, this.sa, this.ea);
         ctx.stroke();
         ctx.restore();
 
         this.select({ h, w, x, y });
+        this.object.value.h = h;
+        this.object.value.w = w;
+        this.object.value.x = x;
+        this.object.value.y = y;
         if (action === "up") {
-            this.Value.h = h;
-            this.Value.w = w;
-            this.Value.x = x;
-            this.Value.y = y;
+            this.tmpX = 0;
+            this.tmpY = 0;
+            this.tmpH = 0;
+            this.tmpW = 0;
+            this.IsDragging = false;
         }
-
         return { x, y, h, w };
     }
 

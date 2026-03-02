@@ -11,11 +11,6 @@ import { IElementEventHandler } from "../element-event-handler";
 export class MoveEventHandler implements IElementEventHandler {
     onMouseDown(e: MouseEvent, board: CanvasBoard, ctx: CanvasRenderingContext2D) {
         board._currentCanvasAction = CanvasActionEnum.Move;
-        board.unSelectElements();
-        if (board.HoveredObject) {
-            board.ActiveObjects = [board.HoveredObject];
-            board.SelectedElements = [board.HoveredObject];
-        }
         board.ActiveObjects.forEach((ao) => {
             ao.move(ctx, { x: 0, y: 0 }, "down");
             ao.ShowSelection = true;
@@ -39,6 +34,7 @@ export class MoveEventHandler implements IElementEventHandler {
         } else if (!board.HoveredObject) {
             board._currentCanvasAction = null;
         }
+        console.log(board.Elements.length);
     }
 
     onMouseUp(e: MouseEvent, board: CanvasBoard, ctx: CanvasRenderingContext2D) {
@@ -54,6 +50,7 @@ export class MoveEventHandler implements IElementEventHandler {
         });
         board.SelectedElements = board.ActiveObjects;
         board.saveBoard();
+        console.log(board.Elements.length);
     }
 
     onWheelAction(e: WheelEvent, board: CanvasBoard) {

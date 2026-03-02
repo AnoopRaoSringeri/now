@@ -30,12 +30,12 @@ export type TextValue = XYHW & { value: string };
 
 export type LinkValue = {
     start:
-        | (CanvasObject & {
+        | (XY & {
               id: string;
           })
         | null;
     end:
-        | (CanvasObject & {
+        | (XY & {
               id: string;
           })
         | null;

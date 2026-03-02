@@ -253,8 +253,8 @@ export class BaseObject {
             }
 
             this.IsDragging = true;
-            let w = dx;
-            let h = dy;
+            const w = dx;
+            const h = dy;
             switch (this.object.type) {
                 case ElementEnum.AiPrompt:
                 case ElementEnum.Chart:
@@ -266,201 +266,145 @@ export class BaseObject {
                         this.tmpH = this.object.value.h;
                         this.tmpW = this.object.value.w;
                     }
-                    let y = this.tmpY;
-                    let x = this.tmpX;
+
+                    // 1. Identify the 'Fixed' anchor point (the corner that doesn't move)
+                    let anchorX = this.tmpX;
+                    let anchorY = this.tmpY;
+
+                    // 2. Identify the 'Moving' point (the handle being dragged)
+                    // Initially, it's where the handle was before the drag started
+                    let moveX = this.tmpX + this.tmpW;
+                    let moveY = this.tmpY + this.tmpH;
+
                     switch (cPos) {
                         case "tl":
-                            x = x + w;
-                            y = y + h;
-                            if (h < 0) {
-                                h = Math.abs(Math.abs(h) + this.tmpH);
-                            } else {
-                                h = Math.abs(this.tmpH - Math.abs(h));
-                            }
-                            if (w < 0) {
-                                w = Math.abs(Math.abs(w) + this.tmpW);
-                            } else {
-                                w = Math.abs(this.tmpW - Math.abs(w));
-                            }
+                            anchorX = this.tmpX + this.tmpW;
+                            anchorY = this.tmpY + this.tmpH;
+                            moveX = this.tmpX + w;
+                            moveY = this.tmpY + h;
                             break;
                         case "tr":
-                            y = y + h;
-                            if (h < 0) {
-                                h = Math.abs(this.tmpH + Math.abs(h));
-                            } else {
-                                h = Math.abs(Math.abs(h) - this.tmpH);
-                            }
-                            if (w < 0) {
-                                w = this.tmpW + w;
-                            } else {
-                                w = Math.abs(this.tmpW + Math.abs(w));
-                            }
+                            anchorX = this.tmpX;
+                            anchorY = this.tmpY + this.tmpH;
+                            moveX = this.tmpX + this.tmpW + w;
+                            moveY = this.tmpY + h;
                             break;
                         case "bl":
-                            x = x + w;
-                            if (h < 0) {
-                                h = this.tmpH - Math.abs(h);
-                            } else {
-                                h = Math.abs(Math.abs(h) + this.tmpH);
-                            }
-                            if (w < 0) {
-                                w = Math.abs(this.tmpW + Math.abs(w));
-                            } else {
-                                w = Math.abs(this.tmpW - Math.abs(w));
-                            }
+                            anchorX = this.tmpX + this.tmpW;
+                            anchorY = this.tmpY;
+                            moveX = this.tmpX + w;
+                            moveY = this.tmpY + this.tmpH + h;
                             break;
                         case "br":
-                            if (h < 0) {
-                                h = h + this.tmpH;
-                            } else {
-                                h = Math.abs(this.tmpH + Math.abs(h));
-                            }
-                            if (w < 0) {
-                                w = this.tmpW + w;
-                            } else {
-                                w = Math.abs(this.tmpW + Math.abs(w));
-                            }
+                            anchorX = this.tmpX;
+                            anchorY = this.tmpY;
+                            moveX = this.tmpX + this.tmpW + w;
+                            moveY = this.tmpY + this.tmpH + h;
                             break;
                         case "t":
+                            moveY = this.tmpY + h;
+                            anchorY = this.tmpY + this.tmpH;
                             break;
                         case "b":
+                            moveY = this.tmpY + this.tmpH + h;
                             break;
                         case "l":
+                            moveX = this.tmpX + w;
+                            anchorX = this.tmpX + this.tmpW;
                             break;
                         case "r":
+                            moveX = this.tmpX + this.tmpW + w;
                             break;
                     }
-                    if (x >= this.tmpX + this.tmpW) {
-                        x = this.tmpX + this.tmpW;
-                    }
-                    if (y >= this.tmpY + this.tmpH) {
-                        y = this.tmpY + this.tmpH;
-                    }
-                    if (h < 0) {
-                        y = y + h;
-                        h = Math.abs(h);
-                    }
-                    if (w < 0) {
-                        x = x + w;
-                        w = Math.abs(w);
-                    }
-                    ctx.strokeRect(x, y, w, h);
-                    ctx.fillRect(x, y, w, h);
+
+                    // 3. Normalize: The top-left (x, y) is always the minimum of the two points
+                    const x = Math.min(anchorX, moveX);
+                    const y = Math.min(anchorY, moveY);
+                    const width = Math.abs(anchorX - moveX);
+                    const height = Math.abs(anchorY - moveY);
+
+                    // 4. Update State and Draw
+                    this.object.value = { x, y, w: width, h: height };
+                    this.select(this.object.value);
+
+                    ctx.strokeRect(x, y, width, height);
+                    ctx.fillRect(x, y, width, height);
                     ctx.restore();
 
-                    this.select({ h, w, x, y });
-                    this.object.value.h = h;
-                    this.object.value.w = w;
-                    this.object.value.x = x;
-                    this.object.value.y = y;
                     if (action === "up") {
+                        this.IsDragging = false;
                         this.tmpX = 0;
                         this.tmpY = 0;
                         this.tmpH = 0;
                         this.tmpW = 0;
-                        this.IsDragging = false;
                     }
-                    return { x, y, h, w };
+
+                    return { x, y, w: width, h: height };
                 }
                 case ElementEnum.Square: {
                     if (action === "down") {
                         this.tmpX = this.object.value.x;
                         this.tmpY = this.object.value.y;
                         this.tmpH = this.object.value.h;
+                        this.tmpW = this.object.value.h; // Store initial size
                     }
-                    let y = this.tmpY;
+
                     let x = this.tmpX;
+                    let y = this.tmpY;
+                    let side = this.tmpH;
+
+                    // w and h are dx and dy
+                    // We use Math.abs or direction logic to determine the new side length
                     switch (cPos) {
-                        case "tl":
-                            x = x + w;
-                            y = y + h;
-                            if (h < 0) {
-                                h = Math.abs(Math.abs(h) + this.tmpH);
-                            } else {
-                                h = Math.abs(this.tmpH - Math.abs(h));
-                            }
-                            if (w < 0) {
-                                w = Math.abs(Math.abs(w) + this.tmpH);
-                            } else {
-                                w = Math.abs(this.tmpH - Math.abs(w));
-                            }
-                            break;
-                        case "tr":
-                            y = y + h;
-                            if (h < 0) {
-                                h = Math.abs(this.tmpH + Math.abs(h));
-                            } else {
-                                h = Math.abs(Math.abs(h) - this.tmpH);
-                            }
-                            if (w < 0) {
-                                w = this.tmpH + w;
-                            } else {
-                                w = Math.abs(this.tmpH + Math.abs(w));
-                            }
-                            break;
-                        case "bl":
-                            x = x + w;
-                            if (h < 0) {
-                                h = this.tmpH - Math.abs(h);
-                            } else {
-                                h = Math.abs(Math.abs(h) + this.tmpH);
-                            }
-                            if (w < 0) {
-                                w = Math.abs(this.tmpH + Math.abs(w));
-                            } else {
-                                w = Math.abs(this.tmpH - Math.abs(w));
-                            }
-                            break;
                         case "br":
-                            if (h < 0) {
-                                h = h + this.tmpH;
-                            } else {
-                                h = Math.abs(this.tmpH + Math.abs(h));
-                            }
-                            if (w < 0) {
-                                w = this.tmpH + w;
-                            } else {
-                                w = Math.abs(this.tmpH + Math.abs(w));
-                            }
+                            // Anchor is Top-Left (x, y). Side grows by the average or max of dx/dy
+                            side = Math.max(this.tmpH + Math.min(w, h));
                             break;
-                        case "t":
+
+                        case "tr":
+                            // Anchor is Bottom-Left (x, tmpY + tmpH).
+                            // Moving mouse UP (negative h) increases height.
+                            side = this.tmpH + Math.min(w, -h);
+                            y = this.tmpY + this.tmpH - side;
                             break;
-                        case "b":
+
+                        case "bl":
+                            // Anchor is Top-Right (tmpX + tmpW, y).
+                            // Moving mouse LEFT (negative w) increases width.
+                            side = this.tmpH + Math.min(-w, h);
+                            x = this.tmpX + this.tmpW - side;
                             break;
-                        case "l":
-                            break;
-                        case "r":
+
+                        case "tl":
+                            // Anchor is Bottom-Right. Both x and y move.
+                            side = this.tmpH + Math.min(-w, -h);
+                            x = this.tmpX + this.tmpW - side;
+                            y = this.tmpY + this.tmpH - side;
                             break;
                     }
-                    if (x >= this.tmpX + this.tmpH) {
-                        x = this.tmpX + this.tmpH;
+
+                    if (side < 0) {
+                        y = y + side;
+                        x = x + side;
+                        side = Math.abs(side);
                     }
-                    if (y >= this.tmpY + this.tmpH) {
-                        y = this.tmpY + this.tmpH;
-                    }
-                    if (h < 0) {
-                        y = y + h;
-                        h = Math.abs(h);
-                    }
-                    if (w < 0) {
-                        x = x + w;
-                        w = Math.abs(w);
-                    }
-                    const side = Math.min(w, h);
+                    // Apply updates
+                    this.object.value.x = x;
+                    this.object.value.y = y;
+                    this.object.value.h = side;
+
                     ctx.strokeRect(x, y, side, side);
                     ctx.fillRect(x, y, side, side);
                     ctx.restore();
                     this.select({ h: side, w: side, x, y });
-                    this.object.value.h = side;
-                    this.object.value.x = x;
-                    this.object.value.y = y;
                     if (action === "up") {
+                        this.IsDragging = false;
                         this.tmpX = 0;
                         this.tmpY = 0;
                         this.tmpH = 0;
                         this.tmpW = 0;
-                        this.IsDragging = false;
                     }
+
                     return { x, y, h: side, w: side };
                 }
                 default:
@@ -544,7 +488,6 @@ export class BaseObject {
     }
 
     unSelect() {
-        console.log("Unselect :", this.id);
         this.IsSelected = false;
         this.ShowSelection = false;
     }
