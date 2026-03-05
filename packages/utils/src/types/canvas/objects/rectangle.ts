@@ -3,7 +3,7 @@ import { IObjectStyle } from "../../sketch-now/object-styles";
 import { BaseObject } from "../base-object";
 import { RectangleObject } from "../types";
 
-export class Rectangle extends BaseObject {
+export class Rectangle extends BaseObject<RectangleObject> {
     object: RectangleObject;
     constructor(id: string, object: RectangleObject, board: CanvasBoard, style: IObjectStyle) {
         super(id, object, board, style);

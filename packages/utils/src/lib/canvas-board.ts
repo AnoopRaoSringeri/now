@@ -62,34 +62,6 @@ export class CanvasBoard implements ICanvas {
         this.Helper = new CanvasHelper(this);
         this.SourceManager = new SourceManager(this);
         this.UiStateManager = new UiStateManager(this);
-        // makeObservable(this, {
-        //     _elementType: observable,
-        //     ElementType: computed,
-        //     _isElementSelectorLocked: observable,
-        //     IsElementSelectorLocked: computed,
-        //     _style: observable,
-        //     Style: computed,
-        //     setStyle: action,
-        //     _selectedElements: observable,
-        //     SelectedElements: computed,
-        //     _zoom: observable,
-        //     Zoom: computed,
-        //     _canvasTransform: observable,
-        //     Transform: computed,
-        //     _selectionArea: observable,
-        //     SelectionElement: computed,
-        //     NewOrder: computed,
-        //     _elements: observable,
-        //     Elements: computed,
-        //     text: observable,
-        //     Text: computed,
-        //     image: observable,
-        //     Image: computed,
-        //     CustomComponentIds: computed,
-        //     getComponent: action,
-        //     _activeObjects: observable,
-        //     _links: observable
-        // });
         makeAutoObservable(this);
     }
 
@@ -680,15 +652,6 @@ export class CanvasBoard implements ICanvas {
             transform: this.Transform,
             deletedSources: dsids
         };
-    }
-
-    toSVG({ height, width }: Size) {
-        let svgString = "";
-        const sRatio = CanvasHelper.getSizeRatio({ height, width }, { height: this.Height, width: this.Width });
-        this.Elements.forEach((ele) => {
-            svgString += ele.toSVG(sRatio);
-        });
-        return `<svg width="${width}" height="${height}" xmlns="http://sketch-now/svg">${svgString}</svg>`;
     }
 
     onMouseDown(e: MouseEvent) {

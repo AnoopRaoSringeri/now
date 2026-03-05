@@ -2,16 +2,14 @@ import { computed, makeObservable, observable, runInAction, toJS } from "mobx";
 import { v4 as uuid } from "uuid";
 import { CanvasBoard } from "../../lib/canvas-board";
 import { CanvasHelper, DefaultStyle } from "../../lib/canvas-helpers";
-import { AbsPosition, CanvasElement, Delta, Position, Size } from "../sketch-now/canvas";
+import { AbsPosition, CanvasElement, Delta, Position } from "../sketch-now/canvas";
 import { CursorPosition, MouseAction } from "../sketch-now/custom-canvas";
 import { ElementEnum } from "../sketch-now/enums";
 import { IObjectStyle } from "../sketch-now/object-styles";
 import { CanvasObject, XYHW } from "./types";
+import { IBaseObject } from "../sketch-now/canvas-object";
 
-export class BaseObject {
-    toSVG(sRatio: Size) {
-        throw new Error("Method not implemented.");
-    }
+export class BaseObject<T extends CanvasObject = CanvasObject> implements IBaseObject<T> {
     readonly Board: CanvasBoard;
     isSelected = false;
     private _showSelection = false;
@@ -82,7 +80,7 @@ export class BaseObject {
         return this.object.value;
     }
 
-    set Value(value: CanvasObject["value"]) {
+    set Value(value: T["value"]) {
         this.object.value = value;
     }
 
@@ -96,12 +94,7 @@ export class BaseObject {
         });
     }
 
-    updateValue(
-        ctx: CanvasRenderingContext2D,
-        objectValue: CanvasObject["value"],
-        action: MouseAction,
-        clearCanvas = true
-    ) {
+    updateValue(ctx: CanvasRenderingContext2D, objectValue: T["value"], action: MouseAction, clearCanvas = true) {
         if (!this.Board.PointerOrigin) {
             return;
         }
