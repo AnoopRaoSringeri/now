@@ -405,7 +405,6 @@ export class CanvasHelper {
 
     static applySelectedStyle(ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D) {
         const { a } = ctx.getTransform();
-        ctx.save();
         ctx.strokeStyle = "#00ffff";
         ctx.fillStyle = "#00ffff";
         ctx.lineWidth = 0.5 / a;
@@ -413,44 +412,45 @@ export class CanvasHelper {
 
     static applySelection(
         ctx: CanvasRenderingContext2D,
-        { height: h, width: w, x: x, y: y }: Position & Size,
+        { height: h, width: w, x, y }: Position & Size,
         withGutter = true
     ) {
         const { a } = ctx.getTransform();
         const radius = SELECTOR_POINT_RADIUS / a;
         const gutter = (withGutter ? GUTTER : 0) / a;
+
+        // 1. Save state before we change anything
+        ctx.save();
+
+        // 2. Set our selection colors
         CanvasHelper.applySelectedStyle(ctx);
+
         const ux = x - gutter;
         const uy = y - gutter;
         const uw = w + gutter * 2;
         const uh = h + gutter * 2;
+
+        // Draw the bounding box
         ctx.strokeRect(ux, uy, uw, uh);
 
-        ctx.beginPath();
-        ctx.moveTo(ux, uy);
-        ctx.arc(ux, uy, radius, 0, 2 * Math.PI);
-        ctx.stroke();
-        ctx.fill();
+        // Define the 4 corner points
+        const points = [
+            { px: ux, py: uy }, // Top Left
+            { px: ux, py: uy + uh }, // Bottom Left
+            { px: ux + uw, py: uy }, // Top Right
+            { px: ux + uw, py: uy + uh } // Bottom Right
+        ];
 
-        ctx.beginPath();
-        ctx.moveTo(ux, uy + uh);
-        ctx.arc(ux, uy + uh, radius, 0, 2 * Math.PI);
-        ctx.stroke();
-        ctx.fill();
+        // 3. Draw the handles (Circular points)
+        points.forEach((p) => {
+            ctx.beginPath();
+            // Remove moveTo to avoid a connecting line from the previous point
+            ctx.arc(p.px, p.py, radius, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+        });
 
-        ctx.beginPath();
-        ctx.moveTo(ux + uw, uy);
-        ctx.arc(ux + uw, uy, radius, 0, 2 * Math.PI);
-        ctx.stroke();
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.moveTo(ux + uw, uy + uh);
-        ctx.arc(ux + uw, uy + uh, radius, 0, 2 * Math.PI);
-        ctx.stroke();
-        ctx.fill();
-
-        ctx.closePath();
+        // 4. Restore everything back to how it was before the selection was drawn
         ctx.restore();
     }
 
