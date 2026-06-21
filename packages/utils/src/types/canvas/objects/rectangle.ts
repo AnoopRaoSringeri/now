@@ -23,10 +23,10 @@ export class Rectangle extends BaseObject<RectangleObject> {
 
     draw(ctx: CanvasRenderingContext2D) {
         this.create(ctx);
+        ctx.restore();
         if (this.IsSelected) {
             this.select({});
         }
-        ctx.restore();
     }
 
     getValues(): RectangleObject {

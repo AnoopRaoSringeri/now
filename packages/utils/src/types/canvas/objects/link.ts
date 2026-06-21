@@ -23,15 +23,13 @@ export class Link extends BaseObject {
             return;
         }
         const { x: sx, y: sy } = this.Value.start;
-        const asx = sx;
-        const asy = sy;
         const { x: ex, y: ey } = this.Value.end;
-        const aex = ex;
-        const aey = ey;
+        const midX = (sx + ex) / 2;
+
         this.Board.Helper.applyStyles(ctx, this.style);
         ctx.beginPath();
-        ctx.moveTo(asx, asy);
-        ctx.lineTo(aex, aey);
+        ctx.moveTo(sx, sy);
+        ctx.bezierCurveTo(midX, sy, midX, ey, ex, ey);
         ctx.stroke();
         ctx.closePath();
         ctx.restore();

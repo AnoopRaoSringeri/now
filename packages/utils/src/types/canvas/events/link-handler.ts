@@ -38,6 +38,16 @@ export class LinkEventHandler implements IElementEventHandler {
                 board.CanvasCopy.style.cursor = "grabbing";
                 board.HoveredObject = ele;
             }
+            board.ActiveObjects.forEach((ao) => {
+                ao.updateValue(
+                    ctx,
+                    {
+                        ...ao.Value,
+                        end: { x: offsetX, y: offsetY, id: "unknoun" }
+                    },
+                    "move"
+                );
+            });
         } else {
             const ele = board.Helper.hoveredElement({ x: offsetX, y: offsetY }, board.Elements);
             if (ele) {

@@ -154,7 +154,6 @@ export class BaseObject<T extends CanvasObject = CanvasObject> implements IBaseO
             switch (this.object.type) {
                 case ElementEnum.Text: {
                     const { x, y } = position;
-                    this.Board.Helper.applyStyles(ctx, this.style);
                     if (clearCanvas) {
                         this.Board.Helper.clearCanvasArea(ctx);
                     }
@@ -181,10 +180,10 @@ export class BaseObject<T extends CanvasObject = CanvasObject> implements IBaseO
                 case ElementEnum.Chart:
                 case ElementEnum.Rectangle: {
                     const { x, y } = position;
-                    this.Board.Helper.applyStyles(ctx, this.style);
                     if (clearCanvas) {
                         this.Board.Helper.clearCanvasArea(ctx);
                     }
+                    ctx.save();
                     if (action === "down") {
                         this.tmpX = this.object.value.x;
                         this.tmpY = this.object.value.y;
@@ -194,8 +193,8 @@ export class BaseObject<T extends CanvasObject = CanvasObject> implements IBaseO
                     const offsetY = y + this.tmpY;
                     ctx.strokeRect(offsetX, offsetY, this.object.value.w, this.object.value.h);
                     ctx.fillRect(offsetX, offsetY, this.object.value.w, this.object.value.h);
-                    this.select({ x: offsetX, y: offsetY });
                     ctx.restore();
+                    this.select({ x: offsetX, y: offsetY });
                     this.object.value.x = offsetX;
                     this.object.value.y = offsetY;
                     if (action === "up") {
@@ -218,10 +217,11 @@ export class BaseObject<T extends CanvasObject = CanvasObject> implements IBaseO
                     this.IsDragging = true;
                     const offsetX = x + this.tmpX;
                     const offsetY = y + this.tmpY;
+                    ctx.save();
                     ctx.strokeRect(offsetX, offsetY, this.object.value.h, this.object.value.h);
                     ctx.fillRect(offsetX, offsetY, this.object.value.h, this.object.value.h);
-                    this.select({ x: offsetX, y: offsetY });
                     ctx.restore();
+                    this.select({ x: offsetX, y: offsetY });
                     this.object.value.x = offsetX;
                     this.object.value.y = offsetY;
                     if (action === "up") {
