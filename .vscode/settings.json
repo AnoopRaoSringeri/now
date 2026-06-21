@@ -1,5 +1,5 @@
 {
-    "prettier.configPath": "C:\\My-Projects\\Apps\\now\\.prettierrc",
+    "prettier.configPath": "d:\\sketch-now\\now\\.prettierrc",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {

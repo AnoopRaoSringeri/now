@@ -14,7 +14,7 @@ export interface IBaseObject<TValue extends CanvasObject = CanvasObject> {
     // Computed / Getters
     readonly Cords: { x: number; y: number; w: number; h: number };
     readonly Type: TValue["type"];
-
+    readonly Area: number;
     // Actions
     draw(ctx: CanvasRenderingContext2D): void;
     move(ctx: CanvasRenderingContext2D, position: Position, action: MouseAction, clearCanvas?: boolean): void;

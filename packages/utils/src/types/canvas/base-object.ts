@@ -532,6 +532,10 @@ export class BaseObject<T extends CanvasObject = CanvasObject> implements IBaseO
                 return { x, y, h, w };
         }
     }
+    get Area() {
+        const { h, w } = this.Cords;
+        return h * w;
+    }
     toJSON(): CanvasElement {
         return { ...this.object, id: this.id, style: this.Style };
     }

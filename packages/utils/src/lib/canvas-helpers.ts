@@ -260,13 +260,17 @@ export class CanvasHelper {
     }
 
     hoveredElement(mouseCords: Position, elements: BaseObject[]) {
-        return this.Board.ReadOnly
-            ? null
-            : elements.find(
-                  (e) =>
-                      this.isUnderMouse(mouseCords, e.getValues()) ||
-                      this.getCursorPosition(mouseCords, e.getValues()) !== "m"
-              );
+        if (this.Board.ReadOnly) {
+            return null;
+        }
+
+        return [...elements]
+            .sort((a, b) => a.Area - b.Area)
+            .find(
+                (e) =>
+                    this.isUnderMouse(mouseCords, e.getValues()) ||
+                    this.getCursorPosition(mouseCords, e.getValues()) !== "m"
+            );
     }
 
     static getElementsInsideArea(area: Position & Size, elements: BaseObject[]) {
